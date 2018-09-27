@@ -21,5 +21,11 @@ namespace WebApp.Controllers {
 
             return View();
         }
+
+        public ActionResult Notimplemented() {
+            ViewBag.Message = "Page for functions that have not been implemented.";
+
+            return View();
+        }
     }
 }
