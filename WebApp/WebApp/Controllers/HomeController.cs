@@ -22,6 +22,13 @@ namespace WebApp.Controllers {
             return View();
         }
 
+        public ActionResult Results()
+        {
+            ViewBag.Message = "Your results page.";
+
+            return View();
+        }
+
         public ActionResult Search()
         {
             ViewBag.Message = "Your search page.";
