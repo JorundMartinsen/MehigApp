@@ -1,0 +1,11 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+<div class="jumbotron">
+    <h4>User @Html.TextBox("User", null, new { style = "width: 100%, left: 50%;" })</h4>
+
+    <h4>Password @Html.TextBox("Password", null, new { style = "width: 100%;" })</h4>
+    <br />
+    <input id="BtnLogin" type="button" value="Login" />
+
+</div>
