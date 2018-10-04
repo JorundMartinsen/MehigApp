@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "Search";
+}
+<div class="jumbotron">
+    <h4>Search <br /></h4>
+
+    <form>
+        Id:<br>
+        <input type="text" name="id"><br>
+        Title:<br>
+        <input type="text" name="Title"><br>
+        Author first name:<br>
+        <input type="text" name="firstname"><br>
+        Author last name:<br>
+        <input type="text" name="lastname"><br>
+        Keyword(s):<br>
+        <input type="text" name="keywords"><br>
+        Separate with ';' <br>
+        Publisher:<br>
+        <input type="text" name="publisher"><br>
+        Date from:
+        <input type="date" name="datefrom"><br />
+        Date to:
+        <input type="date" name="dateto">
+    </form>
+
+    <br>
+    <select id="DropDownDatatype">
+        <option>All datatypes</option>
+        <option>Document</option>
+        <option>Raw data</option>
+    </select>
+    <br />
+    <input id="BtnSearch" type="button" value="Search" />
+
+</div>
+
