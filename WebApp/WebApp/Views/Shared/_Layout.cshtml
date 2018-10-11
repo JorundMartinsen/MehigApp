@@ -149,9 +149,15 @@ function SidebarCollapse () {
                 <li class="nav-item">
                     @Html.ActionLink("Login", "Notimplemented", "Home", new { @class = "nav-link" })
                 </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Search", "Search", "Home", new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                <li>
+                    @Html.ActionLink("Results", "Results", "Home", new { @class = "nav-link" })
+                </li>
                 <!--VISIBLE ON SMALL SCREENS ONLY-->
                 <li class="nav-item d-sm-block d-md-none">
-                    <hline/>
                     @Html.ActionLink("Environmental data", "Notimplemented", "Home", new { @class = "nav-link" })
                 </li>
                 <li class="nav-item d-sm-block d-md-none">
