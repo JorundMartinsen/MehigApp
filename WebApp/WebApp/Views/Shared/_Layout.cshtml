@@ -8,6 +8,7 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+    
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -22,21 +23,34 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("No/En", "Notimplemented", "Home")</li>
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Search", "Search", "Home")</li>
-                    <li>@Html.ActionLink("Environmental data", "Notimplemented", "Home")</li>
-                    <li>@Html.ActionLink("Health data", "Notimplemented", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Results", "Results", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Login", "Login", "Home")</li>
+                    <li>@Html.ActionLink("News", "Notimplemented", "Home")</li>
+                    <li>@Html.ActionLink("Login", "Notimplemented", "Home")</li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container body-content" style="margin-top: 50px">
+        </div>
+    
+    
+    
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li>@Html.ActionLink("Environmental data", "Notimplemented", "Home")</li>
+                <li>@Html.ActionLink("Health data", "Notimplemented", "Home")</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="page-content-wrapper">
         @RenderBody()
         <hr />
         <footer>
+            <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+            </ul>
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
     </div>
