@@ -21,7 +21,8 @@ namespace WebApp {
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/Site.css",
+                      "~/Content/simple-sidebar.css"));
         }
     }
 }
