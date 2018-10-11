@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "GetResults";
+}
+
+<h2>Results</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Title
+        </th>
+        <th>
+            FirstName
+        </th>
+        <th>
+            LastName
+        </th>
+        <th>
+            Keywords
+        </th>
+        <th>
+            Publisher
+        </th>
+        <th>
+            Date Published
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in ViewBag.data as List<WebApp.Models.Document>) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Firstname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Lastname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Keywords)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Publisher)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DatePublished)
+        </td>
+        <td>
+            @Html.ActionLink("Download", "Notimplemented", new { id=item.Id }) 
+        </td>
+    </tr>
+}
+
+</table>

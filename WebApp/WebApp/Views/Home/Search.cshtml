@@ -4,34 +4,30 @@
 <div class="jumbotron">
     <h4>Search <br /></h4>
 
-    <form>
+    <form action="GetResults" method="post">
         Id:<br>
-        <input type="text" name="id"><br>
+        <input type="text" name="Id"><br>
         Title:<br>
         <input type="text" name="Title"><br>
         Author first name:<br>
-        <input type="text" name="firstname"><br>
+        <input type="text" name="Firstname"><br>
         Author last name:<br>
-        <input type="text" name="lastname"><br>
+        <input type="text" name="Lastname"><br>
         Keyword(s):<br>
-        <input type="text" name="keywords"><br>
+        <input type="text" name="Keywords"><br>
         Separate with ';' <br>
         Publisher:<br>
-        <input type="text" name="publisher"><br>
+        <input type="text" name="Publisher"><br>
         Date from:
-        <input type="date" name="datefrom" min="1900-01-01" max="2018-12-31"><br />
+        <input type="date" name="DateFrom" min="1900-01-01" max="2018-12-31"><br />
         Date to:
-        <input type="date" name="dateto" min="1900-01-01" max="2018-12-31">
+        <input type="date" name="DateTo" min="1900-01-01" max="2018-12-31">
+        <br />
+        <input id="BtnSearch" type="submit" value="Search" />
     </form>
 
-    <br>
-    <select id="DropDownDatatype">
-        <option>All datatypes</option>
-        <option>Document</option>
-        <option>Raw data</option>
-    </select>
-    <br />
-    <input id="BtnSearch" type="button" value="Search" />
+    
+    
 
     <h4>Results - different section</h4><br />
 
