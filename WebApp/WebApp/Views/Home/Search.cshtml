@@ -1,23 +1,23 @@
 ﻿@{
     ViewBag.Title = "Search";
 }
-<div class="jumbotron">
+<div>
     <h4>Search <br /></h4>
 
     <form action="Results" method="post">
         Id:<br>
-        <input type="text" name="Id"><br>
+        <input type="text" name="Id" value=""><br>
         Title:<br>
-        <input type="text" name="Title"><br>
+        <input type="text" name="Title" value=""><br>
         Author first name:<br>
-        <input type="text" name="Firstname"><br>
+        <input type="text" name="Firstname" value=""><br>
         Author last name:<br>
-        <input type="text" name="Lastname"><br>
+        <input type="text" name="Lastname" value=""><br>
         Keyword(s):<br>
-        <input type="text" name="Keywords"><br>
+        <input type="text" name="Keywords" value=""><br>
         Separate with ';' <br>
         Publisher:<br>
-        <input type="text" name="Publisher"><br>
+        <input type="text" name="Publisher" value=""><br>
         Date from:
         <input type="date" name="DateFrom" min="1900-01-01" max="2018-12-31"><br />
         Date to:
@@ -25,21 +25,6 @@
         <br />
         <input id="BtnSearch" type="submit" value="Search" />
     </form>
-
-    
-    
-
-    <h4>Results - different section</h4><br />
-
-
-
-
-
-
-
-
-
-
 
 </div>
 

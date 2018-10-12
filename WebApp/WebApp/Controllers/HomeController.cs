@@ -23,12 +23,7 @@ namespace WebApp.Controllers {
             return View();
         }
 
-        public ActionResult AddData()
-        {
-            ViewBag.Message = "Your add data page.";
 
-            return View();
-        }
 
         public ActionResult Search()
         {
@@ -51,20 +46,31 @@ namespace WebApp.Controllers {
             return View();
         }
 
-        public ActionResult ValidateInput(Document doc) //not in use
+        public ActionResult AddData()
         {
-            //If search - pass input through
-            //If adding data, validate input
+            ViewBag.Message = " ";
 
-            if (doc.Id.ToString() == "")
+            return View();
+        }
+
+
+        //use for both search and add data
+        public ActionResult ValidateInput(Document doc)
+        {
+            ViewBag.data = new Document();
+            ViewBag.data.Title = "per";
+            if (doc.Title != null) //ok
             {
-                return RedirectToAction("Notimplemented");
+                ViewBag.data = null;
+                ViewBag.Message = "Data added";
             }
             else
             {
-                return RedirectToAction("Login");
+                ViewBag.Message = "Validation failed";
+                
             }
-
+            
+            return View("AddData", doc);
         }
 
         public ActionResult Results()
