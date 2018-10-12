@@ -70,24 +70,18 @@ namespace WebApp.Controllers {
         public ActionResult GetResults()
         {
             List<Document> lDoc = new List<Document>();
-            lDoc.Add(new Document());
-            lDoc.Add(new Document());
-
-            lDoc[0].Id = 5;
-            lDoc[0].Title = "Paper1";
-            lDoc[0].Firstname = "Albert";
-            lDoc[0].Lastname = "Einste";
-            lDoc[0].Keywords = "Light";
-            lDoc[0].Publisher = "Einstein Publishing Company";
-            lDoc[0].DatePublished = "05.05.20";
-
-            lDoc[1].Id = 5;
-            lDoc[1].Title = "Paper2";
-            lDoc[1].Firstname = "Marie";
-            lDoc[1].Lastname = "Curie";
-            lDoc[1].Keywords = "Uranium";
-            lDoc[1].Publisher = "Curie Publishing";
-            lDoc[1].DatePublished = "25.05.05";
+            for (int i = 0; i < 20; i++)
+            {
+                lDoc.Add(new Document());
+                lDoc[i].Id = i+1;
+                lDoc[i].Title = "Paper " + (i + 1).ToString();
+                lDoc[i].Firstname = "Albert";
+                lDoc[i].Lastname = "Einstein";
+                lDoc[i].Keywords = "Keyword " + (i + 1).ToString();
+                lDoc[i].Publisher = "Publisher " + (i + 1).ToString(); ;
+                lDoc[i].DatePublished = "05.05.20";
+                lDoc[i].Summary = "This is a short summary of paper no. " + (i + 1).ToString(); 
+            }
 
             ViewBag.data = lDoc;
 

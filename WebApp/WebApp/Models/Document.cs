@@ -17,5 +17,9 @@ namespace WebApp.Models
         public string Publisher { get; set; }
 
         public string DatePublished { get; set; }
+
+        public string Summary { get; set; }
+
+        public string URL { get; set; }
     }
 }
