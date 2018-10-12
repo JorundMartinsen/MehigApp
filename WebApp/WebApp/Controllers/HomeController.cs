@@ -23,9 +23,9 @@ namespace WebApp.Controllers {
             return View();
         }
 
-        public ActionResult Results()
+        public ActionResult AddData()
         {
-            ViewBag.Message = "Your results page.";
+            ViewBag.Message = "Your add data page.";
 
             return View();
         }
@@ -67,8 +67,9 @@ namespace WebApp.Controllers {
 
         }
 
-        public ActionResult GetResults()
+        public ActionResult Results()
         {
+            ViewBag.Message = "Your results page.";
             List<Document> lDoc = new List<Document>();
             for (int i = 0; i < 20; i++)
             {
