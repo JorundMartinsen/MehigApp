@@ -51,7 +51,7 @@ namespace WebApp.Controllers {
             return View();
         }
 
-        public ActionResult ValidateInput(Document doc)
+        public ActionResult ValidateInput(Document doc) //not in use
         {
             //If search - pass input through
             //If adding data, validate input
