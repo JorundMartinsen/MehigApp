@@ -260,3 +260,5 @@ paket-files/
 __pycache__/
 *.pyc
 /WebApp/WebApp/Content/index.html
+/WebApp/WebApp/Properties/PublishProfiles/mehdwebapp - Web Deploy1.pubxml
+/WebApp/WebApp/Properties/PublishProfiles
