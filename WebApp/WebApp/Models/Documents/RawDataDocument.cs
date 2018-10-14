@@ -5,6 +5,6 @@ using System.Web;
 
 namespace WebApp.Models.Documents {
     public class RawDataDocument : BaseDocument {
-        public DataDocument Data { get; set; }
+        public List<DataDocument> Data { get; set; }
     }
 }

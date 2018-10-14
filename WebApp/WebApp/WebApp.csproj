@@ -180,8 +180,10 @@
     </Compile>
     <Compile Include="Models\Documents\DataDocument.cs" />
     <Compile Include="Models\Documents\BaseDocument.cs" />
+    <Compile Include="Models\Documents\NameDocument.cs" />
     <Compile Include="Models\Documents\RawDataDocument.cs" />
     <Compile Include="Models\Documents\ReportDocument.cs" />
+    <Compile Include="Models\Documents\UserDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
