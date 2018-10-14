@@ -15,6 +15,12 @@ namespace WebApp {
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "Data registration",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Registration", action = "Index", id = UrlParameter.Optional }
+            );
         }
     }
 }
