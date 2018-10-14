@@ -1,6 +1,38 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    
+
 }
 
+<div>
+    <h4>Add Data <br /></h4>
 
-This is the data registration page
+    <form action="ValidateInput" method="post">
+        Title:<br>
+        <input type="text" name="Title" value=@title><br>
+        Author first name:<br>
+        <input type="text" name="Firstname" value=@firstname><br>
+        Author last name:<br>
+        <input type="text" name="Lastname" value=@lastname><br>
+        Keyword(s):<br>
+        <input type="text" name="Keywords" value=@keywords><br>
+        Separate with ';' <br>
+        Publisher:<br>
+        <input type="text" name="Publisher" value=@publisher><br>
+        Date published:
+        <input type="date" name="DatePublished" min="1900-01-01" max="2018-12-31"><br />
+        <br />
+        <input id="InputFile" type="file" />
+        <br />
+        <br />
+        <input id="BtnAddData" type="submit" value="Add Data" />
+    </form>
+
+</div>
+
+<br />
+<br />
+@status
+<br />
+<br />
