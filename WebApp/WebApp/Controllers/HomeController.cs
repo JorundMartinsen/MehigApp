@@ -26,13 +26,6 @@ namespace WebApp.Controllers {
 
 
 
-        public ActionResult Search()
-        {
-            ViewBag.Message = "Your search page.";
-
-            return View();
-        }
-
         public ActionResult Login()
         {
             ViewBag.Message = "Your login page.";
@@ -80,31 +73,7 @@ namespace WebApp.Controllers {
             return View("AddData");
         }
 
-        public ActionResult Results()
-        {
-            ViewBag.Message = "Your results page.";
-            // ASSUMING THIS IS A MOCK SOLUTION. JM
-            // -------------------------------
-            //List<Document> lDoc = new List<Document>();
-            //for (int i = 0; i < 20; i++)
-            //{
-            //    lDoc.Add(new Document());
-            //    lDoc[i].Id = i+1;
-            //    lDoc[i].Title = "Paper " + (i + 1).ToString();
-            //    lDoc[i].Firstname = "Albert";
-            //    lDoc[i].Lastname = "Einstein";
-            //    lDoc[i].Keywords = "Keyword " + (i + 1).ToString();
-            //    lDoc[i].Publisher = "Publisher " + (i + 1).ToString(); ;
-            //    lDoc[i].DatePublished = "05.05.20";
-            //    lDoc[i].Summary = "This is a short summary of paper no. " + (i + 1).ToString(); 
-            //}
-
-            //ViewBag.data = lDoc;
-
-            // -------------------------------
-
-            return View();
-        }
+       
         
 
     }

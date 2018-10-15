@@ -1,37 +1,25 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    @model WebApp.Models.Reports
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+@using (@Html.BeginForm("Results", "Search"))
+{
+<p>
+    Id:<br /> @Html.TextBox("Id") <br />
+    Title:<br /> @Html.TextBox("Title") <br />
+    Author:<br /> @Html.TextBox("Author") <br />
+    Keywords:<br /> @Html.TextBox("Keywords") <br />
+    Publisher:<br /> @Html.TextBox("Publisher") <br />
+    Date from - to:<br />
+    <input type="date" name="DateFrom" min="1900-01-01" max=@DateTime.Now.Date>
+    -
+    <input type="date" name="DateTo" min="1900-01-01" max=@DateTime.Now.Date><br />
+    <br />
+    <input type="submit" value="Search" name="searchBtn" />
+</p>
 
-<div>
-    <h4>Search <br /></h4>
-
-    <form action="Results" method="post">
-        Id:<br>
-        <input type="text" name="Id" value=""><br>
-        Title:<br>
-        <input type="text" name="Title" value=""><br>
-        Author first name:<br>
-        <input type="text" name="Firstname" value=""><br>
-        Author last name:<br>
-        <input type="text" name="Lastname" value=""><br>
-        Keywords (;):<br>
-        <input type="text" name="Keywords" value=""><br>
-
-        Publisher:<br>
-        <input type="text" name="Publisher" value=""><br>
-        Date from - to:<br />
-        <input type="date" name="DateFrom" min="1900-01-01" max="2018-12-31">
-        -
-        <input type="date" name="DateTo" min="1900-01-01" max=@DateTime.Now.Date><br />
-        <br />
-        <input id="BtnSearch" type="submit" value="Search" />
-        <br /><br />
-    </form>
-
-</div>
+}
 
 

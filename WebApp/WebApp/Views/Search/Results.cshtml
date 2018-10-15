@@ -1,7 +1,8 @@
 ﻿@{
-    ViewBag.Title = "Results";
-    var data = ViewBag.data as List<WebApp.Models.Reports>;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    // var data = ViewBag.data as List<WebApp.Models.Reports>;
     // string selectedSummary = data[0];
+    var data = "";
     string selectedSummary = "";
     if (selectedSummary is null)
     {
