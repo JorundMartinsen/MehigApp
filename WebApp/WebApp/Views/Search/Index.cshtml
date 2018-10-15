@@ -1,6 +1,11 @@
-﻿@{
-    ViewBag.Title = "Search";
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<h2>Index</h2>
+
 <div>
     <h4>Search <br /></h4>
 
@@ -13,18 +18,20 @@
         <input type="text" name="Firstname" value=""><br>
         Author last name:<br>
         <input type="text" name="Lastname" value=""><br>
-        Keyword(s):<br>
+        Keywords (;):<br>
         <input type="text" name="Keywords" value=""><br>
-        Separate with ';' <br>
+
         Publisher:<br>
         <input type="text" name="Publisher" value=""><br>
-        Date from:
-        <input type="date" name="DateFrom" min="1900-01-01" max="2018-12-31"><br />
-        Date to:
-        <input type="date" name="DateTo" min="1900-01-01" max="2018-12-31">
+        Date from - to:<br />
+        <input type="date" name="DateFrom" min="1900-01-01" max="2018-12-31">
+        -
+        <input type="date" name="DateTo" min="1900-01-01" max=@DateTime.Now.Date><br />
         <br />
         <input id="BtnSearch" type="submit" value="Search" />
+        <br /><br />
     </form>
 
 </div>
+
 

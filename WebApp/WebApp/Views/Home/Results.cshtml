@@ -1,4 +1,16 @@
-﻿<head>
+﻿@{
+    ViewBag.Title = "Results";
+    var data = ViewBag.data as List<WebApp.Models.Reports>;
+    // string selectedSummary = data[0];
+    string selectedSummary = "";
+    if (selectedSummary is null)
+    {
+        selectedSummary = "";
+    }
+}
+
+
+<head>
     <style type="text/css">
         table {
             width: 100%;
@@ -43,15 +55,6 @@
     </script>
 </head>
 
-@{
-    ViewBag.Title = "Results";
-    var data = ViewBag.data as List<WebApp.Models.Document>;
-    string selectedSummary = data[0].Title;
-    if (selectedSummary is null)
-    {
-        selectedSummary = "";
-    }
-}
 
 
 
@@ -98,34 +101,36 @@
                 @foreach (var item in data)
                 {
                 <tr>
+                    @*
+        <td>
+            @Html.DisplayFor(modelItem => item.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Firstname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Lastname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Keywords)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Publisher)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DatePublished)
+        </td>
+        <td>
+            <a href="#" onclick="updateSummary()"> Summary </a>
+        </td>
+        <td>
+            @Html.ActionLink("Download", "Notimplemented", new { id = item.Id })
+        </td>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Firstname)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Lastname)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Keywords)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Publisher)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DatePublished)
-                    </td>
-                    <td>
-                        <a href="#" onclick="updateSummary()"> Summary </a>
-                    </td>
-                    <td>
-                        @Html.ActionLink("Download", "Notimplemented", new { id = item.Id })
-                    </td>
+                    *@
                 </tr>
 
                 }
@@ -137,5 +142,5 @@
 <br />
 <br />
 <h3>Summary - fill tb when clicking on summary link</h3>
-@Html.TextBox("summaryTb", selectedSummary, new {@readonly = "readonly"})
+@Html.TextBox("summaryTb", selectedSummary, new { @readonly = "readonly" })
 

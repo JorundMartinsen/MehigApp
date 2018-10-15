@@ -21,6 +21,12 @@ namespace WebApp {
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Registration", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "Data search",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Search", action = "Index", id = UrlParameter.Optional }
+            );
         }
     }
 }
