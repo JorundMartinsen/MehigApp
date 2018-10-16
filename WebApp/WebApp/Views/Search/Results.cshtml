@@ -1,4 +1,9 @@
-﻿@{
+﻿@using WebApp.Models
+@model List<WebApp.Models.Result>
+
+
+@{
+    ViewBag.Title = "Result";
     Layout = "~/Views/Shared/_Layout.cshtml";
     // var data = ViewBag.data as List<WebApp.Models.Reports>;
     // string selectedSummary = data[0];
@@ -8,6 +13,7 @@
     {
         selectedSummary = "";
     }
+
 }
 
 
@@ -57,9 +63,6 @@
 </head>
 
 
-
-
-
 <h2>Results</h2>
 
 <body onload="makeTableScroll();">
@@ -68,77 +71,52 @@
         <table id="ResultTable" class="fixed_headers">
             <thead>
                 <tr>
-                    <th>
-                        ID
-                    </th>
-                    <th>
-                        Title
-                    </th>
-                    <th>
-                        FirstName
-                    </th>
-                    <th>
-                        LastName
-                    </th>
-                    <th>
-                        Keywords
-                    </th>
-                    <th>
-                        Publisher
-                    </th>
-                    <th>
-                        Date Published
-                    </th>
-                    <th>
-                        Summary
-                    </th>
-                    <th>
-                        Download
-                    </th>
+
+                    @foreach (var itm2 in Result.HeaderList)
+                    {
+                        <th>
+                            @Html.DisplayFor(modelItem => itm2)
+                        </th>
+
+                    }
+
                 </tr>
             </thead>
-
             <tbody>
-                @foreach (var item in data)
+                @foreach (var item in Model)
                 {
-                <tr>
-                    @*
-        <td>
-            @Html.DisplayFor(modelItem => item.Id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Firstname)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Lastname)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Keywords)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Publisher)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DatePublished)
-        </td>
-        <td>
-            <a href="#" onclick="updateSummary()"> Summary </a>
-        </td>
-        <td>
-            @Html.ActionLink("Download", "Notimplemented", new { id = item.Id })
-        </td>
+                    <tr>
 
-                    *@
-                </tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Author)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Keywords)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            <a href="#" onclick="updateSummary()"> Summary </a>
+                        </td>
+                        <td>
+                            @Html.ActionLink("Download", "Notimplemented", new { id = item.Id })
+                        </td>
 
+                    </tr>
                 }
             </tbody>
 
         </table>
     </div>
+
+
 </body>
 <br />
 <br />

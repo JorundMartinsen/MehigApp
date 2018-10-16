@@ -1,32 +1,57 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using WebApp.Models;
 
 namespace WebApp.Controllers
 {
     public class SearchController : Controller
     {
+        public SearchData sData = new SearchData();
+        
+
         // GET: Search
+        [HttpGet]
         public ActionResult Index()
         {
-            return View();
+            return View(sData);
         }
 
-        public ActionResult Results(FormCollection collection)
+
+        //public ActionResult Results(FormCollection col)
+        public ActionResult Results(SearchData sData)
         {
-            ViewBag.Message = "Your results page.";
-            string s = collection["SearchString"];
+            List<Result> resultList = new List<Result>();
+            for(int i = 0; i < 20; i++)
+            {
+                resultList.Add(new Result());
+                resultList[i].Id = (i+1).ToString();
+            }
+            
 
             try
             {
-                //search logic
+                sData.ValidateInput();
+                if (sData.Successful)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View(resultList);
+                }
 
-                return View(s);
+                
             }
             catch
             {
-                RedirectToAction("Index");
+                
             }
 
             return View();
         }
+
     }
 }
