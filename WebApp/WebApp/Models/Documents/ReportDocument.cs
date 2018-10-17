@@ -4,6 +4,10 @@ using Newtonsoft.Json;
 
 namespace WebApp.Models.Documents {
     public class ReportDocument : BaseDocument {
+        public ReportDocument() : base() {
+
+        }
+
         [JsonProperty(PropertyName = "publisher")]
         public string Publisher { get; set; }
 
@@ -16,6 +20,6 @@ namespace WebApp.Models.Documents {
 
         [JsonProperty(PropertyName = "file")]
         [DisplayName("Upload file")]
-        public HttpPostedFile Report { get; set; }
+        public HttpPostedFileBase File { get; set; }
     }
 }

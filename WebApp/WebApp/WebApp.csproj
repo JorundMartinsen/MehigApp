@@ -185,7 +185,7 @@
     <Compile Include="Models\Documents\RawDataDocument.cs" />
     <Compile Include="Models\Documents\ReportDocument.cs" />
     <Compile Include="Models\Documents\UserDocument.cs" />
-    <Compile Include="Models\Reports.cs" />
+    <Compile Include="Models\Report.cs" />
     <Compile Include="Models\Result.cs" />
     <Compile Include="Models\SearchData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

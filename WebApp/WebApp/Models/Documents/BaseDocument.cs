@@ -4,6 +4,10 @@ using Newtonsoft.Json;
 
 namespace WebApp.Models.Documents {
     public class BaseDocument {
+        public BaseDocument() {
+
+        }
+
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
