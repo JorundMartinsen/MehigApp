@@ -1,38 +1,72 @@
-﻿@{
+﻿@model WebApp.Models.Documents.ReportDocument
+
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
-
-    
-
 }
 
-<div>
-    <h4>Add Data <br /></h4>
+<div class="jumbotron">
 
-    <form action="ValidateInput" method="post">
-        Title:<br>
-        <input type="text" name="Tittestle" value=""><br>
-        Author first name:<br>
-        <input type="text" name="Firstname" value=""><br>
-        Author last name:<br>
-        <input type="text" name="Lastname" value=""><br>
-        Keyword(s):<br>
-        <input type="text" name="Keywords" value=""><br>
-        Separate with ';' <br>
-        Publisher:<br>
-        <input type="text" name="Publisher" value=""><br>
-        Date published:
-        <input type="date" name="DatePublished" min="1900-01-01" max="2018-12-31"><br />
-        <br />
-        <input id="InputFile" type="file" />
-        <br />
-        <br />
-        <input id="BtnAddData" type="submit" value="Add Data" />
-    </form>
+    <div class="h4 pb-3">Register a document</div>
+    <div class="form-group">
+        @using (Html.BeginForm("UploadReport", "Registration"))
+        {
+            @Html.ValidationSummary(true)
 
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.TextBoxFor(model => model.Author, new { @class = "form-control" })
+            @Html.LabelFor(model => model.Author, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.TextBoxFor(model => model.Date, new { @type = "date", @class = "form-control", @Value = DateTime.Now })
+            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.TextBoxFor(model => model.Publisher, new { @class = "form-control" })
+            @Html.LabelFor(model => model.Publisher, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.TextAreaFor(model => model.Summary, new { @class = "form-control" })
+            @Html.LabelFor(model => model.Summary, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.TextBoxFor(model => model.Keywords, new { @class = "form-control" })
+            @Html.LabelFor(model => model.Keywords, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.TextBoxFor(model => model.Source, new { @class = "form-control" })
+            @Html.LabelFor(model => model.Source, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.TextBoxFor(model => model.Report, new { @type = "file", @class = "form-control-file" })
+            @Html.LabelFor(model => model.Report, htmlAttributes: new { @class = "control-label col-md-2" })
+            <br />
+            <input type="submit" class="form-control btn btn-outline-dark" />
+        }
+    </div>
 </div>
 
-<br />
-<br />
-test
-<br />
-<br />
+
+    @*<form action="ValidateInput" method="post">
+
+                <input type="text" name="Tittestle" value=""><br>
+                Author first name:<br>
+                <input type="text" name="Firstname" value=""><br>
+                Author last name:<br>
+                <input type="text" name="Lastname" value=""><br>
+                Keyword(s):<br>
+                <input type="text" name="Keywords" value=""><br>
+                Separate with ';' <br>
+                Publisher:<br>
+                <input type="text" name="Publisher" value=""><br>
+                Date published:
+                <input type="date" name="DatePublished" min="1900-01-01" max="2018-12-31"><br />
+                <br />
+                <input id="InputFile" type="file" />
+                <br />
+                <br />
+                <input id="BtnAddData" type="submit" value="Add Data" />
+            </form>
+
+        </div>
+
+        <br />
+        <br />
+        test
+        <br />
+        <br />*@

@@ -5,12 +5,7 @@ using System.Web;
 using WebApp.Models.Documents;
 
 namespace WebApp.Models {
-    public class Reports {
-
-        public List<ReportDocument> ReportDocuments { get; set; }
-
-        public Reports() {
-
-        }
+    public class Report {
+        
     }
 }

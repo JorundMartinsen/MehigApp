@@ -85,5 +85,10 @@ namespace WebApp.Controllers
                 return View();
             }
         }
+
+        [HttpPost]
+        public ActionResult UploadReport() {
+            return View();
+        }
     }
 }
