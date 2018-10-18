@@ -1,12 +1,13 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Registration";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>@ViewBag.Title</h2>
 
 <div class="jumbotron">
-    @Html.ActionLink("Register documents", "Document")
+    @Html.ActionLink("Register documents", "Document", null, new { @class = "btn btn-outline-dark" })
+    @Html.ActionLink("Register raw data", "RawData", null, new { @class = "btn btn-outline-dark" })
 </div>
 

@@ -284,6 +284,7 @@
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Search\GetResults.cshtml" />
     <Content Include="Views\Registration\Index.cshtml" />
+    <Content Include="Views\Registration\RawData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

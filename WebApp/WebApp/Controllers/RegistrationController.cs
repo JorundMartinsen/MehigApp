@@ -71,6 +71,16 @@ namespace WebApp.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult RawData() {
+            return View("RawData", new RawDataDocument());
+        }
+
+        [HttpPost]
+        public ActionResult RawData(RawDataDocument document) {
+            return View("RawData", document);
+        }
+
         private void Save(ReportDocument document) {
             string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["MongoDB"].ConnectionString;
             MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
@@ -119,6 +129,10 @@ namespace WebApp.Controllers
             var bdoc = document.ToBsonDocument();
             collection.InsertOne(bdoc);
             
+        }
+
+        private void SaveRawData(RawDataDocument document) {
+
         }
     }
 }
