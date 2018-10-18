@@ -19,6 +19,10 @@ namespace WebApp.Models.Documents {
         [DisplayName("Link to source")]
         public string Source { get; set; }
 
+        [BsonIgnoreIfNull]
+        [BsonElement("filesource")]
+        public string FileSource { get; set; }
+
         [BsonIgnore]
         [DisplayName("Upload file")]
         public HttpPostedFileBase File { get; set; }

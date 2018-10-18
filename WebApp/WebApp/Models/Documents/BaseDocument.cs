@@ -7,7 +7,7 @@ namespace WebApp.Models.Documents {
         public BaseDocument() {
 
         }
-        [BsonId]
+        [BsonIgnoreIfNull]
         public string Id { get; set; }
 
         [BsonElement("name")]

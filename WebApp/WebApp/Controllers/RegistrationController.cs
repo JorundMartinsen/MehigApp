@@ -6,13 +6,16 @@ using System.Web;
 using System.Web.Mvc;
 using System.Security.Authentication;
 using System.Reflection;
-using WebApp.Models;
-using WebApp.Models.Documents;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.WindowsAzure.Storage.Blob;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using MongoDB.Driver.GridFS;
+using WebApp.Models;
+using WebApp.Models.Documents;
 
 namespace WebApp.Controllers
 {
@@ -48,18 +51,17 @@ namespace WebApp.Controllers
             }
             else
             {
-                //var bdocument = new BsonDocument {
-                //Attribute.GetCustomAttribute(typeof(ReportDocument), typeof(JsonProperty))
-                //{ "name", document.Name },
-                //{ "author", document.Author },
-                //{ "keywords",document.Keywords },
-                //{"date",document.Date },
-                //{"publisher",document.Publisher },
-                //{"summary",document.Summary },
-                //{"source",document.Source }
-                Save(document);
-                ViewBag.FileStatus = string.Format("Success. {0} saved.", document.Name);
-                return View("Index", new ReportDocument());
+                if (document.Source != null)
+                {
+                    Save(document);
+                    ViewBag.FileStatus = string.Format("Success. {0} saved.", document.Name);
+                    return View("Index", new ReportDocument());
+                }
+                else
+                {
+                    ViewBag.FileStatus = "You have to input source or upload file as PDF";
+                    return View("Index", document);
+                }
             }
         }
 
@@ -71,26 +73,35 @@ namespace WebApp.Controllers
             var database = client.GetDatabase("TestDB");
             var collection = database.GetCollection<BsonDocument>("Reports");
             var bdoc = document.ToBsonDocument();
-            //collection.InsertOne(document.ToBsonDocument());
-            if (true)
-            {
-                
-            }
+            collection.InsertOne(bdoc);
+            
         }
 
         private void SaveFile(ReportDocument document) {
+            // Connect to and configure MongoDB connection
             string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["MongoDB"].ConnectionString;
             MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
             settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
             MongoClient client = new MongoClient(settings);
             var database = client.GetDatabase("TestDB");
             var collection = database.GetCollection<BsonDocument>("Reports");
-            var bdoc = document.ToBsonDocument();
-            //collection.InsertOne(document);
-            if (true) 
-            {
 
-            }
+            // Connect to and configure Azure Blob storage
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(System.Configuration.ConfigurationManager.ConnectionStrings["AzureBlob"].ConnectionString);
+            CloudBlobContainer cloudBlobContainer = new CloudBlobContainer(storageAccount.BlobStorageUri, storageAccount.Credentials);
+
+            //Upload file to block
+            CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(document.File.FileName);
+            var path = Path.GetFullPath(document.File.FileName);
+            //cloudBlockBlob.UploadFromFile(path);
+
+            //Update source to filename
+            document.FileSource = document.File.FileName;
+
+            //Convert document to BsonDocument and upload to MongoDB
+            var bdoc = document.ToBsonDocument();
+            collection.InsertOne(bdoc);
+            
         }
     }
 }
