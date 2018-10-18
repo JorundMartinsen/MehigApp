@@ -1,82 +1,12 @@
-﻿@model WebApp.Models.Documents.ReportDocument
-
+﻿
 @{
+    ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<h2>@ViewBag.Title</h2>
+
 <div class="jumbotron">
+    @Html.ActionLink("Register documents", "Document")
+</div>
 
-    <div class="h4 pb-3">Register a document</div>
-    <div class="form-group">
-        @using (Html.BeginForm("UploadReport", "Registration", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @Html.AntiForgeryToken()
-
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="pb-4">
-            <div class="form-check-inline">
-                @Html.RadioButtonFor(model => model.DataType, "Environment", new { @class = "form-check-input" }) @Html.Label("Environment", new { @class = "form-check-label" })
-            </div>
-            <div class="form-check-inline">
-                @Html.RadioButtonFor(model => model.DataType, "Health", new { @class = "form-check-input" }) @Html.Label("Health", new { @class = "form-check-label" })
-            </div>
-        </div>
-            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label pl-3 pb-3 " })
-
-            @Html.TextBoxFor(model => model.Author, new { @class = "form-control" })
-            @Html.LabelFor(model => model.Author, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
-
-            @Html.TextBoxFor(model => model.Date, new { @type = "date", @class = "form-control", @Value = DateTime.Now })
-            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
-
-            @Html.TextBoxFor(model => model.Publisher, new { @class = "form-control" })
-            @Html.LabelFor(model => model.Publisher, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
-
-            @Html.TextAreaFor(model => model.Summary, new { @class = "form-control" })
-            @Html.LabelFor(model => model.Summary, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
-
-            @Html.TextBoxFor(model => model.Keywords, new { @class = "form-control" })
-            @Html.LabelFor(model => model.Keywords, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
-
-            @Html.TextBoxFor(model => model.ExternalLink, new { @class = "form-control" })
-            @Html.LabelFor(model => model.ExternalLink, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
-
-            @Html.TextBoxFor(model => model.File, new { @type = "file", @class = "form-control-file" })
-            @Html.LabelFor(model => model.File, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
-            <br />
-            <input type="submit" class="form-control btn btn-outline-dark col-md-2" />
-            <div class="custom-control-label col-md-2">@ViewBag.FileStatus</div>
-            }
-        </div>
-        </div>
-
-
-    @*<form action="ValidateInput" method="post">
-
-                <input type="text" name="Tittestle" value=""><br>
-                Author first name:<br>
-                <input type="text" name="Firstname" value=""><br>
-                Author last name:<br>
-                <input type="text" name="Lastname" value=""><br>
-                Keyword(s):<br>
-                <input type="text" name="Keywords" value=""><br>
-                Separate with ';' <br>
-                Publisher:<br>
-                <input type="text" name="Publisher" value=""><br>
-                Date published:
-                <input type="date" name="DatePublished" min="1900-01-01" max="2018-12-31"><br />
-                <br />
-                <input id="InputFile" type="file" />
-                <br />
-                <br />
-                <input id="BtnAddData" type="submit" value="Add Data" />
-            </form>
-
-        </div>
-
-        <br />
-        <br />
-        test
-        <br />
-        <br />*@

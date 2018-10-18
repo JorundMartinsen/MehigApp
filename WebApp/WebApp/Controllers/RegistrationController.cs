@@ -27,8 +27,14 @@ namespace WebApp.Controllers
             return View(new ReportDocument());
         }
 
+        [HttpGet]
+        public ActionResult Document() {
+
+            return View("Document", new ReportDocument());
+        }
+
         [HttpPost]
-        public ActionResult UploadReport(ReportDocument document) {
+        public ActionResult Document(ReportDocument document) {
             if (document.File != null)
             {
                 string fileExt = Path.GetExtension(document.File.FileName).ToUpper();
@@ -40,13 +46,13 @@ namespace WebApp.Controllers
 
                     SaveFile(document);
                     ViewBag.FileStatus = string.Format("Success. {0} saved.", document.Name);
-                    return View("Index", new ReportDocument());
+                    return View("Document", new ReportDocument());
 
                 }
                 else
                 {
                     ViewBag.FileStatus = "Wrong file format. Only PDF accepted";
-                    return View("Index", document);
+                    return View("Document", document);
                 }
             }
             else
@@ -55,12 +61,12 @@ namespace WebApp.Controllers
                 {
                     Save(document);
                     ViewBag.FileStatus = string.Format("Success. {0} saved.", document.Name);
-                    return View("Index", new ReportDocument());
+                    return View("Document", new ReportDocument());
                 }
                 else
                 {
                     ViewBag.FileStatus = "You have to input source or upload file as PDF";
-                    return View("Index", document);
+                    return View("Document", document);
                 }
             }
         }
