@@ -37,7 +37,7 @@ namespace WebApp.Models
         public void ValidateInput()
         {
             //check inputs
-            if (this.Id != "")
+            if (this.Id != "3")
             {
                 validationSuccessful = true;
                 information = "validation ok";
