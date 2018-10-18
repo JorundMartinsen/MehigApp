@@ -4,31 +4,46 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    string info = "";
-    if (Model != null)
-    {
-        info = Model.Information;
-    }
-
+    string info = Model.Information;
 }
 
-@using (@Html.BeginForm("Results", "Search"))
-{
-    <p>
-        Id:<br /> @Html.TextBoxFor(s => s.Id) <br />
-        Title:<br /> @Html.TextBox("Title") <br />
-        Author:<br /> @Html.TextBox("Author") <br />
-        Keywords:<br /> @Html.TextBox("Keywords") <br />
-        Publisher:<br /> @Html.TextBox("Publisher") <br />
-        Date from - to:<br />
-        <input type="date" name="DateFrom" min="1900-01-01" max=@DateTime.Now.Date>
-        -
-        <input type="date" name="DateTo" min="1900-01-01" max=@DateTime.Now.Date><br />
-        <br />
-        <input type="submit" value="Search" name="searchBtn" />
-    </p>
+<div class="jumbotron">
+    <div class="h4 pb-3">Search</div>
+    <div class="form-group">
+        @using (Html.BeginForm("GetResults", "Search"))
+        {
+            @Html.AntiForgeryToken()
 
-}
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-@Html.EditorFor(s => s.Information)
-@Html.TextBox("summaryTb", info, new { @readonly = "readonly" })
+            @Html.LabelFor(model => model.Id, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.TextBoxFor(model => model.Id, new { @class = "form-control" })
+
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+
+            @Html.LabelFor(model => model.Author, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.TextBoxFor(model => model.Author, new { @class = "form-control" })
+
+            @Html.LabelFor(model => model.Publisher, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.TextBoxFor(model => model.Publisher, new { @class = "form-control" })
+
+            @Html.LabelFor(model => model.Keywords, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.TextBoxFor(model => model.Keywords, new { @class = "form-control" })
+
+            <br />
+            <input type="submit" value="Search" name="searchBtn" />
+
+
+        }
+
+
+
+
+
+    </div>
+</div>
+
+old:
+<br />
+@info

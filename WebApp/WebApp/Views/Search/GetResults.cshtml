@@ -1,13 +1,10 @@
 ﻿@using WebApp.Models
-@model List<WebApp.Models.Result>
-
+@model WebApp.Models.SearchData
 
 @{
     ViewBag.Title = "Result";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    // var data = ViewBag.data as List<WebApp.Models.Reports>;
-    // string selectedSummary = data[0];
-    var data = "";
+
     string selectedSummary = "";
     if (selectedSummary is null)
     {
@@ -30,35 +27,32 @@
     </style>
     <script type="text/javascript">
 
-        jQuery(document).ready(function ($) {
-            $(".clickable-row").click(function () {
-                window.location = $(this).data("href");
+            jQuery(document).ready(function ($) {
+                $(".clickable-row").click(function () {
+                    window.location = $(this).data("href");
+                });
             });
-        });
 
-        $('#myLink').click(function () { selectedSummary = "testing.." });
+            $('#myLink').click(function () { selectedSummary = "testing.." });
 
-        function updateSummary() {
-            document.getElementById('summaryTb').value = "ecapital letters and the small letters represent distinct and unrelated entities.";
-        }
-
-
-        function makeTableScroll() {
-            // Constant retrieved from server-side via JSP
-            var maxRows = 10;
-            var table = document.getElementById('ResultTable');
-            var wrapper = table.parentNode;
-            var rowsInTable = table.rows.length;
-            var height = 0;
-            if (rowsInTable > maxRows) {
-                for (var i = 0; i < maxRows; i++) {
-                    height += table.rows[i].clientHeight;
-                }
-                wrapper.style.height = height + "px";
+            function updateSummary() {
+                document.getElementById('summaryTb').value = "ecapital letters and the small letters represent distinct and unrelated entities.";
             }
-        }
 
-
+            function makeTableScroll() {
+                // Constant retrieved from server-side via JSP
+                var maxRows = 10;
+                var table = document.getElementById('ResultTable');
+                var wrapper = table.parentNode;
+                var rowsInTable = table.rows.length;
+                var height = 0;
+                if (rowsInTable > maxRows) {
+                    for (var i = 0; i < maxRows; i++) {
+                        height += table.rows[i].clientHeight;
+                    }
+                    wrapper.style.height = height + "px";
+                }
+            }
     </script>
 </head>
 
@@ -72,10 +66,10 @@
             <thead>
                 <tr>
 
-                    @foreach (var itm2 in Result.HeaderList)
+                    @foreach (var header in WebApp.Models.SearchData.HeaderList)
                     {
                         <th>
-                            @Html.DisplayFor(modelItem => itm2)
+                            @Html.DisplayFor(modelItem => header)
                         </th>
 
                     }
@@ -83,7 +77,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                @foreach (var item in Model.ResultList)
                 {
                     <tr>
 

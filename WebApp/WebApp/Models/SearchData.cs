@@ -1,29 +1,72 @@
-﻿using WebApp.Models.Documents;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using WebApp.Models.Documents;
 
 namespace WebApp.Models
 {
-    public class SearchData : BaseDocument
+    public class SearchData : ReportDocument
     {
-        private bool successful;
+        private bool validationSuccessful;
         private string information;
+        public static List<string> HeaderList = new List<string>() {"Id","Name", "Author", "Keywords", "Date", "Summary", "Download" };
+        private List<ReportDocument> resultList;
+        private DateTime dateFrom;
+        private DateTime dateTo;
 
 
         public SearchData()
         {
-            successful = false;
-            information = "not checked";
+            validationSuccessful = false;
+            information = "";
+            ResultList = new List<ReportDocument>();
 
         }
 
-        public bool Successful { get => successful;}
+        public bool ValidationSuccessful { get => validationSuccessful;}
 
         public string Information { get => information; }
 
+        public List<ReportDocument> ResultList { get => resultList; set => resultList = value; }
+
+        public DateTime DateFrom { get => dateFrom; set => dateFrom = value; }
+
+        public DateTime DateTo { get => dateTo; set => dateTo = value; }
 
         public void ValidateInput()
         {
-            successful = false;
-            information = "error";
+            //check inputs
+            if (this.Id != "")
+            {
+                validationSuccessful = true;
+                information = "validation ok";
+            }
+            else
+            {
+                validationSuccessful = false;
+                information = "validation error";
+            }
+        }
+
+        public void Search()
+        {
+            //search db
+            if (this.Id != "2")
+            {
+                //dummy db
+                for (int i = 0; i < 20; i++)
+                {
+                    resultList.Add(new ReportDocument());
+                    resultList[i].Id = (i + 1).ToString();
+                }
+                information = string.Format("Found {0}.", resultList.Count());
+            }
+            else
+            {
+                information = "No matches found.";
+            }
+            
         }
     }
 }

@@ -4,53 +4,51 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebApp.Models;
+using WebApp.Models.Documents;
 
 namespace WebApp.Controllers
 {
     public class SearchController : Controller
-    {
-        public SearchData sData = new SearchData();
-        
-
+    {   
         // GET: Search
         [HttpGet]
         public ActionResult Index()
         {
-            return View(sData);
+            return View(new SearchData());
         }
 
 
         //public ActionResult Results(FormCollection col)
-        public ActionResult Results(SearchData sData)
+        public ActionResult GetResults(SearchData sData)
         {
-            List<Result> resultList = new List<Result>();
-            for(int i = 0; i < 20; i++)
-            {
-                resultList.Add(new Result());
-                resultList[i].Id = (i+1).ToString();
-            }
-            
-
             try
             {
                 sData.ValidateInput();
-                if (sData.Successful)
+                if (sData.ValidationSuccessful)
                 {
-                    return RedirectToAction("Index");
+                    sData.Search();
+                    if (sData.ResultList.Count() > 0)
+                    {
+                        ViewBag.FileStatus = string.Format("{0} found.", sData.ResultList.Count());
+                        return View(sData);
+                    }
+                    else
+                    {
+                        ViewBag.FileStatus = "No listings found.";
+                        return View("Index", sData);
+                    }
                 }
                 else
                 {
-                    return View(resultList);
+                    ViewBag.FileStatus = sData.Information;
+                    return View("Index", sData);
                 }
-
-                
             }
             catch
             {
-                
+                ViewBag.FileStatus = "Error";
+                return View("Index", new SearchData());
             }
-
-            return View();
         }
 
     }

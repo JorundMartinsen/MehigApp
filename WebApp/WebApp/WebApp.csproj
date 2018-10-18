@@ -186,7 +186,6 @@
     <Compile Include="Models\Documents\ReportDocument.cs" />
     <Compile Include="Models\Documents\UserDocument.cs" />
     <Compile Include="Models\Report.cs" />
-    <Compile Include="Models\Result.cs" />
     <Compile Include="Models\SearchData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -276,8 +275,10 @@
     <Content Include="Views\Search\Results.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\AddData.cshtml" />
-    <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\Search\Index_old.cshtml" />
     <Content Include="Views\Registration\Index.cshtml" />
+    <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\Search\GetResults.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
