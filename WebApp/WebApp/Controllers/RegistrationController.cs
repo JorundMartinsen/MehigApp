@@ -87,16 +87,34 @@ namespace WebApp.Controllers
             var collection = database.GetCollection<BsonDocument>("Reports");
 
             // Connect to and configure Azure Blob storage
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(System.Configuration.ConfigurationManager.ConnectionStrings["AzureBlob"].ConnectionString);
-            CloudBlobContainer cloudBlobContainer = new CloudBlobContainer(storageAccount.BlobStorageUri, storageAccount.Credentials);
+            CloudStorageAccount storageAccount =
+                CloudStorageAccount.Parse(
+                    @"DefaultEndpointsProtocol=https;AccountName=mehdstorageacc;" + 
+                    @"AccountKey=hbt2SpeTW9ARMRC+ZkMjbfAV6gAKmarvpEU5Gjda0jI12MAsq8fUsG5B1/3Z4a1nUhxdlAD0NsCrqZ+NcP4DtA==;" + 
+                    @"EndpointSuffix=core.windows.net");
+
+
+                    //System.Configuration.ConfigurationManager.ConnectionStrings["AzureBlob"].ConnectionString);
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            CloudBlobContainer cloudBlobContainer = blobClient.GetContainerReference("testdb");
+            if (!cloudBlobContainer.Exists())
+            {
+                cloudBlobContainer.CreateIfNotExists();
+                var permissions = cloudBlobContainer.GetPermissions();
+                permissions.PublicAccess = BlobContainerPublicAccessType.Off;
+                cloudBlobContainer.SetPermissions(permissions);
+            }
 
             //Upload file to block
-            CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(document.File.FileName);
-            var path = Path.GetFullPath(document.File.FileName);
-            //cloudBlockBlob.UploadFromFile(path);
+            string uniqueBlobName = string.Format("MehigDocs/{0}", document.File.FileName);
+            CloudBlockBlob blob = cloudBlobContainer.GetBlockBlobReference(uniqueBlobName);
+            blob.Properties.ContentType = document.File.ContentType;
+            blob.UploadFromStream(document.File.InputStream);
+            //CloudBlob cloudBlob = cloudBlobContainer.GetBlobReference(document.File.FileName);
+            //cloudBlockBlob.UploadFromStream(document.File.InputStream);
 
-            //Update source to filename
-            document.FileSource = document.File.FileName;
+            //Update filesource to filename
+            document.FileSource = uniqueBlobName;
 
             //Convert document to BsonDocument and upload to MongoDB
             var bdoc = document.ToBsonDocument();
