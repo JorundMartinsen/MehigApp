@@ -12,8 +12,8 @@ namespace WebApp.Models
         private string information;
         public static List<string> HeaderList = new List<string>() {"Id","Name", "Author", "Keywords", "Date", "Summary", "Download" };
         private List<ReportDocument> resultList;
-        private DateTime dateFrom;
-        private DateTime dateTo;
+        private string dateFrom;
+        private string dateTo;
 
 
         public SearchData()
@@ -21,7 +21,7 @@ namespace WebApp.Models
             validationSuccessful = false;
             information = "";
             ResultList = new List<ReportDocument>();
-
+            
         }
 
         public bool ValidationSuccessful { get => validationSuccessful;}
@@ -30,9 +30,9 @@ namespace WebApp.Models
 
         public List<ReportDocument> ResultList { get => resultList; set => resultList = value; }
 
-        public DateTime DateFrom { get => dateFrom; set => dateFrom = value; }
+        public string DateFrom { get => dateFrom; set => dateFrom = value; }
 
-        public DateTime DateTo { get => dateTo; set => dateTo = value; }
+        public string DateTo { get => dateTo; set => dateTo = value; }
 
         public void ValidateInput()
         {
@@ -59,6 +59,8 @@ namespace WebApp.Models
                 {
                     resultList.Add(new ReportDocument());
                     resultList[i].Id = (i + 1).ToString();
+                    resultList[i].Name = "Einstein " + (i + 1).ToString();
+                    resultList[i].Summary = "summary "+ (i + 1).ToString();
                 }
                 information = string.Format("Found {0}.", resultList.Count());
             }

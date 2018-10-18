@@ -4,7 +4,7 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    string info = Model.Information;
+    string info = " " + Model.Information;
 }
 
 <div class="jumbotron">
@@ -30,20 +30,20 @@
 
             @Html.LabelFor(model => model.Keywords, htmlAttributes: new { @class = "control-label col-md-2" })
             @Html.TextBoxFor(model => model.Keywords, new { @class = "form-control" })
+            <br />
+            @Html.LabelFor(model => model.DateFrom, htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="date" name="DateFrom" min="1900-01-01" max="2018-12-31" value=@Model.DateFrom><br />
+
+            @Html.LabelFor(model => model.DateTo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="date" name="DateTo" min="1900-01-01" max="2018-12-31" value=@Model.DateTo><br />
 
             <br />
-            <input type="submit" value="Search" name="searchBtn" />
-
-
+            <input type="submit" value="Search" name="searchBtn" /><font color="red">@info</font>
         }
-
-
-
-
 
     </div>
 </div>
 
-old:
 <br />
-@info
+
+
