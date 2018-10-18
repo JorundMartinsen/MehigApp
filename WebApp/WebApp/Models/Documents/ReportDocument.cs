@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Web;
-using Newtonsoft.Json;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace WebApp.Models.Documents {
     public class ReportDocument : BaseDocument {
@@ -8,17 +8,18 @@ namespace WebApp.Models.Documents {
 
         }
 
-        [JsonProperty(PropertyName = "publisher")]
+        [BsonElement("publisher")]
         public string Publisher { get; set; }
 
-        [JsonProperty(PropertyName = "summary")]
+        [BsonElement("summary")]
         public string Summary { get; set; }
 
-        [JsonProperty(PropertyName = "source")]
+        [BsonIgnoreIfNull]
+        [BsonElement("source")]
         [DisplayName("Link to source")]
         public string Source { get; set; }
 
-        [JsonProperty(PropertyName = "file")]
+        [BsonIgnore]
         [DisplayName("Upload file")]
         public HttpPostedFileBase File { get; set; }
     }

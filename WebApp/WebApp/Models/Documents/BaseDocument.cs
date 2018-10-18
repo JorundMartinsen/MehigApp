@@ -1,27 +1,26 @@
 ﻿using System;
 using System.ComponentModel;
-using Newtonsoft.Json;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace WebApp.Models.Documents {
     public class BaseDocument {
         public BaseDocument() {
 
         }
-
-        [JsonProperty(PropertyName = "id")]
+        [BsonId]
         public string Id { get; set; }
 
-        [JsonProperty(PropertyName = "name")]
+        [BsonElement("name")]
         [DisplayName("Title of document")]
         public string Name { get; set; }
 
-        [JsonProperty(PropertyName = "author")]
+        [BsonElement("author")]
         public string Author { get; set; }
 
-        [JsonProperty(PropertyName = "keywords")]
+        [BsonElement("keywords")]
         public string Keywords { get; set; }
 
-        [JsonProperty(PropertyName = "date")]
+        [BsonElement("date")]
         [DisplayName("Date of publication")]
         public string Date { get; set; }
     }
