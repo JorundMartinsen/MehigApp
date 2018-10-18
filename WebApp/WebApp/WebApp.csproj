@@ -278,7 +278,6 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Search\Results.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\AddData.cshtml" />
     <Content Include="Views\Search\Index_old.cshtml" />
