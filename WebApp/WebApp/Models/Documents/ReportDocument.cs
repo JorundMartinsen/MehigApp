@@ -8,21 +8,32 @@ namespace WebApp.Models.Documents {
 
         }
 
+        [BsonIgnoreIfNull]
         [BsonElement("publisher")]
         public string Publisher { get; set; }
 
+        [BsonIgnoreIfNull]
         [BsonElement("summary")]
         public string Summary { get; set; }
 
+        /// <summary>
+        /// Link to external document
+        /// </summary>
         [BsonIgnoreIfNull]
-        [BsonElement("source")]
+        [BsonElement("externallink")]
         [DisplayName("Link to source")]
-        public string Source { get; set; }
+        public string ExternalLink { get; set; }
 
+        /// <summary>
+        /// The link to the Blob-document
+        /// </summary>
         [BsonIgnoreIfNull]
-        [BsonElement("filesource")]
-        public string FileSource { get; set; }
+        [BsonElement("internallink")]
+        public string InternalLink { get; set; }
 
+        /// <summary>
+        /// Used for sending files to controller. Ignored by MongoDB
+        /// </summary>
         [BsonIgnore]
         [DisplayName("Upload file")]
         public HttpPostedFileBase File { get; set; }

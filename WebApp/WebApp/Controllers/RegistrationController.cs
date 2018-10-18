@@ -51,7 +51,7 @@ namespace WebApp.Controllers
             }
             else
             {
-                if (document.Source != null)
+                if (document.ExternalLink != null)
                 {
                     Save(document);
                     ViewBag.FileStatus = string.Format("Success. {0} saved.", document.Name);
@@ -89,12 +89,7 @@ namespace WebApp.Controllers
             // Connect to and configure Azure Blob storage
             CloudStorageAccount storageAccount =
                 CloudStorageAccount.Parse(
-                    @"DefaultEndpointsProtocol=https;AccountName=mehdstorageacc;" + 
-                    @"AccountKey=hbt2SpeTW9ARMRC+ZkMjbfAV6gAKmarvpEU5Gjda0jI12MAsq8fUsG5B1/3Z4a1nUhxdlAD0NsCrqZ+NcP4DtA==;" + 
-                    @"EndpointSuffix=core.windows.net");
-
-
-                    //System.Configuration.ConfigurationManager.ConnectionStrings["AzureBlob"].ConnectionString);
+                    System.Configuration.ConfigurationManager.ConnectionStrings["AzureBlob"].ConnectionString);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer cloudBlobContainer = blobClient.GetContainerReference("testdb");
             if (!cloudBlobContainer.Exists())
@@ -110,11 +105,9 @@ namespace WebApp.Controllers
             CloudBlockBlob blob = cloudBlobContainer.GetBlockBlobReference(uniqueBlobName);
             blob.Properties.ContentType = document.File.ContentType;
             blob.UploadFromStream(document.File.InputStream);
-            //CloudBlob cloudBlob = cloudBlobContainer.GetBlobReference(document.File.FileName);
-            //cloudBlockBlob.UploadFromStream(document.File.InputStream);
 
             //Update filesource to filename
-            document.FileSource = uniqueBlobName;
+            document.InternalLink = uniqueBlobName;
 
             //Convert document to BsonDocument and upload to MongoDB
             var bdoc = document.ToBsonDocument();
