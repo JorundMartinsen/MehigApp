@@ -36,12 +36,12 @@
             @Html.TextBoxFor(model => model.Keywords, new { @class = "form-control" })
             @Html.LabelFor(model => model.Keywords, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
 
-            @Html.TextBoxFor(model => model.DateFrom, new { @type = "date", @class = "form-control"})
+            @Html.TextBoxFor(model => model.DateFrom, new { @type = "date", @class = "form-control" })
             @Html.LabelFor(model => model.DateFrom, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
 
-            @Html.TextBoxFor(model => model.DateTo, new { @type = "date", @class = "form-control"})
+            @Html.TextBoxFor(model => model.DateTo, new { @type = "date", @class = "form-control" })
             @Html.LabelFor(model => model.DateTo, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
-                                 
+
             <br />
             <input type="submit" value="Search" name="searchBtn" /><font color="red">@info</font>
         }
@@ -50,5 +50,9 @@
 </div>
 
 <br />
+Exact title search working<br />
+id="1" - 20 dummy results<br />
+id="2" - no match message<br />
+no input returning everything in db<br />
 
 

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebApp.Models;
-using WebApp.Models.Documents;
 
 namespace WebApp.Controllers
 {
@@ -19,14 +18,14 @@ namespace WebApp.Controllers
 
 
         //public ActionResult Results(FormCollection col)
-        public ActionResult GetResults(SearchData sData)
+        public async System.Threading.Tasks.Task<ActionResult> GetResults(SearchData sData) //async
         {
             try
             {
                 sData.ValidateInput();
                 if (sData.ValidationSuccessful)
                 {
-                    sData.Search();
+                    await sData.SearchAsync();
                     if (sData.ResultList.Count() > 0)
                     {
                         ViewBag.FileStatus = string.Format("{0} found.", sData.ResultList.Count());
