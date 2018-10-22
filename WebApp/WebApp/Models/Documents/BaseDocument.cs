@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace WebApp.Models.Documents {
@@ -33,6 +34,7 @@ namespace WebApp.Models.Documents {
         [BsonIgnoreIfNull]
         [BsonElement("name")]
         [DisplayName("Title of document")]
+        [Required]
         public string Name { get; set; }
 
         [BsonIgnoreIfNull]
