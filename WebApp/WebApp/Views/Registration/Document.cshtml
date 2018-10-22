@@ -19,10 +19,10 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="pb-4">
             <div class="form-check-inline">
-                @Html.RadioButtonFor(model => model.DataType, "Environment", new { @class = "form-check-input" }) @Html.Label("Environment", new { @class = "form-check-label" })
+                @Html.RadioButtonFor(model => model.Datatype, "Environment", new { @class = "form-check-input" }) @Html.Label("Environment", new { @class = "form-check-label" })
             </div>
             <div class="form-check-inline">
-                @Html.RadioButtonFor(model => model.DataType, "Health", new { @class = "form-check-input" }) @Html.Label("Health", new { @class = "form-check-label" })
+                @Html.RadioButtonFor(model => model.Datatype, "Health", new { @class = "form-check-input" }) @Html.Label("Health", new { @class = "form-check-label" })
             </div>
         </div>
             @Html.TextBoxFor(model => model.Name, new { @class = "form-control tb"})
@@ -50,7 +50,7 @@
             @Html.LabelFor(model => model.File, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
             <br />
             <input type="submit" class="form-control btn btn-outline-dark col-md-2" />
-            <div class="col-md-2">@ViewBag.FileStatus</div>
+            <div class="col-md-2">@ViewBag.ModelStatus</div>
          }
     </div>
 </div>

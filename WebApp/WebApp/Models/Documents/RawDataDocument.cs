@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -10,16 +11,31 @@ namespace WebApp.Models.Documents {
 
         [BsonIgnore]
         [DisplayName("Data headers")]
-        public string Header { get; set; }
+        public string Header {
+            get {
+                return header;
+            }
+            set {
+                header = value;
+                Columns = header.Split(Separator.ToCharArray()).Count();
+            }
+        }
 
         [BsonIgnore]
-        [DisplayName("Seperator character")]
-        public string Seperator { get; set; }
+        [DisplayName("Separator character")]
+        public string Separator { get; set; }
+
+        private string header;
 
         [BsonIgnore]
+        [DisplayName("Data")]
+        [DataType(DataType.MultilineText)]
         public string Data { get; set; }
 
+        [BsonIgnore]
+        public int Columns { get; private set; }
 
-        public DataDocument[] DataDocuments { get; set; }
+        public List<DataDocument> DataDocuments { get; set; }
+        public int TimeColumn { get; internal set; }
     }
 }

@@ -25,7 +25,7 @@ namespace WebApp.Models.Documents {
         /// </summary>
         [BsonRequired]
         [BsonElement("type")]
-        public string DataType { get; set; }
+        public string Datatype { get; set; }
 
         /// <summary>
         /// Title of data

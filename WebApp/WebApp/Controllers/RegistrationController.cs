@@ -17,13 +17,10 @@ using MongoDB.Driver.GridFS;
 using WebApp.Models;
 using WebApp.Models.Documents;
 
-namespace WebApp.Controllers
-{
-    public class RegistrationController : Controller
-    {
+namespace WebApp.Controllers {
+    public class RegistrationController : Controller {
         // GET: Registration
-        public ActionResult Index()
-        {
+        public ActionResult Index() {
             return View(new ReportDocument());
         }
 
@@ -45,13 +42,13 @@ namespace WebApp.Controllers
 
 
                     SaveFile(document);
-                    ViewBag.FileStatus = string.Format("Success. {0} saved.", document.Name);
+                    ViewBag.ModelStatus = string.Format("Success. {0} saved.", document.Name);
                     return View("Document", new ReportDocument());
 
                 }
                 else
                 {
-                    ViewBag.FileStatus = "Wrong file format. Only PDF accepted";
+                    ViewBag.ModelStatus = "Wrong file format. Only PDF accepted";
                     return View("Document", document);
                 }
             }
@@ -60,12 +57,12 @@ namespace WebApp.Controllers
                 if (document.ExternalLink != null)
                 {
                     Save(document);
-                    ViewBag.FileStatus = string.Format("Success. {0} saved.", document.Name);
+                    ViewBag.ModelStatus = string.Format("Success. {0} saved.", document.Name);
                     return View("Document", new ReportDocument());
                 }
                 else
                 {
-                    ViewBag.FileStatus = "You have to input source or upload file as PDF";
+                    ViewBag.ModelStatus = "You have to input source or upload file as PDF";
                     return View("Document", document);
                 }
             }
@@ -78,7 +75,35 @@ namespace WebApp.Controllers
 
         [HttpPost]
         public ActionResult RawData(RawDataDocument document) {
-            return View("RawData", document);
+
+            if (ModelState.IsValid)
+            {
+                string[] hs = document.Header.Split(document.Separator.ToCharArray());
+                string[] ds = document.Data.Split(new[] { '\r', '\n' });
+                foreach (var d in ds)
+                {
+                    string[] s = d.Split(document.Separator.ToCharArray());
+                    for (int i = 0; i < s.Length; i++)
+                    {
+                        DataDocument dataDocument = new DataDocument();
+                        dataDocument.Time = s[document.TimeColumn];
+                        if (i != document.TimeColumn)
+                        {
+                            dataDocument.Value = s[i];
+                            dataDocument.Measurand = s[i];
+                        }
+                        document.DataDocuments.Add(dataDocument);
+                    }
+                }
+
+                ViewBag.ModelStatus = "Success";
+                return View("RawData");
+            }
+            else
+            {
+                ViewBag.ModelStatus = "Something went wrong";
+                return View("RawData", document);
+            }
         }
 
         private void Save(ReportDocument document) {
@@ -90,7 +115,7 @@ namespace WebApp.Controllers
             var collection = database.GetCollection<BsonDocument>("Reports");
             var bdoc = document.ToBsonDocument();
             collection.InsertOne(bdoc);
-            
+
         }
 
         private void SaveFile(ReportDocument document) {
@@ -128,7 +153,7 @@ namespace WebApp.Controllers
             //Convert document to BsonDocument and upload to MongoDB
             var bdoc = document.ToBsonDocument();
             collection.InsertOne(bdoc);
-            
+
         }
 
         private void SaveRawData(RawDataDocument document) {
