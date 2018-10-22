@@ -97,7 +97,7 @@ namespace WebApp.Models
                 settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
                 MongoClient client = new MongoClient(settings);
                 var database = client.GetDatabase("TestDB");
-                var collection = database.GetCollection<BsonDocument>("Reports");
+                var collection = database.GetCollection<BsonDocument>("documents");
                 int nResultlist = 0;
 
                 

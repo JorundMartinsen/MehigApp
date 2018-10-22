@@ -16,12 +16,11 @@ namespace WebApp.Models.Documents {
 
         [BsonIgnore]
         [DisplayName("Data headers")]
-        //[Required]
         public string Header { get; set; }
 
         [BsonIgnore]
         [DisplayName("Separator character*")]
-        //[Required]
+        [Required]
         public string Separator { get; set; }
 
         [BsonIgnore]
@@ -31,5 +30,10 @@ namespace WebApp.Models.Documents {
         [BsonIgnore]
         [DisplayName("Source file as .csv")]
         public HttpPostedFileBase File { get; set; }
+
+        [BsonIgnore]
+        [DisplayName("Row title column")]
+        [DefaultValue(0)]
+        public int RowColumn { get; set; }
     }
 }

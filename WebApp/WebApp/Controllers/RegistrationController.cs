@@ -61,24 +61,32 @@ namespace WebApp.Controllers {
 
         [HttpPost]
         public ActionResult RawData(RawDataDocument document) {
-
-            if (true)
-            //if (ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 document.DataDocuments = new List<DataDocument>();
+
+                if (document.File != null) {
+                    document.Data = "";
+                    using (StreamReader reader = new StreamReader(document.File.InputStream)) {
+                        document.Header = reader.ReadLine() + "\r\n";
+                        while (!reader.EndOfStream) {
+                            document.Data += reader.ReadLine() + "\r\n";
+                        }
+                    }
+                }
 
                 string[] hs = document.Header.Split(document.Separator.ToCharArray());
                 string[] ds = document.Data.Split(new[] { '\r', '\n' });
                 foreach (var d in ds) {
-
+                    
                     string[] s = d.Split(document.Separator.ToCharArray());
                     for (int i = 0; i < hs.Length; i++) {
                         DataDocument dataDocument = new DataDocument();
-                        //dataDocument.Time = s[document.TimeColumn];
                         //if (i != document.TimeColumn)
                         if (s.Length == hs.Length) {
+                            dataDocument.Row = s[document.RowColumn];
                             dataDocument.Value = s[i];
-                            dataDocument.Measurand = hs[i];
+                            dataDocument.Column = hs[i];
                             document.DataDocuments.Add(dataDocument);
                         }
                     }
@@ -111,15 +119,23 @@ namespace WebApp.Controllers {
         }
 
         private void Save(ReportDocument document) {
+            BsonDocument bdoc = document.ToBsonDocument();
+            Save(bdoc, "documents");
+        }
+
+        private void Save(RawDataDocument document) {
+            BsonDocument bdoc = document.ToBsonDocument();
+            Save(bdoc, "data");
+        }
+
+        private void Save(BsonDocument bdoc, string collectionName) {
             string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["MongoDB"].ConnectionString;
             MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
             settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
             MongoClient client = new MongoClient(settings);
             var database = client.GetDatabase("TestDB");
-            var collection = database.GetCollection<BsonDocument>("Reports");
-            var bdoc = document.ToBsonDocument();
+            var collection = database.GetCollection<BsonDocument>(collectionName);
             collection.InsertOne(bdoc);
-
         }
 
         private void SaveFile(ReportDocument document) {

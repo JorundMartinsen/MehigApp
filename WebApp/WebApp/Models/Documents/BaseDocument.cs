@@ -40,12 +40,12 @@ namespace WebApp.Models.Documents {
         public string Author { get; set; }
 
         [BsonIgnoreIfNull]
-        [BsonElement("keywords")]
-        public string Keywords { get; set; }
-
-        [BsonIgnoreIfNull]
         [BsonElement("date")]
         [DisplayName("Date of publication")]
         public string Date { get; set; }
+
+        [BsonIgnoreIfNull]
+        [BsonElement("keywords")]
+        public string Keywords { get; set; }
     }
 }
