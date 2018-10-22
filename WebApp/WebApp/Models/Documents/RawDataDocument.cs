@@ -9,35 +9,27 @@ using System.Web;
 namespace WebApp.Models.Documents {
     public class RawDataDocument : BaseDocument {
 
+        [DisplayName("Data location")]
+        public string Location { get; set; }
+
+        public List<DataDocument> DataDocuments { get; set; }
+
         [BsonIgnore]
         [DisplayName("Data headers")]
-        public string Header {
-            get {
-                return header;
-            }
-            set {
-                header = value;
-                //Columns = header.Split(Separator.ToCharArray()).Count();
-            }
-        }
+        //[Required]
+        public string Header { get; set; }
 
         [BsonIgnore]
-        [DisplayName("Separator character")]
+        [DisplayName("Separator character*")]
+        //[Required]
         public string Separator { get; set; }
-
-        private string header;
 
         [BsonIgnore]
         [DisplayName("Data")]
-        [DataType(DataType.MultilineText)]
         public string Data { get; set; }
 
-        public HttpPostedFileBase File { get; set; }
-
         [BsonIgnore]
-        public int Columns { get; private set; }
-
-        public List<DataDocument> DataDocuments { get; set; }
-        public int TimeColumn { get; internal set; }
+        [DisplayName("Source file as .csv")]
+        public HttpPostedFileBase File { get; set; }
     }
 }
