@@ -17,7 +17,7 @@ namespace WebApp.Models.Documents {
             }
             set {
                 header = value;
-                Columns = header.Split(Separator.ToCharArray()).Count();
+                //Columns = header.Split(Separator.ToCharArray()).Count();
             }
         }
 

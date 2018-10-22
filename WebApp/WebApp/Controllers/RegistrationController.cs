@@ -76,8 +76,10 @@ namespace WebApp.Controllers {
         [HttpPost]
         public ActionResult RawData(RawDataDocument document) {
 
-            if (ModelState.IsValid)
+            if (true)
+            //if (ModelState.IsValid)
             {
+                document.DataDocuments = new List<DataDocument>();
                 string[] hs = document.Header.Split(document.Separator.ToCharArray());
                 string[] ds = document.Data.Split(new[] { '\r', '\n' });
                 foreach (var d in ds)
@@ -86,11 +88,12 @@ namespace WebApp.Controllers {
                     for (int i = 0; i < s.Length; i++)
                     {
                         DataDocument dataDocument = new DataDocument();
-                        dataDocument.Time = s[document.TimeColumn];
-                        if (i != document.TimeColumn)
+                        //dataDocument.Time = s[document.TimeColumn];
+                        if(true)
+                        //if (i != document.TimeColumn)
                         {
                             dataDocument.Value = s[i];
-                            dataDocument.Measurand = s[i];
+                            dataDocument.Measurand = hs[i];
                         }
                         document.DataDocuments.Add(dataDocument);
                     }
