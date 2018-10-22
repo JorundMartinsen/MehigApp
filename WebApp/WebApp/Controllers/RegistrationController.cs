@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Security.Authentication;
-using System.Reflection;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Auth;
+﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
-using MongoDB.Driver.Linq;
-using MongoDB.Driver.GridFS;
+using System.Collections.Generic;
+using System.IO;
+using System.Security.Authentication;
+using System.Web.Mvc;
 using WebApp.Models;
 using WebApp.Models.Documents;
 
@@ -32,12 +24,10 @@ namespace WebApp.Controllers {
 
         [HttpPost]
         public ActionResult Document(ReportDocument document) {
-            if (document.File != null)
-            {
+            if (document.File != null) {
                 string fileExt = Path.GetExtension(document.File.FileName).ToUpper();
 
-                if (fileExt == ".PDF")
-                {
+                if (fileExt == ".PDF") {
                     Report report = new Report();
 
 
@@ -46,22 +36,18 @@ namespace WebApp.Controllers {
                     return View("Document", new ReportDocument());
 
                 }
-                else
-                {
+                else {
                     ViewBag.ModelStatus = "Wrong file format. Only PDF accepted";
                     return View("Document", document);
                 }
             }
-            else
-            {
-                if (document.ExternalLink != null)
-                {
+            else {
+                if (document.ExternalLink != null) {
                     Save(document);
                     ViewBag.ModelStatus = string.Format("Success. {0} saved.", document.Name);
                     return View("Document", new ReportDocument());
                 }
-                else
-                {
+                else {
                     ViewBag.ModelStatus = "You have to input source or upload file as PDF";
                     return View("Document", document);
                 }
@@ -80,30 +66,45 @@ namespace WebApp.Controllers {
             //if (ModelState.IsValid)
             {
                 document.DataDocuments = new List<DataDocument>();
+
                 string[] hs = document.Header.Split(document.Separator.ToCharArray());
                 string[] ds = document.Data.Split(new[] { '\r', '\n' });
-                foreach (var d in ds)
-                {
+                foreach (var d in ds) {
+
                     string[] s = d.Split(document.Separator.ToCharArray());
-                    for (int i = 0; i < s.Length; i++)
-                    {
+                    for (int i = 0; i < hs.Length; i++) {
                         DataDocument dataDocument = new DataDocument();
                         //dataDocument.Time = s[document.TimeColumn];
-                        if(true)
                         //if (i != document.TimeColumn)
-                        {
+                        if (s.Length == hs.Length) {
                             dataDocument.Value = s[i];
                             dataDocument.Measurand = hs[i];
+                            document.DataDocuments.Add(dataDocument);
                         }
-                        document.DataDocuments.Add(dataDocument);
                     }
                 }
 
+                var bson = document.ToBsonDocument();
+
                 ViewBag.ModelStatus = "Success";
                 return View("RawData");
+
+
+
+                //string path = AppDomain.CurrentDomain.BaseDirectory + "/App_Data/uploads/";
+                //var detector = new FileHelpers.Detection.SmartFormatDetector();
+                //var formats = detector.DetectFileFormat(Path.Combine(path, document.File.FileName));
+
+                //foreach (var format in formats) {
+
+                //    if (true) {
+
+                //    }
+
+                //}
+
             }
-            else
-            {
+            else {
                 ViewBag.ModelStatus = "Something went wrong";
                 return View("RawData", document);
             }
@@ -136,8 +137,7 @@ namespace WebApp.Controllers {
                     System.Configuration.ConfigurationManager.ConnectionStrings["AzureBlob"].ConnectionString);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer cloudBlobContainer = blobClient.GetContainerReference("testdb");
-            if (!cloudBlobContainer.Exists())
-            {
+            if (!cloudBlobContainer.Exists()) {
                 cloudBlobContainer.CreateIfNotExists();
                 var permissions = cloudBlobContainer.GetPermissions();
                 permissions.PublicAccess = BlobContainerPublicAccessType.Off;

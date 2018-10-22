@@ -32,6 +32,8 @@ namespace WebApp.Models.Documents {
         [DataType(DataType.MultilineText)]
         public string Data { get; set; }
 
+        public HttpPostedFileBase File { get; set; }
+
         [BsonIgnore]
         public int Columns { get; private set; }
 

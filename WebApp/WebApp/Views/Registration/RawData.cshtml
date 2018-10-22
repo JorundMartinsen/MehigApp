@@ -49,6 +49,8 @@
             <br />
             @Html.TextAreaFor(model => model.Data, new { @class = "form-control tb noresize" })
             @Html.LabelFor(model => model.Data, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
+
+            @Html.TextBoxFor(model => model.File, new { @type = "file", @class = "form-control-file" })
         </div>
         <div align="center">
             <input type="submit" class="btn btn-outline-dark btn-lg" />
