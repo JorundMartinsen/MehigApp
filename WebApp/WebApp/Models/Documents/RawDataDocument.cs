@@ -19,7 +19,7 @@ namespace WebApp.Models.Documents {
         public string Header { get; set; }
 
         [BsonIgnore]
-        [DisplayName("Separator character*")]
+        [DisplayName("Separator character")]
         [Required]
         public string Separator { get; set; }
 

@@ -2,6 +2,7 @@
 using Microsoft.WindowsAzure.Storage.Blob;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Authentication;
@@ -30,11 +31,9 @@ namespace WebApp.Controllers {
                 if (fileExt == ".PDF") {
                     Report report = new Report();
 
-
                     SaveFile(document);
                     ViewBag.ModelStatus = string.Format("Success. {0} saved.", document.Name);
                     return View("Document", new ReportDocument());
-
                 }
                 else {
                     ViewBag.ModelStatus = "Wrong file format. Only PDF accepted";
@@ -65,12 +64,12 @@ namespace WebApp.Controllers {
             {
                 document.DataDocuments = new List<DataDocument>();
 
-                if (document.File != null) {
+                if (document.File != null && string.IsNullOrWhiteSpace(document.Data)) {
                     document.Data = "";
                     using (StreamReader reader = new StreamReader(document.File.InputStream)) {
-                        document.Header = reader.ReadLine() + "\r\n";
+                        document.Header = reader.ReadLine() + Environment.NewLine;
                         while (!reader.EndOfStream) {
-                            document.Data += reader.ReadLine() + "\r\n";
+                            document.Data += reader.ReadLine() + Environment.NewLine;
                         }
                     }
                 }
@@ -78,7 +77,6 @@ namespace WebApp.Controllers {
                 string[] hs = document.Header.Split(document.Separator.ToCharArray());
                 string[] ds = document.Data.Split(new[] { '\r', '\n' });
                 foreach (var d in ds) {
-                    
                     string[] s = d.Split(document.Separator.ToCharArray());
                     for (int i = 0; i < hs.Length; i++) {
                         DataDocument dataDocument = new DataDocument();
@@ -91,26 +89,10 @@ namespace WebApp.Controllers {
                         }
                     }
                 }
-
-                var bson = document.ToBsonDocument();
+                Save(document);
 
                 ViewBag.ModelStatus = "Success";
                 return View("RawData");
-
-
-
-                //string path = AppDomain.CurrentDomain.BaseDirectory + "/App_Data/uploads/";
-                //var detector = new FileHelpers.Detection.SmartFormatDetector();
-                //var formats = detector.DetectFileFormat(Path.Combine(path, document.File.FileName));
-
-                //foreach (var format in formats) {
-
-                //    if (true) {
-
-                //    }
-
-                //}
-
             }
             else {
                 ViewBag.ModelStatus = "Something went wrong";
@@ -139,14 +121,6 @@ namespace WebApp.Controllers {
         }
 
         private void SaveFile(ReportDocument document) {
-            // Connect to and configure MongoDB connection
-            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["MongoDB"].ConnectionString;
-            MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
-            settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
-            MongoClient client = new MongoClient(settings);
-            var database = client.GetDatabase("TestDB");
-            var collection = database.GetCollection<BsonDocument>("Reports");
-
             // Connect to and configure Azure Blob storage
             CloudStorageAccount storageAccount =
                 CloudStorageAccount.Parse(
@@ -169,13 +143,7 @@ namespace WebApp.Controllers {
             //Update filesource to filename
             document.InternalLink = uniqueBlobName;
 
-            //Convert document to BsonDocument and upload to MongoDB
-            var bdoc = document.ToBsonDocument();
-            collection.InsertOne(bdoc);
-
-        }
-
-        private void SaveRawData(RawDataDocument document) {
+            Save(document);
 
         }
     }
