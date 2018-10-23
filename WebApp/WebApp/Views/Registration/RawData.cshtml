@@ -15,7 +15,7 @@
     @using (Html.BeginForm("RawData", "Registration", FormMethod.Post, new { enctype = "multipart/form-data" })) {
         @Html.AntiForgeryToken()
 
-        
+
         <div class="modal-body row">
             <div class="col-lg-4">
                 <div class="form-group pb-4">
@@ -25,6 +25,7 @@
                     <div class="form-check-inline">
                         @Html.RadioButtonFor(model => model.Datatype, "Health", new { @class = "form-check-input" }) @Html.Label("Health", new { @class = "form-check-label" })
                     </div>
+                    @Html.ValidationMessageFor(model => model.Datatype, "Data type must be specified")
                 </div>
                 @Chtml.Control(Html, model => model.Name)
 
@@ -34,26 +35,23 @@
 
                 @Chtml.Control(Html, model => model.Keywords)
 
+                <div class="text-center">
+                    <input type="submit" class="btn btn-outline-dark btn-lg" />
+                    <div>@ViewBag.ModelStatus</div>
+                </div>
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-4">
                 @Chtml.Control(Html, model => model.Header)
-                <br />
-                @Chtml.Textarea(Html, model => model.Data)
-                <div class="col-lg-3 pl-3 pb-3">
-                    @Chtml.Control(Html, model => model.Separator)
-                </div>
-                <div class="col-lg-3">
-                    @Chtml.Control(Html, model => model.RowColumn)
-                </div>
-                <div class="col-lg-6">
-                    @Chtml.Control(Html, model => model.File)
-                </div>
 
+                @Chtml.Control(Html, model => model.Separator)
+
+                @Chtml.Control(Html, model => model.RowColumn)
+
+                @Chtml.Control(Html, model => model.File)
+
+                @Chtml.Textarea(Html, model => model.Data)
             </div>
-            <div align="center">
-                <input type="submit" class="btn btn-outline-dark btn-lg" />
-                <div class="col-lg-6">@ViewBag.ModelStatus</div>
-            </div>
+            <div class="col-lg-4"></div>
         </div>
     }
 </div>

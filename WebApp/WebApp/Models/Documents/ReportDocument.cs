@@ -40,7 +40,7 @@ namespace WebApp.Models.Documents {
         /// Used for sending files to controller. Ignored by MongoDB
         /// </summary>
         [BsonIgnore]
-        [DisplayName("Upload file")]
+        [DisplayName("Upload file as .pdf")]
         public HttpPostedFileBase File { get; set; }
     }
 }

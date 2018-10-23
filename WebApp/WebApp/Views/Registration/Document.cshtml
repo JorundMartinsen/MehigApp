@@ -21,6 +21,7 @@
             <div class="form-check-inline">
                 @Html.RadioButtonFor(model => model.Datatype, "Health", new { @class = "form-check-input" }) @Html.Label("Health", new { @class = "form-check-label" })
             </div>
+            @Html.ValidationMessageFor(model => model.Datatype, "Data type must be specified")
         </div>
         @Chtml.Control(Html, model => model.Name)
 
