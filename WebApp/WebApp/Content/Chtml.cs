@@ -17,9 +17,9 @@ namespace WebApp.Content {
             else if (t==typeof(DateTime)) {
                 return Textdate(htmlHelper, expression);
             }
-            else if (t==typeof(BigString)) {
-                return Textarea(htmlHelper, expression);
-            }
+            //else if (t==typeof(BigString)) {
+            //    return Textarea(htmlHelper, expression);
+            //}
             else {
                 return Textbox(htmlHelper, expression);
             }

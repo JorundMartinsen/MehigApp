@@ -27,7 +27,7 @@ namespace WebApp.Models.Documents {
 
         [BsonIgnore]
         [DisplayName("Data")]
-        public BigString Data { get; set; }
+        public string Data { get; set; }
 
         [BsonIgnore]
         [DisplayName("Source file as .csv")]
@@ -38,17 +38,17 @@ namespace WebApp.Models.Documents {
         [DefaultValue(0)]
         public int RowColumn { get; set; }
     }
-    public class BigString
-    {
-        private string _data;
-        public BigString(string data)
-        {
-            _data = data;
-        }
-        public static implicit operator string(BigString bigString)
-        {
-            if (bigString._data == null) return null;
-            return bigString._data;
-        }
-    }
+    //public class BigString
+    //{
+    //    private string _data;
+    //    public BigString(string data)
+    //    {
+    //        _data = data;
+    //    }
+    //    public static implicit operator string(BigString bigString)
+    //    {
+    //        if (bigString._data == null) return null;
+    //        return bigString._data;
+    //    }
+    //}
 }
