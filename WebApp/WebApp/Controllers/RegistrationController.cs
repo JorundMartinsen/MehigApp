@@ -10,58 +10,70 @@ using System.Web.Mvc;
 using WebApp.Models;
 using WebApp.Models.Documents;
 
-namespace WebApp.Controllers {
-    public class RegistrationController : Controller {
+namespace WebApp.Controllers
+{
+    public class RegistrationController : Controller
+    {
         // GET: Registration
-        public ActionResult Index() {
+        public ActionResult Index()
+        {
             return View(new ReportDocument());
         }
 
         [HttpGet]
-        public ActionResult Document() {
+        public ActionResult Document()
+        {
 
             return View("Document", new ReportDocument());
         }
 
         [HttpPost]
-        public ActionResult Document(ReportDocument document) {
-            if (document.File != null) {
-                string fileExt = Path.GetExtension(document.File.FileName).ToUpper();
+        public ActionResult Document(ReportDocument document)
+        {
+            if (ModelState.IsValid) {
 
-                if (fileExt == ".PDF") {
-                    Report report = new Report();
+                if (document.File != null) {
+                    string fileExt = Path.GetExtension(document.File.FileName).ToUpper();
 
-                    SaveFile(document);
-                    ViewBag.ModelStatus = string.Format("Success. {0} saved.", document.Name);
-                    return View("Document", new ReportDocument());
+                    if (fileExt == ".PDF") {
+                        Report report = new Report();
+
+                        SaveFile(document);
+                        ViewBag.ModelStatus = string.Format("Success. {0} saved.", document.Name);
+                        return View("Document", new ReportDocument());
+                    }
+                    else {
+                        ViewBag.ModelStatus = "Wrong file format. Only PDF accepted";
+                        return View("Document", document);
+                    }
                 }
                 else {
-                    ViewBag.ModelStatus = "Wrong file format. Only PDF accepted";
-                    return View("Document", document);
+                    if (document.ExternalLink != null) {
+                        Save(document);
+                        ViewBag.ModelStatus = string.Format("Success. {0} saved.", document.Name);
+                        return View("Document", new ReportDocument());
+                    }
+                    else {
+                        ViewBag.ModelStatus = "You have to input source or upload file as PDF";
+                        return View("Document", document);
+                    }
                 }
             }
             else {
-                if (document.ExternalLink != null) {
-                    Save(document);
-                    ViewBag.ModelStatus = string.Format("Success. {0} saved.", document.Name);
-                    return View("Document", new ReportDocument());
-                }
-                else {
-                    ViewBag.ModelStatus = "You have to input source or upload file as PDF";
-                    return View("Document", document);
-                }
+                return View("Document", document);
             }
         }
 
         [HttpGet]
-        public ActionResult RawData() {
+        public ActionResult RawData()
+        {
             return View("RawData", new RawDataDocument());
         }
 
         [HttpPost]
-        public ActionResult RawData(RawDataDocument document) {
-            if (ModelState.IsValid)
-            {
+        public ActionResult RawData(RawDataDocument document)
+        {
+            if (ModelState.IsValid) {
                 document.DataDocuments = new List<DataDocument>();
 
                 if (document.File != null && string.IsNullOrWhiteSpace(document.Data)) {
@@ -100,17 +112,20 @@ namespace WebApp.Controllers {
             }
         }
 
-        private void Save(ReportDocument document) {
+        private void Save(ReportDocument document)
+        {
             BsonDocument bdoc = document.ToBsonDocument();
             Save(bdoc, "documents");
         }
 
-        private void Save(RawDataDocument document) {
+        private void Save(RawDataDocument document)
+        {
             BsonDocument bdoc = document.ToBsonDocument();
             Save(bdoc, "data");
         }
 
-        private void Save(BsonDocument bdoc, string collectionName) {
+        private void Save(BsonDocument bdoc, string collectionName)
+        {
             string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["MongoDB"].ConnectionString;
             MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
             settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
@@ -120,7 +135,8 @@ namespace WebApp.Controllers {
             collection.InsertOne(bdoc);
         }
 
-        private void SaveFile(ReportDocument document) {
+        private void SaveFile(ReportDocument document)
+        {
             // Connect to and configure Azure Blob storage
             CloudStorageAccount storageAccount =
                 CloudStorageAccount.Parse(

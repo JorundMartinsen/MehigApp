@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Web;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -10,10 +11,14 @@ namespace WebApp.Models.Documents {
 
         [BsonIgnoreIfNull]
         [BsonElement("publisher")]
+        [DisplayName("Publisher*")]
+        [Required]
         public string Publisher { get; set; }
 
         [BsonIgnoreIfNull]
         [BsonElement("summary")]
+        [DisplayName("Summary*")]
+        [Required]
         public string Summary { get; set; }
 
         /// <summary>

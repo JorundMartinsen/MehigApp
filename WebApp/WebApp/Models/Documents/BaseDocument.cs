@@ -26,6 +26,7 @@ namespace WebApp.Models.Documents {
         /// </summary>
         [BsonRequired]
         [BsonElement("type")]
+        [Required]
         public string Datatype { get; set; }
 
         /// <summary>
@@ -33,21 +34,26 @@ namespace WebApp.Models.Documents {
         /// </summary>
         [BsonIgnoreIfNull]
         [BsonElement("name")]
-        [DisplayName("Title of document")]
+        [DisplayName("Title of document*")]
         [Required]
         public string Name { get; set; }
 
         [BsonIgnoreIfNull]
         [BsonElement("author")]
+        [DisplayName("Author*")]
+        [Required]
         public string Author { get; set; }
 
         [BsonIgnoreIfNull]
         [BsonElement("date")]
-        [DisplayName("Date of publication")]
+        [DisplayName("Date of publication*")]
+        [Required]
         public string Date { get; set; }
 
         [BsonIgnoreIfNull]
         [BsonElement("keywords")]
+        [DisplayName("Keyword*")]
+        [Required]
         public string Keywords { get; set; }
     }
 }

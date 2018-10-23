@@ -1,5 +1,5 @@
 ﻿@model WebApp.Models.Documents.ReportDocument
-
+@using WebApp.Content
 @{
     ViewBag.Title = "Register a document";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,14 +10,11 @@
     <div class="h4 pb-3">
         @ViewBag.Title
     </div>
-    
-    <div class="form-group">
-        @using (Html.BeginForm("Document", "Registration", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @Html.AntiForgeryToken()
 
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="pb-4">
+    @using (Html.BeginForm("Document", "Registration", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+        @Html.AntiForgeryToken()
+    <div>
+        <div class="form-group pb-4">
             <div class="form-check-inline">
                 @Html.RadioButtonFor(model => model.Datatype, "Environment", new { @class = "form-check-input" }) @Html.Label("Environment", new { @class = "form-check-label" })
             </div>
@@ -25,32 +22,23 @@
                 @Html.RadioButtonFor(model => model.Datatype, "Health", new { @class = "form-check-input" }) @Html.Label("Health", new { @class = "form-check-label" })
             </div>
         </div>
-            @Html.TextBoxFor(model => model.Name, new { @class = "form-control tb"})
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label pl-3 pb-3 " })
+        @Chtml.Control(Html, model => model.Name)
 
-            @Html.TextBoxFor(model => model.Author, new { @class = "form-control tb" })
-            @Html.LabelFor(model => model.Author, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
+        @Chtml.Control(Html, model => model.Author)
 
-            @Html.TextBoxFor(model => model.Date, new { @type = "date", @class = "form-control tb", @Value = DateTime.Now })
-            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
+        @Chtml.Control(Html, model => model.Date)
 
-            @Html.TextBoxFor(model => model.Publisher, new { @class = "form-control tb" })
-            @Html.LabelFor(model => model.Publisher, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
+        @Chtml.Control(Html, model => model.Publisher)
 
-            @Html.TextAreaFor(model => model.Summary, new { @class = "form-control tb" })
-            @Html.LabelFor(model => model.Summary, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
+        @Chtml.Textarea(Html, model => model.Summary)
 
-            @Html.TextBoxFor(model => model.Keywords, new { @class = "form-control tb" })
-            @Html.LabelFor(model => model.Keywords, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
+        @Chtml.Control(Html, model => model.Keywords)
 
-            @Html.TextBoxFor(model => model.ExternalLink, new { @class = "form-control tb" })
-            @Html.LabelFor(model => model.ExternalLink, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
+        @Chtml.Control(Html, model => model.ExternalLink)
 
-            @Html.TextBoxFor(model => model.File, new { @type = "file", @class = "form-control-file" })
-            @Html.LabelFor(model => model.File, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
-            <br />
-            <input type="submit" class="form-control btn btn-outline-dark col-md-2" />
-            <div class="col-md-2">@ViewBag.ModelStatus</div>
-         }
+        @Chtml.Control(Html, model => model.File)
     </div>
+        <input type="submit" class="btn btn-outline-dark btn-lg" />
+        <div class="col-md-2">@ViewBag.ModelStatus</div>
+    }
 </div>
