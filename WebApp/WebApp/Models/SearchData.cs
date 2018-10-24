@@ -4,17 +4,10 @@ using System.Linq;
 using System.Web;
 using WebApp.Models.Documents;
 using System.Security.Authentication;
-using System.Reflection;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Auth;
-using Microsoft.WindowsAzure.Storage.Blob;
 using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
-using MongoDB.Driver.Linq;
-using MongoDB.Driver.GridFS;
-using WebApp.Models;
-using static MongoDB.Bson.Serialization.BsonSerializationContext;
+using MongoDB.Driver.Builders;
+
 
 namespace WebApp.Models
 {
@@ -26,6 +19,7 @@ namespace WebApp.Models
         private List<ReportDocument> resultList;
         private string dateFrom;
         private string dateTo;
+        
 
 
         public SearchData()
@@ -40,8 +34,7 @@ namespace WebApp.Models
             this.Date = "";
             this.DateFrom = "1900-01-01";
             this.dateTo = DateTime.Now.ToString("yyyy-MM-dd");
-            this.Summary = "";
-
+            this.Summary = "";           
         }
 
         public bool ValidationSuccessful { get => validationSuccessful;}
@@ -55,18 +48,50 @@ namespace WebApp.Models
         public string DateTo { get => dateTo; set => dateTo = value; }
 
 
+        private BsonDocument GenerateFilter()
+        {
+            return new BsonDocument();
+        }
+
+
         public void ValidateInput()
         {
-            //check inputs
-            if (this.Id != "3")
+            //LOOP
+            if (this.Datatype == null)
             {
-                validationSuccessful = true;
-                information = "";
+                this.Datatype = "";
             }
-            else
+            if (this.Id == null)
             {
-                validationSuccessful = false;
-                information = "";
+                this.Id = "";
+            }
+            if (this.Name == null)
+            {
+                this.Name = "";
+            }
+            if (this.Author == null)
+            {
+                this.Author = "";
+            }
+            if (this.Keywords == null)
+            {
+                this.Keywords = "";
+            }
+            if (this.Publisher == null)
+            {
+                this.Publisher = "";
+            }
+            if (this.DateFrom == null)
+            {
+                this.DateFrom = "1900-01-01";
+            }
+            if (this.DateTo == null)
+            {
+                this.DateTo = DateTime.Now.ToString("yyyy-MM-dd");
+            }
+            if (this.Summary == null)
+            {
+                this.Summary = "";
             }
             validationSuccessful = true;
         }
@@ -97,86 +122,136 @@ namespace WebApp.Models
                 settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
                 MongoClient client = new MongoClient(settings);
                 var database = client.GetDatabase("TestDB");
-                var collection = database.GetCollection<BsonDocument>("documents");
+
+                List<string> collectionList = new List<string>() { "Reports", "documents" };
+
                 int nResultlist = 0;
-
-                
-                //var filter2 = new FilterDefinitionBuilder<BsonDocument>().In("name",this.Name);
-
-                var filter = new BsonDocument();
-                if (this.Name != null)
+                foreach (string colName in collectionList)
                 {
+                    var collection = database.GetCollection<BsonDocument>(colName);
+                    
+
+                    //filter
+                    //BsonDocument filter = GenerateFilter();
+
+                    //------------------------------------------Into GenerateFilter-----------------------------------------------------
+                    var builder = Builders<BsonDocument>.Filter;
+                    var filter = builder.Empty;
+                    //LOOP
+                    if (this.Datatype != "")
+                    {
+                        filter = filter & builder.Regex("type", this.Datatype);
+                    }
+                    if (this.Id != "")
+                    {
+                        filter = filter & builder.Regex("_id", this.Id);
+                    }
                     if (this.Name != "")
                     {
-                        
-                        filter = new BsonDocument("name", this.Name);
+                        filter = filter & builder.Regex("name", this.Name);
                     }
-                }
-                
-                
-
-                using (IAsyncCursor<BsonDocument> cursor = await collection.FindAsync(filter))
-                {
-                    while (await cursor.MoveNextAsync())
+                    if (this.Author != "")
                     {
-                        IEnumerable<BsonDocument> documents = cursor.Current;
-                        BsonValue outValue;
-
-                        foreach (BsonDocument document in documents)
+                        filter = filter & builder.Regex("author", this.Author);
+                    }
+                    if (this.Publisher != "")
+                    {
+                        filter = filter & builder.Regex("publisher", this.Publisher);
+                    }
+                    if (this.Keywords != "")
+                    {
+                        char[] sepArr = { ';', ',', '/', '.'};
+                        if (this.Keywords.IndexOfAny(sepArr) ==  -1)
                         {
-                            //find better way to do this
-
-                            resultList.Add(new ReportDocument());
-                            if (document.TryGetValue("_id", out outValue))
-                            {
-                                resultList[nResultlist].Id = outValue.ToString();
-                            }
-                            if (document.TryGetValue("type", out outValue))
-                            {
-                                resultList[nResultlist].Datatype = outValue.ToString();
-                            }
-                            if (document.TryGetValue("name", out outValue))
-                            {
-                                resultList[nResultlist].Name = outValue.ToString();
-                            }
-                            if (document.TryGetValue("author", out outValue))
-                            {
-                                resultList[nResultlist].Author = outValue.ToString();
-                            }
-                            if (document.TryGetValue("date", out outValue))
-                            {
-                                resultList[nResultlist].Date = outValue.ToString();
-                            }
-                            if (document.TryGetValue("keywords", out outValue))
-                            {
-                                resultList[nResultlist].Keywords = outValue.ToString();
-                            }
-                            if (document.TryGetValue("publisher", out outValue))
-                            {
-                                resultList[nResultlist].Publisher = outValue.ToString();
-                            }
-                            if (document.TryGetValue("author", out outValue))
-                            {
-                                resultList[nResultlist].Author = outValue.ToString();
-                            }
-                            if (document.TryGetValue("summary", out outValue))
-                            {
-                                resultList[nResultlist].Summary = outValue.ToString();
-                            }
-                            if (document.TryGetValue("internallink", out outValue))
-                            {
-                                resultList[nResultlist].InternalLink = outValue.ToString();
-                            }
-
-                            nResultlist++;
+                            filter = filter & builder.Regex("keywords", this.Keywords.Trim());
                         }
-                        if (nResultlist == 0)
+                        else
                         {
-                            information = "No matches found.";
+                            for(int i = 1; i < sepArr.Count();i++)
+                            {
+                                this.Keywords = this.Keywords.Replace(sepArr[i], sepArr[0]);
+                            }
+                            List<string> splitList = this.Keywords.Split(sepArr[0]).ToList<string>();
+
+                            for (int i = 0; i < splitList.Count(); i++)
+                            {
+                                splitList[i] = splitList[i].Trim();
+                                filter = filter & builder.Regex("keywords", splitList[i]);
+                            }
+                        }                       
+                    }
+                    if (this.DateFrom != "1900-01-01")
+                    {
+                        filter = filter & builder.Gte("date", this.DateFrom);
+                    }
+                    if (this.DateTo != DateTime.Now.ToString("yyyy-MM-dd"))
+                    {
+                        filter = filter & builder.Lte("date", this.DateTo);
+                    }
+                    //------------------------------------------Into GenerateFilter above-----------------------------------------------------
+
+                    using (IAsyncCursor<BsonDocument> cursor = await collection.FindAsync(filter))
+                    {
+                        while (await cursor.MoveNextAsync())
+                        {
+                            IEnumerable<BsonDocument> documents = cursor.Current;
+                            BsonValue outValue;
+
+                            foreach (BsonDocument document in documents)
+                            {
+                                resultList.Add(new ReportDocument());
+
+                                //LOOP
+                                if (document.TryGetValue("_id", out outValue))
+                                {
+                                    resultList[nResultlist].Id = outValue.ToString();
+                                }
+                                if (document.TryGetValue("type", out outValue))
+                                {
+                                    resultList[nResultlist].Datatype = outValue.ToString();
+                                }
+                                if (document.TryGetValue("name", out outValue))
+                                {
+                                    resultList[nResultlist].Name = outValue.ToString();
+                                }
+                                if (document.TryGetValue("author", out outValue))
+                                {
+                                    resultList[nResultlist].Author = outValue.ToString();
+                                }
+                                if (document.TryGetValue("date", out outValue))
+                                {
+                                    resultList[nResultlist].Date = outValue.ToString();
+                                }
+                                if (document.TryGetValue("keywords", out outValue))
+                                {
+                                    resultList[nResultlist].Keywords = outValue.ToString();
+                                }
+                                if (document.TryGetValue("publisher", out outValue))
+                                {
+                                    resultList[nResultlist].Publisher = outValue.ToString();
+                                }
+                                if (document.TryGetValue("author", out outValue))
+                                {
+                                    resultList[nResultlist].Author = outValue.ToString();
+                                }
+                                if (document.TryGetValue("summary", out outValue))
+                                {
+                                    resultList[nResultlist].Summary = outValue.ToString();
+                                }
+                                if (document.TryGetValue("internallink", out outValue))
+                                {
+                                    resultList[nResultlist].InternalLink = outValue.ToString();
+                                }
+                                nResultlist++;
+                            }
                         }
                     }
-
                 }
+                if (nResultlist == 0)
+                {
+                    information = "No matches found.";
+                }
+
             }
         }
     }
