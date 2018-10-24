@@ -2,6 +2,7 @@
 using Microsoft.WindowsAzure.Storage.Blob;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Builders;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -163,11 +164,21 @@ namespace WebApp.Controllers
 
         }
 
-        private void CheckIfExists(ReportDocument document, MongoDatabase database) {
-            //var collection = database.GetCollection<>
-            //int count = items.FindAs
-
-
+        private bool CheckIfExists(ReportDocument document) {
+            //string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["MongoDB"].ConnectionString;
+            //MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
+            //settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
+            //MongoClient client = new MongoClient(settings);
+            //var database = client.GetDatabase("TestDB");
+            //var collection = database.GetCollection<ReportDocument>("documents");
+            //long count = 0;
+            //foreach (var name in typeof(ReportDocument).GetProperties()) {
+            //    count += collection.Find(Query.Exists(nameof(document.Author), document.Author.ToBson())).Count();
+            //    collection.Find(Query.Exists())
+            //}
+            //if (count == 0) return false;
+            //else return true;
+            return false;
         }
     }
 }
