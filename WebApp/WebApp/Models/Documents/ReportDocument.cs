@@ -12,13 +12,12 @@ namespace WebApp.Models.Documents {
         [BsonIgnoreIfNull]
         [BsonElement("publisher")]
         [DisplayName("Publisher")]
-        [Required]
         public string Publisher { get; set; }
 
         [BsonIgnoreIfNull]
         [BsonElement("summary")]
         [DisplayName("Summary")]
-        [Required]
+        [DataType(DataType.MultilineText)]
         public string Summary { get; set; }
 
         /// <summary>
@@ -41,6 +40,7 @@ namespace WebApp.Models.Documents {
         /// </summary>
         [BsonIgnore]
         [DisplayName("Upload file as .pdf")]
+        [DataType(DataType.Upload)]
         public HttpPostedFileBase File { get; set; }
     }
 }

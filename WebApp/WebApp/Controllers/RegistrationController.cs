@@ -162,5 +162,12 @@ namespace WebApp.Controllers
             Save(document);
 
         }
+
+        private void CheckIfExists(ReportDocument document, MongoDatabase database) {
+            //var collection = database.GetCollection<>
+            //int count = items.FindAs
+
+
+        }
     }
 }

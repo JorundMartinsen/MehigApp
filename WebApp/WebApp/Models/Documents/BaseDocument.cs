@@ -47,6 +47,7 @@ namespace WebApp.Models.Documents {
         [BsonIgnoreIfNull]
         [BsonElement("date")]
         [DisplayName("Date of publication")]
+        [DataType(DataType.Date)]
         [Required]
         public string Date { get; set; }
 

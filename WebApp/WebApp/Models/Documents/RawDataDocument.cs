@@ -17,20 +17,21 @@ namespace WebApp.Models.Documents {
 
         [BsonIgnore]
         [DisplayName("Data headers")]
-        [Required]
         public string Header { get; set; }
 
         [BsonIgnore]
         [DisplayName("Separator character")]
-        [Required]
+        [DefaultValue(',')]
         public string Separator { get; set; }
 
         [BsonIgnore]
         [DisplayName("Data")]
+        [DataType(DataType.MultilineText)]
         public string Data { get; set; }
 
         [BsonIgnore]
         [DisplayName("Source file as .csv")]
+        [DataType(DataType.Upload)]
         public HttpPostedFileBase File { get; set; }
 
         [BsonIgnore]
