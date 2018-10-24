@@ -11,13 +11,13 @@ namespace WebApp.Models.Documents {
 
         [BsonIgnoreIfNull]
         [BsonElement("publisher")]
-        [DisplayName("Publisher*")]
+        [DisplayName("Publisher")]
         [Required]
         public string Publisher { get; set; }
 
         [BsonIgnoreIfNull]
         [BsonElement("summary")]
-        [DisplayName("Summary*")]
+        [DisplayName("Summary")]
         [Required]
         public string Summary { get; set; }
 

@@ -16,12 +16,12 @@ namespace WebApp.Models.Documents {
         public List<DataDocument> DataDocuments { get; set; }
 
         [BsonIgnore]
-        [DisplayName("Data headers*")]
+        [DisplayName("Data headers")]
         [Required]
         public string Header { get; set; }
 
         [BsonIgnore]
-        [DisplayName("Separator character*")]
+        [DisplayName("Separator character")]
         [Required]
         public string Separator { get; set; }
 
@@ -34,21 +34,8 @@ namespace WebApp.Models.Documents {
         public HttpPostedFileBase File { get; set; }
 
         [BsonIgnore]
-        [DisplayName("Row title column*")]
+        [DisplayName("Row title column")]
         [DefaultValue(0)]
         public int RowColumn { get; set; }
     }
-    //public class BigString
-    //{
-    //    private string _data;
-    //    public BigString(string data)
-    //    {
-    //        _data = data;
-    //    }
-    //    public static implicit operator string(BigString bigString)
-    //    {
-    //        if (bigString._data == null) return null;
-    //        return bigString._data;
-    //    }
-    //}
 }

@@ -28,7 +28,7 @@ namespace WebApp.Content {
             var attr = new RouteValueDictionary { { "class", "form-control tb" } };
             var mvc1 = htmlHelper.TextBoxFor(expression, attr);
             attr = new RouteValueDictionary { { "class", "control-label pl-3 pb-3" } };
-            var mvc2 = htmlHelper.LabelFor(expression, attr);
+            var mvc2 = mvcLabel(htmlHelper, expression, attr);
             var mvc3 = htmlHelper.ValidationMessageFor(expression, " ");
             return MvcHtmlString.Create(mvc1.ToString() + mvc2.ToString() + mvc3.ToString());
         }
@@ -37,7 +37,7 @@ namespace WebApp.Content {
             var attr = new RouteValueDictionary { { "class", "form-control tb noresize" } };
             var mvc1 = htmlHelper.TextAreaFor(expression, attr);
             attr = new RouteValueDictionary { { "class", "control-label pl-3 pb-3" } };
-            var mvc2 = htmlHelper.LabelFor(expression, attr);
+            var mvc2 = mvcLabel(htmlHelper, expression, attr);
             var mvc3 = htmlHelper.ValidationMessageFor(expression, " ");
             return MvcHtmlString.Create(mvc1.ToString() + mvc2.ToString() + mvc3.ToString());
         }
@@ -45,7 +45,7 @@ namespace WebApp.Content {
             var attr = new RouteValueDictionary { { "class", "form-control-file" }, { "type", "file" } };
             var mvc1 = htmlHelper.TextBoxFor(expression, attr);
             attr = new RouteValueDictionary { { "class", "control-label pl-3 pb-3" } };
-            var mvc2 = htmlHelper.LabelFor(expression, attr);
+            var mvc2 = mvcLabel(htmlHelper, expression, attr);
             var mvc3 = htmlHelper.ValidationMessageFor(expression, " ");
             return MvcHtmlString.Create(mvc1.ToString() + mvc2.ToString() + mvc3.ToString());
         }
@@ -53,9 +53,21 @@ namespace WebApp.Content {
             var attr = new RouteValueDictionary { { "class", "form-control tb" }, { "type", "date" } };
             var mvc1 = htmlHelper.TextBoxFor(expression, attr);
             attr = new RouteValueDictionary { { "class", "control-label pl-3 pb-3" } };
-            var mvc2 = htmlHelper.LabelFor(expression, attr);
+            var mvc2 = mvcLabel(htmlHelper, expression, attr);
             var mvc3 = htmlHelper.ValidationMessageFor(expression, " ");
             return MvcHtmlString.Create(mvc1.ToString() + mvc2.ToString() + mvc3.ToString());
+        }
+
+        private static MvcHtmlString mvcLabel<TModel, TProperty>(this System.Web.Mvc.HtmlHelper<TModel> htmlHelper, System.Linq.Expressions.Expression<Func<TModel, TProperty>> expression, RouteValueDictionary attr) {
+            MvcHtmlString mvc2 = MvcHtmlString.Empty;
+            if (ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData).IsRequired) {
+                string label = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData).DisplayName + "*";
+                mvc2 = htmlHelper.LabelFor(expression, label, attr);
+            }
+            else {
+                mvc2 = htmlHelper.LabelFor(expression, attr);
+            }
+            return mvc2;
         }
     }
 }
