@@ -1,7 +1,10 @@
 ﻿@using WebApp.Models
 @model WebApp.Models.SearchData
+@using WebApp.Content
 
 @{
+    /**/
+
     ViewBag.Title = "GetResults";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
@@ -21,9 +24,11 @@
         .scrollingTable {
             overflow-y: auto;
         }
+
         input {
             border: 0;
         }
+
         summary {
             width: 300%;
         }
@@ -62,67 +67,64 @@
 </head>
 
 
-<h2>Results</h2>
-
 <body onload="makeTableScroll();">
-    <div class="scrollingTable">
-        <table id="ResultTable" class="fixed_headers">
-            <thead>
-                <tr>
-                    @foreach (var header in WebApp.Models.SearchData.HeaderList)
-                    {
-                        <th>
-                            @Html.DisplayFor(modelItem => header)
-                        </th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.ResultList)
-                {
+    <div class="jumbotron">
+        <div class="h4 pb-3">Results</div>
+        <div class="scrollingTable">
+            <table id="ResultTable" class="fixed_headers">
+                <thead>
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Author)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Keywords)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Date)
-                        </td>
-                        <td>
-                            <a href="#" id=@item.Id onclick="updateSummary(this.id)"> Summary </a>
-                        </td>
-                        <td>
-                            @Html.ActionLink("Download", "Index", new { id = item.Id })
-                        </td>
+                        @foreach (var header in WebApp.Models.SearchData.HeaderList)
+                        {
+                            <th>
+                                @Html.DisplayFor(modelItem => header)
+                            </th>
+                        }
                     </tr>
-                }
-            </tbody>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ResultList)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Author)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Keywords)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Publisher)
+                            </td>
+                            <td>
+                                <a href="#" id=@item.Id onclick="updateSummary(this.id)"> Summary </a>
+                            </td>
+                            <td>
+                                @Html.ActionLink("Download", "Index", new { id = item.Id })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
 
-        </table>
+            </table>
+        </div>
+        <div>
+            <form>
+                <br />
+                <br />
+                <div class="h4 pb-3">Summary</div>
+                <textarea id="summaryTb" value="" readonly="readonly" rows="10" cols="50" wrap="soft" /><br />
+
+            </form>
+
+        </div>
+
+
     </div>
-    <div class="summary">
-        <form>
-            <br />
-            <br />
-            <h3>Summary</h3>
-
-            <h5>
-                <input type="text" value="" readonly="readonly" id="summaryTb" class="summary" /><br />
-                <input type="text" value="" readonly="readonly" id="testTb" class="summary" />
-            </h5>
-        </form>
-        
-    </div>
-    
-
-
 </body>
 

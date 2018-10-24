@@ -22,7 +22,7 @@ namespace WebApp.Models
     {
         private bool validationSuccessful;
         private string information;
-        public static List<string> HeaderList = new List<string>() {"Id","Name", "Author", "Keywords", "Date", "Summary", "Download" };
+        public static List<string> HeaderList = new List<string>() {"Name", "Author", "Date", "Keywords", "Publisher", "Summary", "Download" };
         private List<ReportDocument> resultList;
         private string dateFrom;
         private string dateTo;
@@ -127,6 +127,14 @@ namespace WebApp.Models
                             //find better way to do this
 
                             resultList.Add(new ReportDocument());
+                            if (document.TryGetValue("_id", out outValue))
+                            {
+                                resultList[nResultlist].Id = outValue.ToString();
+                            }
+                            if (document.TryGetValue("type", out outValue))
+                            {
+                                resultList[nResultlist].Datatype = outValue.ToString();
+                            }
                             if (document.TryGetValue("name", out outValue))
                             {
                                 resultList[nResultlist].Name = outValue.ToString();
@@ -135,10 +143,31 @@ namespace WebApp.Models
                             {
                                 resultList[nResultlist].Author = outValue.ToString();
                             }
+                            if (document.TryGetValue("date", out outValue))
+                            {
+                                resultList[nResultlist].Date = outValue.ToString();
+                            }
                             if (document.TryGetValue("keywords", out outValue))
                             {
                                 resultList[nResultlist].Keywords = outValue.ToString();
                             }
+                            if (document.TryGetValue("publisher", out outValue))
+                            {
+                                resultList[nResultlist].Publisher = outValue.ToString();
+                            }
+                            if (document.TryGetValue("author", out outValue))
+                            {
+                                resultList[nResultlist].Author = outValue.ToString();
+                            }
+                            if (document.TryGetValue("summary", out outValue))
+                            {
+                                resultList[nResultlist].Summary = outValue.ToString();
+                            }
+                            if (document.TryGetValue("internallink", out outValue))
+                            {
+                                resultList[nResultlist].InternalLink = outValue.ToString();
+                            }
+
                             nResultlist++;
                         }
                         if (nResultlist == 0)
