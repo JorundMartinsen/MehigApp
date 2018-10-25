@@ -2,7 +2,6 @@
 using Microsoft.WindowsAzure.Storage.Blob;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using MongoDB.Driver.Builders;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,122 +10,119 @@ using System.Web.Mvc;
 using WebApp.Models;
 using WebApp.Models.Documents;
 
-namespace WebApp.Controllers
-{
-    public class RegistrationController : Controller
-    {
+namespace WebApp.Controllers {
+    public class RegistrationController : Controller {
         // GET: Registration
-        public ActionResult Index()
-        {
+        public ActionResult Index() {
             return View(new ReportDocument());
         }
 
         [HttpGet]
-        public ActionResult Document()
-        {
+        public ActionResult Document() {
 
             return View("Document", new ReportDocument());
         }
 
         [HttpPost]
-        public ActionResult Document(ReportDocument document)
-        {
+        public ActionResult Document(ReportDocument document) {
             if (ModelState.IsValid) {
+                if (document.Public) {
+                    if (document.File != null) {
+                        string fileExt = Path.GetExtension(document.File.FileName).ToUpper();
 
-                if (document.File != null) {
-                    string fileExt = Path.GetExtension(document.File.FileName).ToUpper();
+                        if (fileExt == ".PDF") {
+                            Report report = new Report();
 
-                    if (fileExt == ".PDF") {
-                        Report report = new Report();
-
-                        SaveFile(document);
-                        ViewBag.ModelStatus = string.Format("Success. {0} saved.", document.Name);
-                        return View("Document", new ReportDocument());
+                            SaveFile(document);
+                            ViewBag.ModelStatus = string.Format("Success. {0} saved.", document.Name);
+                            return View("Document", new ReportDocument());
+                        }
+                        else {
+                            ViewBag.ModelStatus = "Wrong file format. Only PDF accepted";
+                            return View("Document", document);
+                        }
                     }
                     else {
-                        ViewBag.ModelStatus = "Wrong file format. Only PDF accepted";
-                        return View("Document", document);
+                        if (document.ExternalLink != null) {
+                            Save(document);
+                            ViewBag.ModelStatus = string.Format("Success. {0} saved.", document.Name);
+                            return View("Document", new ReportDocument());
+                        }
+                        else {
+                            ViewBag.ModelStatus = "You have to input source or upload file as PDF";
+                            return View("Document", document);
+                        }
                     }
                 }
                 else {
-                    if (document.ExternalLink != null) {
-                        Save(document);
-                        ViewBag.ModelStatus = string.Format("Success. {0} saved.", document.Name);
-                        return View("Document", new ReportDocument());
-                    }
-                    else {
-                        ViewBag.ModelStatus = "You have to input source or upload file as PDF";
-                        return View("Document", document);
-                    }
+                    ViewBag.ModelStatus = "You cannot upload data that is not public";
                 }
             }
-            else {
-                return View("Document", document);
-            }
+            return View("Document", document);
         }
 
         [HttpGet]
-        public ActionResult RawData()
-        {
+        public ActionResult RawData() {
             return View("RawData", new RawDataDocument());
         }
 
         [HttpPost]
-        public ActionResult RawData(RawDataDocument document)
-        {
+        public ActionResult RawData(RawDataDocument document) {
             if (ModelState.IsValid) {
-                document.DataDocuments = new List<DataDocument>();
+                if (document.Public) {
+                    document.DataDocuments = new List<DataDocument>();
 
-                if (document.File != null && string.IsNullOrWhiteSpace(document.Data)) {
-                    document.Data = "";
-                    using (StreamReader reader = new StreamReader(document.File.InputStream)) {
-                        document.Header = reader.ReadLine() + Environment.NewLine;
-                        while (!reader.EndOfStream) {
-                            document.Data += reader.ReadLine() + Environment.NewLine;
+                    if (document.File != null && string.IsNullOrWhiteSpace(document.Data)) {
+                        document.Data = "";
+                        using (StreamReader reader = new StreamReader(document.File.InputStream)) {
+                            document.Header = reader.ReadLine() + Environment.NewLine;
+                            while (!reader.EndOfStream) {
+                                document.Data += reader.ReadLine() + Environment.NewLine;
+                            }
                         }
                     }
-                }
 
-                string[] hs = document.Header.Split(document.Separator.ToCharArray());
-                string[] ds = document.Data.Split(new[] { '\r', '\n' });
-                foreach (var d in ds) {
-                    string[] s = d.Split(document.Separator.ToCharArray());
-                    for (int i = 0; i < hs.Length; i++) {
-                        DataDocument dataDocument = new DataDocument();
-                        //if (i != document.TimeColumn)
-                        if (s.Length == hs.Length) {
-                            dataDocument.Row = s[document.RowColumn];
-                            dataDocument.Value = s[i];
-                            dataDocument.Column = hs[i];
-                            document.DataDocuments.Add(dataDocument);
+                    string[] hs = document.Header.Split(document.Separator.ToCharArray());
+                    string[] ds = document.Data.Split(new[] { '\r', '\n' });
+                    foreach (var d in ds) {
+                        string[] s = d.Split(document.Separator.ToCharArray());
+                        for (int i = 0; i < hs.Length; i++) {
+                            DataDocument dataDocument = new DataDocument();
+                            //if (i != document.TimeColumn)
+                            if (s.Length == hs.Length) {
+                                dataDocument.Row = s[document.RowColumn];
+                                dataDocument.Value = s[i];
+                                dataDocument.Column = hs[i];
+                                document.DataDocuments.Add(dataDocument);
+                            }
                         }
                     }
-                }
-                Save(document);
+                    Save(document);
 
-                ViewBag.ModelStatus = "Success";
-                return View("RawData");
+                    ViewBag.ModelStatus = "Success";
+                    return View("RawData");
+                }
+                else {
+                    ViewBag.ModelStatus = "You cannot upload data that is not public";
+                }
             }
             else {
                 ViewBag.ModelStatus = "Something went wrong";
-                return View("RawData", document);
             }
+            return View("RawData", document);
         }
 
-        private void Save(ReportDocument document)
-        {
+        private void Save(ReportDocument document) {
             BsonDocument bdoc = document.ToBsonDocument();
             Save(bdoc, "documents");
         }
 
-        private void Save(RawDataDocument document)
-        {
+        private void Save(RawDataDocument document) {
             BsonDocument bdoc = document.ToBsonDocument();
             Save(bdoc, "data");
         }
 
-        private void Save(BsonDocument bdoc, string collectionName)
-        {
+        private void Save(BsonDocument bdoc, string collectionName) {
             string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["MongoDB"].ConnectionString;
             MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
             settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
@@ -136,8 +132,7 @@ namespace WebApp.Controllers
             collection.InsertOne(bdoc);
         }
 
-        private void SaveFile(ReportDocument document)
-        {
+        private void SaveFile(ReportDocument document) {
             // Connect to and configure Azure Blob storage
             CloudStorageAccount storageAccount =
                 CloudStorageAccount.Parse(

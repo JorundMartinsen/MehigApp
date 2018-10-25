@@ -146,3 +146,8 @@ textarea {
 .tri-state {
     width: 6em;
 }
+
+.img-carousel {
+    max-height: 500px;
+    width: auto;
+}
