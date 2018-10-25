@@ -299,11 +299,12 @@ namespace WebApp.Models
                                     DateTime dateOut;
                                     if(DateTime.TryParseExact(outValue.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOut))
                                     {
-                                        resultList[nResultlist].Date = dateOut.Date;
+                                        resultList[nResultlist].Date = dateOut.Date.ToString();
                                     }
                                     else
                                     {
-                                        resultList[nResultlist].Date = DateTime.ParseExact("01/01/1900", "dd/MM/yyyy", CultureInfo.InvariantCulture).Date;
+                                        //resultList[nResultlist].Date = DateTime.ParseExact("01/01/1900", "dd/MM/yyyy", CultureInfo.InvariantCulture).DateToString();
+                                        resultList[nResultlist].Date = "";
                                     }
                                 }
                                 if (document.TryGetValue("keywords", out outValue))

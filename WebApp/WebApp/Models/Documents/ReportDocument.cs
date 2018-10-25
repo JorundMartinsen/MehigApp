@@ -2,9 +2,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.Web;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 
 namespace WebApp.Models.Documents {
     public class ReportDocument : BaseDocument {
+        internal int nKWHit;
+
         public ReportDocument() : base() {
 
         }
@@ -43,6 +46,6 @@ namespace WebApp.Models.Documents {
         [DataType(DataType.Upload)]
         public HttpPostedFileBase File { get; set; }
 
-        
+        internal List<string> KWList { get; set; }
     }
 }
