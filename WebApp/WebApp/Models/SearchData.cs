@@ -197,7 +197,7 @@ namespace WebApp.Models
                 MongoClient client = new MongoClient(settings);
                 var database = client.GetDatabase("TestDB");
 
-                List<string> collectionList = new List<string>() { "documents" };
+                List<string> collectionList = new List<string>() { "documents", "data" };
 
                 //filter
                 //BsonDocument filter = GenerateFilter();
