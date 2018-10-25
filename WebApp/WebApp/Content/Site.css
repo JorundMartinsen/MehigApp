@@ -97,7 +97,9 @@ textarea {
     max-width: 280px;
 }*/
 
-.tb { max-width: 380px }
+.tb {
+    max-width: 380px
+}
 
 /* Styles for validation helpers
 -----------------------------------------------------------*/
@@ -150,4 +152,9 @@ textarea {
 .img-carousel {
     max-height: 500px;
     width: auto;
+}
+
+i.h-logo {
+    font-size: 80px;
+    color: #F5511E
 }
