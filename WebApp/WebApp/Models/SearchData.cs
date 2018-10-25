@@ -7,6 +7,11 @@ using System.Security.Authentication;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
+using System.Globalization;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson.Serialization.Attributes;
+using System.Text.RegularExpressions;
 
 
 namespace WebApp.Models
@@ -17,36 +22,63 @@ namespace WebApp.Models
         private string information;
         public static List<string> HeaderList = new List<string>() {"Name", "Author", "Date", "Keywords", "Publisher", "Summary", "Download" };
         private List<ReportDocument> resultList;
-        private string dateFrom;
-        private string dateTo;
         
-
+        
 
         public SearchData()
         {
             validationSuccessful = false;
             information = "";
             ResultList = new List<ReportDocument>();
-            this.Id = "";
-            this.Name = "";
-            this.Author = "";
-            this.Keywords = "";
-            this.Date = "";
-            this.DateFrom = "1900-01-01";
-            this.dateTo = DateTime.Now.ToString("yyyy-MM-dd");
-            this.Summary = "";           
+            this.SearchDatatype = "";
+            this.SearchId = "";
+            this.SearchName = "";
+            this.SearchAuthor = "";
+            this.SearchPublisher = "";
+            this.SearchKeywords = "";
+            this.SearchDateFrom = DateTime.ParseExact("01/01/1900", "dd/MM/yyyy", CultureInfo.InvariantCulture).Date;
+            this.SearchDateTo = DateTime.Now.Date;
+            SearchKWList = new List<string>();
         }
 
-        public bool ValidationSuccessful { get => validationSuccessful;}
+        public void Error()
+        {
+            information = "Error";
+        }
+
+        private List<string> SearchKWList { get; set; }
+        public string SearchDatatype { get; set; }
+
+        [DisplayName("Id")]
+        public string SearchId { get; set; }
+
+        [DisplayName("Title of document*")]
+        public string SearchName { get; set; }
+
+        [DisplayName("Author")]
+        public string SearchAuthor { get; set; }
+
+        [DisplayName("Publisher")]
+        public string SearchPublisher { get; set; }
+
+        [DisplayName("Keywords - 'health;environment'")]
+        public string SearchKeywords { get; set; }
+
+        [DisplayName("Date From")]
+        public DateTime SearchDateFrom { get; set; }
+
+        [DisplayName("Date To")]
+        public DateTime SearchDateTo { get; set; }
+
+
+        public bool ValidationSuccessful { get => validationSuccessful; }
+
 
         public string Information { get => information; }
 
+
         public List<ReportDocument> ResultList { get => resultList; set => resultList = value; }
-
-        public string DateFrom { get => dateFrom; set => dateFrom = value; }
-
-        public string DateTo { get => dateTo; set => dateTo = value; }
-
+        
 
         private BsonDocument GenerateFilter()
         {
@@ -57,48 +89,83 @@ namespace WebApp.Models
         public void ValidateInput()
         {
             //LOOP
-            if (this.Datatype == null)
+            if (this.SearchDatatype == null)
             {
-                this.Datatype = "";
+                this.SearchDatatype = "";
             }
-            if (this.Id == null)
+            if (this.SearchId == null)
             {
-                this.Id = "";
+                this.SearchId = "";
             }
-            if (this.Name == null)
+            if (this.SearchName == null)
             {
-                this.Name = "";
+                this.SearchName = "";
             }
-            if (this.Author == null)
+            if (this.SearchAuthor == null)
             {
-                this.Author = "";
+                this.SearchAuthor = "";
             }
-            if (this.Keywords == null)
+            if (this.SearchKeywords == null)
             {
-                this.Keywords = "";
+                this.SearchKeywords = "";
             }
-            if (this.Publisher == null)
+            if (this.SearchPublisher == null)
             {
-                this.Publisher = "";
+                this.SearchPublisher = "";
             }
-            if (this.DateFrom == null)
+            if (this.SearchDateFrom == null)
             {
-                this.DateFrom = "1900-01-01";
+                this.SearchDateFrom = DateTime.ParseExact("01/01/1900", "dd/MM/yyyy", CultureInfo.InvariantCulture).Date;
             }
-            if (this.DateTo == null)
+            if (this.SearchDateTo == null)
             {
-                this.DateTo = DateTime.Now.ToString("yyyy-MM-dd");
-            }
-            if (this.Summary == null)
-            {
-                this.Summary = "";
+                this.SearchDateTo = DateTime.Now;
             }
             validationSuccessful = true;
         }
 
+        private void SortResultListonKW()
+        {
+           for(int i = 0; i < resultList.Count(); i++)
+            {
+                resultList[i].nKWHit = 0;
+                for (int j = 0; j < resultList[i].KWList.Count(); j++)
+                {
+                    for(int k = 0; k < this.SearchKWList.Count(); k++)
+                    {
+                        if(resultList[i].KWList[j].ToLower() == this.SearchKWList[k].ToLower())
+                        {
+                            resultList[i].nKWHit++;
+                        }
+                    }
+                }
+            }
+            resultList = resultList.OrderByDescending(x => x.nKWHit).ToList();
+        }
+
+        private List<string> KwToList(string kwstring)
+        {
+            char[] kwSepArr = { ';', ',', '/', '.'};
+            List<string> l = new List<string>();
+
+            if(!string.IsNullOrEmpty(kwstring))
+            {
+                for (int i = 1; i < kwSepArr.Count(); i++)
+                {
+                    kwstring = kwstring.Replace(kwSepArr[i], kwSepArr[0]);
+                }
+                l = kwstring.Split(kwSepArr[0]).ToList<string>();
+            }
+            for (int i = 1; i < l.Count(); i++)
+            {
+                l[i] = l[i].Trim();
+            }
+            return l;
+        }
+
         public async System.Threading.Tasks.Task SearchAsync()
         {
-            if (this.Id == "1") //dummy
+            if (this.SearchId == "1") //dummy
             {
                 for (int i = 0; i < 20; i++)
                 {
@@ -109,7 +176,7 @@ namespace WebApp.Models
                 }
                 information = string.Format("Found {0}.", resultList.Count());
             }
-            else if (this.Id == "2")
+            else if (this.SearchId == "2")
             {
                 information = "No matches found.";
             } 
@@ -123,72 +190,81 @@ namespace WebApp.Models
                 MongoClient client = new MongoClient(settings);
                 var database = client.GetDatabase("TestDB");
 
-                List<string> collectionList = new List<string>() { "Reports", "documents" };
+                List<string> collectionList = new List<string>() { "documents" };
+
+                //filter
+                //BsonDocument filter = GenerateFilter();
+
+                //------------------------------------------Into GenerateFilter function-----------------------------------------------------
+                var builder = Builders<BsonDocument>.Filter;
+                var filter = builder.Empty;
+                var tempfilter = builder.Empty;
+                var tempfilter2 = builder.Empty;
+                string dbField = "";
+                //LOOP
+                if (this.SearchDatatype != "")
+                {
+                    dbField = "type";
+                    tempfilter = builder.Eq(dbField, this.SearchDatatype);
+                    filter = filter & tempfilter;
+                }
+                if (this.SearchId != "")
+                {
+                    dbField = "_id";
+                    tempfilter = builder.Regex(dbField, new BsonRegularExpression(new Regex(this.SearchId, RegexOptions.IgnoreCase)));
+                    filter = filter & tempfilter;
+                }
+                if (this.SearchName != "")
+                {
+                    dbField = "name";
+                    tempfilter = builder.Regex(dbField, new BsonRegularExpression(new Regex(this.SearchName, RegexOptions.IgnoreCase)));
+                    filter = filter & tempfilter;
+                }
+                if (this.SearchAuthor != "")
+                {
+                    dbField = "author";
+                    tempfilter = builder.Regex(dbField, new BsonRegularExpression(new Regex(this.SearchAuthor, RegexOptions.IgnoreCase)));
+                    filter = filter & tempfilter;
+                }
+                if (this.SearchPublisher != "")
+                {
+                    dbField = "publisher";
+                    tempfilter = builder.Regex(dbField, new BsonRegularExpression(new Regex(this.SearchPublisher, RegexOptions.IgnoreCase)));
+                    filter = filter & tempfilter;
+                }
+                if (this.SearchKeywords != "")
+                {
+                    tempfilter2 = builder.Empty;
+                    dbField = "keywords";
+                    SearchKWList = KwToList(this.SearchKeywords.Trim());
+                    for (int i = 0; i < SearchKWList.Count(); i++)
+                    {
+                        if(i == 0)
+                        {
+                            tempfilter2 = builder.Regex(dbField, new BsonRegularExpression(new Regex(SearchKWList[i], RegexOptions.IgnoreCase)));
+                        }
+                        else
+                        {
+                            tempfilter = builder.Regex(dbField, new BsonRegularExpression(new Regex(SearchKWList[i], RegexOptions.IgnoreCase)));
+                            tempfilter2 = (tempfilter2 | tempfilter); //OR
+                        }
+                    }
+                    filter = filter & tempfilter2;
+                }
+                if (this.SearchDateFrom != DateTime.ParseExact("01/01/1900", "dd/MM/yyyy", CultureInfo.InvariantCulture).Date)
+                {
+                    filter = filter & builder.Gte("date", this.SearchDateFrom);
+                }
+                if (this.SearchDateTo != DateTime.Now.Date)
+                {
+                    filter = filter & builder.Lte("date", this.SearchDateTo);
+                }
+                //------------------------------------------Above Into GenerateFilter-----------------------------------------------------
 
                 int nResultlist = 0;
                 foreach (string colName in collectionList)
                 {
-                    var collection = database.GetCollection<BsonDocument>(colName);
-                    
-
-                    //filter
-                    //BsonDocument filter = GenerateFilter();
-
-                    //------------------------------------------Into GenerateFilter-----------------------------------------------------
-                    var builder = Builders<BsonDocument>.Filter;
-                    var filter = builder.Empty;
-                    //LOOP
-                    if (this.Datatype != "")
-                    {
-                        filter = filter & builder.Regex("type", this.Datatype);
-                    }
-                    if (this.Id != "")
-                    {
-                        filter = filter & builder.Regex("_id", this.Id);
-                    }
-                    if (this.Name != "")
-                    {
-                        filter = filter & builder.Regex("name", this.Name);
-                    }
-                    if (this.Author != "")
-                    {
-                        filter = filter & builder.Regex("author", this.Author);
-                    }
-                    if (this.Publisher != "")
-                    {
-                        filter = filter & builder.Regex("publisher", this.Publisher);
-                    }
-                    if (this.Keywords != "")
-                    {
-                        char[] sepArr = { ';', ',', '/', '.'};
-                        if (this.Keywords.IndexOfAny(sepArr) ==  -1)
-                        {
-                            filter = filter & builder.Regex("keywords", this.Keywords.Trim());
-                        }
-                        else
-                        {
-                            for(int i = 1; i < sepArr.Count();i++)
-                            {
-                                this.Keywords = this.Keywords.Replace(sepArr[i], sepArr[0]);
-                            }
-                            List<string> splitList = this.Keywords.Split(sepArr[0]).ToList<string>();
-
-                            for (int i = 0; i < splitList.Count(); i++)
-                            {
-                                splitList[i] = splitList[i].Trim();
-                                filter = filter & builder.Regex("keywords", splitList[i]);
-                            }
-                        }                       
-                    }
-                    if (this.DateFrom != "1900-01-01")
-                    {
-                        filter = filter & builder.Gte("date", this.DateFrom);
-                    }
-                    if (this.DateTo != DateTime.Now.ToString("yyyy-MM-dd"))
-                    {
-                        filter = filter & builder.Lte("date", this.DateTo);
-                    }
-                    //------------------------------------------Into GenerateFilter above-----------------------------------------------------
+                    var collection = database.GetCollection<BsonDocument>(colName);               
 
                     using (IAsyncCursor<BsonDocument> cursor = await collection.FindAsync(filter))
                     {
@@ -220,11 +296,20 @@ namespace WebApp.Models
                                 }
                                 if (document.TryGetValue("date", out outValue))
                                 {
-                                    resultList[nResultlist].Date = outValue.ToString();
+                                    DateTime dateOut;
+                                    if(DateTime.TryParseExact(outValue.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOut))
+                                    {
+                                        resultList[nResultlist].Date = dateOut.Date;
+                                    }
+                                    else
+                                    {
+                                        resultList[nResultlist].Date = DateTime.ParseExact("01/01/1900", "dd/MM/yyyy", CultureInfo.InvariantCulture).Date;
+                                    }
                                 }
                                 if (document.TryGetValue("keywords", out outValue))
                                 {
                                     resultList[nResultlist].Keywords = outValue.ToString();
+                                    resultList[nResultlist].KWList = KwToList(outValue.ToString());
                                 }
                                 if (document.TryGetValue("publisher", out outValue))
                                 {
@@ -251,7 +336,12 @@ namespace WebApp.Models
                 {
                     information = "No matches found.";
                 }
-
+                else
+                {
+                    //sort list
+                    SortResultListonKW();
+                }
+                
             }
         }
     }

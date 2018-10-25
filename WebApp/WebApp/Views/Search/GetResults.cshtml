@@ -11,7 +11,7 @@
     var resList = Model.ResultList as List<WebApp.Models.Documents.ReportDocument>;
     var count = 5;
     count = resList.Count();
-    int p = 0;
+    
 }
 
 <head>
@@ -93,7 +93,7 @@
                                 @Html.DisplayFor(modelItem => item.Author)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Date)
+                                @Html.DisplayFor(modelItem => item.Date.Date)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Keywords)

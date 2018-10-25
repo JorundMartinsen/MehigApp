@@ -43,10 +43,11 @@ namespace WebApp.Controllers
                     return View("Index", sData);
                 }
             }
-            catch
+            catch (Exception e)
             {
                 ViewBag.FileStatus = "Error";
-                return View("Index", new SearchData());
+                sData.Error();
+                return View("Index", sData);
             }
         }
 

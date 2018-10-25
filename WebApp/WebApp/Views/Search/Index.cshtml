@@ -20,28 +20,28 @@
             @Chtml.Control(Html, model => model.Datatype)*@
 
             <div class="form-check-inline">
-                @Html.RadioButtonFor(model => model.Datatype, "", new { @class = "form-check-input", @checked = "checked" }) @Html.Label("All", new { @class = "form-check-label" })
+                @Html.RadioButtonFor(model => model.SearchDatatype, "", new { @class = "form-check-input", @checked = "checked" }) @Html.Label("All", new { @class = "form-check-label" })
             </div>
             <div class="form-check-inline">
-                @Html.RadioButtonFor(model => model.Datatype, "Environment", new { @class = "form-check-input" }) @Html.Label("Environment", new { @class = "form-check-label" })
+                @Html.RadioButtonFor(model => model.SearchDatatype, "Environment", new { @class = "form-check-input" }) @Html.Label("Environment", new { @class = "form-check-label" })
             </div>
             <div class="form-check-inline">
-                @Html.RadioButtonFor(model => model.Datatype, "Health", new { @class = "form-check-input" }) @Html.Label("Health", new { @class = "form-check-label" })
+                @Html.RadioButtonFor(model => model.SearchDatatype, "Health", new { @class = "form-check-input" }) @Html.Label("Health", new { @class = "form-check-label" })
             </div>
 
-            @Chtml.Control(Html, model => model.Id)
+            @Chtml.Control(Html, model => model.SearchId)
 
-            @Chtml.Control(Html, model => model.Name)
+            @Chtml.Control(Html, model => model.SearchName)
 
-            @Chtml.Control(Html, model => model.Author)
+            @Chtml.Control(Html, model => model.SearchAuthor)
 
-            @Chtml.Control(Html, model => model.Publisher)
+            @Chtml.Control(Html, model => model.SearchPublisher)
 
-            @Chtml.Control(Html, model => model.Keywords)
+            @Chtml.Control(Html, model => model.SearchKeywords)
 
-            @Chtml.Control(Html, model => model.DateFrom)
+            @Chtml.Control(Html, model => model.SearchDateFrom)
 
-            @Chtml.Control(Html, model => model.DateTo)
+            @Chtml.Control(Html, model => model.SearchDateTo)
 
             @*
             <div class="form-check-inline">
@@ -72,9 +72,9 @@
             @Html.TextBoxFor(model => model.DateFrom, new { @type = "date", @class = "form-control" })
             @Html.LabelFor(model => model.DateFrom, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
 
-            @Html.TextBoxFor(model => model.DateTo, new { @type = "date", @class = "form-control" })
-            @Html.LabelFor(model => model.DateTo, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
-                *@
+            @Html.TextBoxFor(model => model.SearchDateTo, new { @type = "date", @class = "form-control", @value = Model.SearchDateTo })
+            @Html.LabelFor(model => model.SearchDateTo, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
+            *@
             <br />
             <input type="submit" value="Search" name="searchBtn" /><font color="red">@info</font>
         }

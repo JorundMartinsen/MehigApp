@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
+
 
 namespace WebApp.Models.Documents {
     public class BaseDocument {
@@ -48,12 +50,16 @@ namespace WebApp.Models.Documents {
         [BsonElement("date")]
         [DisplayName("Date of publication*")]
         [Required]
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
 
         [BsonIgnoreIfNull]
         [BsonElement("keywords")]
         [DisplayName("Keyword*")]
         [Required]
         public string Keywords { get; set; }
+
+        public List<string> KWList { get; set; }
+
+        public int nKWHit { get; set; }
     }
 }

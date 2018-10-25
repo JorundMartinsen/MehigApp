@@ -42,5 +42,7 @@ namespace WebApp.Models.Documents {
         [BsonIgnore]
         [DisplayName("Upload file as .pdf")]
         public HttpPostedFileBase File { get; set; }
+
+        
     }
 }
