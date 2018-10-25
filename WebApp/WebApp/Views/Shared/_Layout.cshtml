@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Grenland EMS</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @{
@@ -17,7 +17,13 @@
     <!--TOP NAV BAR-->
     <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
         <!--TITLE-->
-        @Html.ActionLink("Monitoring app", "Index", "Home", null, new { @class = "navbar-brand" })
+        <a href="@Url.Action("Index", "Home")" class="navbar-brand">
+            <div class="row">
+                <img src="~/Content/Images/LogoLong.svg" height="40" width="170" class="d-none d-md-block" />
+                <img src="~/Content/Images/LogoSmall.svg" height="40" width="40" class="d-md-none" />
+            </div>
+        </a>
+        @*@Html.ActionLink("Monitoring app", "Index", "Home", null, new { @class = "navbar-brand" })*@
 
         <!--DROPDOWN BUTTON FOR SMALL SCREENS-->
         <button type="button" class="navbar-toggler navbar-toggler-right" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +49,7 @@
                     @Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })
                 </li>
                 <li class="nav-item">
-                    @Html.ActionLink("Login", "Notimplemented", "Home", null, new { @class = "nav-link" })
+                    @Html.ActionLink("Login", "Login", "Home", null, new { @class = "nav-link" })
                 </li>
                 <li class="nav-item">
                     @Html.ActionLink("Search", "Index", "Search", null, new { @class = "nav-link" })
@@ -82,7 +88,7 @@
                 @RenderBody()
             </div>
             <footer>
-                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+                <p>&copy; @DateTime.Now.Year - Grenland EMS</p>
             </footer>
         </div>
     </div>

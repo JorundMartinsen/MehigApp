@@ -31,13 +31,15 @@
 
         @Chtml.Control(Html, model => model.Publisher)
 
-        @Chtml.Textarea(Html, model => model.Summary)
+        @Chtml.Control(Html, model => model.Summary)
 
         @Chtml.Control(Html, model => model.Keywords)
 
         @Chtml.Control(Html, model => model.ExternalLink)
 
         @Chtml.Control(Html, model => model.File)
+
+        @Chtml.Control(Html, model => model.Public)
     </div>
         <input type="submit" class="btn btn-outline-dark btn-lg" />
         <div class="col-md-2">@ViewBag.ModelStatus</div>

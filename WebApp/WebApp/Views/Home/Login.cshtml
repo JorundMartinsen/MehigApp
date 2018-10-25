@@ -1,11 +1,20 @@
-﻿@{
+﻿@model WebApp.Models.Documents.UserDocument
+@using WebApp.Content
+@{
     ViewBag.Title = "Login";
 }
 <div class="jumbotron">
-    <h4>User @Html.TextBox("User", null, new { style = "width: 100%, left: 50%;" })</h4>
+    <div class="h4 pb-3">
+        @ViewBag.Title
+    </div>
 
-    <h4>Password @Html.TextBox("Password", null, new { style = "width: 100%;" })</h4>
-    <br />
-    <input id="BtnLogin" type="button" value="Login" />
-
+    @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+        @Html.AntiForgeryToken()
+    <div>
+        @Chtml.Control(Html, model => model.Username)
+        @Chtml.Control(Html, model => model.Password)
+    </div>
+        <input type="submit" class="btn btn-outline-dark btn-lg" />
+        <div class="col-md-2">@ViewBag.ModelStatus</div>
+    }
 </div>

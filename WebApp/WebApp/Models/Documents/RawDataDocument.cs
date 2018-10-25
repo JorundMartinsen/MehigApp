@@ -16,39 +16,27 @@ namespace WebApp.Models.Documents {
         public List<DataDocument> DataDocuments { get; set; }
 
         [BsonIgnore]
-        [DisplayName("Data headers*")]
-        [Required]
+        [DisplayName("Data headers")]
         public string Header { get; set; }
 
         [BsonIgnore]
-        [DisplayName("Separator character*")]
-        [Required]
+        [DisplayName("Separator character")]
+        [DefaultValue(',')]
         public string Separator { get; set; }
 
         [BsonIgnore]
         [DisplayName("Data")]
+        [DataType(DataType.MultilineText)]
         public string Data { get; set; }
 
         [BsonIgnore]
         [DisplayName("Source file as .csv")]
+        [DataType(DataType.Upload)]
         public HttpPostedFileBase File { get; set; }
 
         [BsonIgnore]
-        [DisplayName("Row title column*")]
+        [DisplayName("Row title column")]
         [DefaultValue(0)]
         public int RowColumn { get; set; }
     }
-    //public class BigString
-    //{
-    //    private string _data;
-    //    public BigString(string data)
-    //    {
-    //        _data = data;
-    //    }
-    //    public static implicit operator string(BigString bigString)
-    //    {
-    //        if (bigString._data == null) return null;
-    //        return bigString._data;
-    //    }
-    //}
 }

@@ -1,61 +1,103 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Linq.Expressions;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
-using WebApp.Models.Documents;
 
 namespace WebApp.Content {
     public static class Chtml {
-        public static MvcHtmlString Control<TModel, TProperty>(this System.Web.Mvc.HtmlHelper<TModel> htmlHelper, System.Linq.Expressions.Expression<Func<TModel, TProperty>> expression) {
-            Type t = expression.ReturnType;
-            if (t == typeof(HttpPostedFileBase)) {
-                return Textfile(htmlHelper, expression);
+        public static MvcHtmlString Control<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression) {
+            ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+            string dt = metadata.DataTypeName;
+            MvcHtmlString control;
+            switch (dt) {
+                case "MultilineText":
+                    control = Textarea(htmlHelper, expression, metadata);
+                    break;
+                case "Upload":
+                    control = Textfile(htmlHelper, expression, metadata);
+                    break;
+                case "Date":
+                    control = Textdate(htmlHelper, expression, metadata);
+                    break;
+                case "Password":
+                    control = Textpass(htmlHelper, expression, metadata);
+                    break;
+                case "Checkmark":
+                    control = Checkmark(htmlHelper, expression, metadata);
+                    break;
+                default:
+                    control = Textbox(htmlHelper, expression, metadata);
+                    break;
             }
-            else if (t==typeof(DateTime)) {
-                return Textdate(htmlHelper, expression);
-            }
-            //else if (t==typeof(BigString)) {
-            //    return Textarea(htmlHelper, expression);
-            //}
-            else {
-                return Textbox(htmlHelper, expression);
-            }
+            return MvcHtmlString.Create("<div class=\"form-group\">" + control.ToString() + "</div>");
         }
-            public static MvcHtmlString Textbox<TModel, TProperty>(this System.Web.Mvc.HtmlHelper<TModel> htmlHelper, System.Linq.Expressions.Expression<Func<TModel, TProperty>> expression) {
-            var attr = new RouteValueDictionary { { "class", "form-control tb" } };
+        public static MvcHtmlString Checkmark<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, ModelMetadata metadata) {
+            if (metadata.ModelType.Name == "Boolean") {
+                var attr = new RouteValueDictionary { { "class", "form-check-input" } };
+
+                var mvc1 = htmlHelper.CheckBoxFor((Expression<Func<TModel, bool>>)(object)expression, attr);
+
+                attr = new RouteValueDictionary { { "class", "form-check-label" } };
+                var mvc2 = mvcLabel(htmlHelper, expression, attr, metadata);
+                var mvc3 = htmlHelper.ValidationMessageFor(expression);
+                return MvcHtmlString.Create(mvc1.ToString() + mvc2.ToString() + mvc3.ToString());
+            }
+            else throw new Exception("Type of checkmark property must be boolean");
+        }
+
+        public static MvcHtmlString Textbox<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, ModelMetadata metadata) {
+            var attr = new RouteValueDictionary { { "class", "form-control tb" }, { "placeholder" ,metadata.Watermark} };
             var mvc1 = htmlHelper.TextBoxFor(expression, attr);
-            attr = new RouteValueDictionary { { "class", "control-label pl-3 pb-3" } };
-            var mvc2 = htmlHelper.LabelFor(expression, attr);
+            attr = new RouteValueDictionary { { "class", "control-label " } };
+            var mvc2 = mvcLabel(htmlHelper, expression, attr, metadata);
             var mvc3 = htmlHelper.ValidationMessageFor(expression, " ");
             return MvcHtmlString.Create(mvc1.ToString() + mvc2.ToString() + mvc3.ToString());
         }
 
-        public static MvcHtmlString Textarea<TModel, TProperty>(this System.Web.Mvc.HtmlHelper<TModel> htmlHelper, System.Linq.Expressions.Expression<Func<TModel, TProperty>> expression) {
+        public static MvcHtmlString Textarea<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, ModelMetadata metadata) {
             var attr = new RouteValueDictionary { { "class", "form-control tb noresize" } };
             var mvc1 = htmlHelper.TextAreaFor(expression, attr);
-            attr = new RouteValueDictionary { { "class", "control-label pl-3 pb-3" } };
-            var mvc2 = htmlHelper.LabelFor(expression, attr);
+            attr = new RouteValueDictionary { { "class", "control-label" } };
+            var mvc2 = mvcLabel(htmlHelper, expression, attr, metadata);
             var mvc3 = htmlHelper.ValidationMessageFor(expression, " ");
             return MvcHtmlString.Create(mvc1.ToString() + mvc2.ToString() + mvc3.ToString());
         }
-        public static MvcHtmlString Textfile<TModel, TProperty>(this System.Web.Mvc.HtmlHelper<TModel> htmlHelper, System.Linq.Expressions.Expression<Func<TModel, TProperty>> expression) {
+        public static MvcHtmlString Textfile<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, ModelMetadata metadata) {
             var attr = new RouteValueDictionary { { "class", "form-control-file" }, { "type", "file" } };
             var mvc1 = htmlHelper.TextBoxFor(expression, attr);
-            attr = new RouteValueDictionary { { "class", "control-label pl-3 pb-3" } };
-            var mvc2 = htmlHelper.LabelFor(expression, attr);
+            attr = new RouteValueDictionary { { "class", "control-label" } };
+            var mvc2 = mvcLabel(htmlHelper, expression, attr, metadata);
             var mvc3 = htmlHelper.ValidationMessageFor(expression, " ");
             return MvcHtmlString.Create(mvc1.ToString() + mvc2.ToString() + mvc3.ToString());
         }
-        public static MvcHtmlString Textdate<TModel, TProperty>(this System.Web.Mvc.HtmlHelper<TModel> htmlHelper, System.Linq.Expressions.Expression<Func<TModel, TProperty>> expression) {
+        public static MvcHtmlString Textdate<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, ModelMetadata metadata) {
             var attr = new RouteValueDictionary { { "class", "form-control tb" }, { "type", "date" } };
             var mvc1 = htmlHelper.TextBoxFor(expression, attr);
-            attr = new RouteValueDictionary { { "class", "control-label pl-3 pb-3" } };
-            var mvc2 = htmlHelper.LabelFor(expression, attr);
+            attr = new RouteValueDictionary { { "class", "control-label" } };
+            var mvc2 = mvcLabel(htmlHelper, expression, attr, metadata);
             var mvc3 = htmlHelper.ValidationMessageFor(expression, " ");
             return MvcHtmlString.Create(mvc1.ToString() + mvc2.ToString() + mvc3.ToString());
+        }
+        public static MvcHtmlString Textpass<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, ModelMetadata metadata) {
+            var attr = new RouteValueDictionary { { "class", "form-control tb" } };
+            var mvc1 = htmlHelper.PasswordFor(expression, attr);
+            attr = new RouteValueDictionary { { "class", "control-label" } };
+            var mvc2 = mvcLabel(htmlHelper, expression, attr, metadata);
+            var mvc3 = htmlHelper.ValidationMessageFor(expression, " ");
+            return MvcHtmlString.Create(mvc1.ToString() + mvc2.ToString() + mvc3.ToString());
+        }
+
+        private static MvcHtmlString mvcLabel<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, RouteValueDictionary attr, ModelMetadata metadata) {
+            MvcHtmlString mvc2 = MvcHtmlString.Empty;
+            if (ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData).IsRequired) {
+                string label = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData).DisplayName + "*";
+                mvc2 = htmlHelper.LabelFor(expression, label, attr);
+            }
+            else {
+                mvc2 = htmlHelper.LabelFor(expression, attr);
+            }
+            return mvc2;
         }
     }
 }
