@@ -55,7 +55,7 @@ namespace WebApp.Models.Documents {
 
         [BsonIgnoreIfNull]
         [BsonElement("keywords")]
-        [DisplayName("Keyword")]
+        [Display(Name = "Keyword", Prompt = "Measurement, Emissions, Ships, Sea, Norway")]
         [Required]
         public string Keywords { get; set; }
 
