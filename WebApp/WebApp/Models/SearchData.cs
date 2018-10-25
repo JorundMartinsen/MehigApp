@@ -20,7 +20,7 @@ namespace WebApp.Models
     {
         private bool validationSuccessful;
         private string information;
-        public static List<string> HeaderList = new List<string>() {"Name", "Author", "Date", "Keywords", "Publisher", "Summary", "Download" };
+        public static List<string> HeaderList = new List<string>() {"Name", "Author", "Date", "Keywords", "Publisher", "Summary", "Open" };
         private List<ReportDocument> resultList;
         
         
@@ -285,22 +285,27 @@ namespace WebApp.Models
                                 resultList.Add(new ReportDocument());
 
                                 //LOOP
+                                resultList[nResultlist].Id = "";
                                 if (document.TryGetValue("_id", out outValue))
                                 {
                                     resultList[nResultlist].Id = outValue.ToString();
                                 }
+                                resultList[nResultlist].Datatype = "";
                                 if (document.TryGetValue("type", out outValue))
                                 {
                                     resultList[nResultlist].Datatype = outValue.ToString();
                                 }
+                                resultList[nResultlist].Name = "";
                                 if (document.TryGetValue("name", out outValue))
                                 {
                                     resultList[nResultlist].Name = outValue.ToString();
                                 }
+                                resultList[nResultlist].Author = "";
                                 if (document.TryGetValue("author", out outValue))
                                 {
                                     resultList[nResultlist].Author = outValue.ToString();
                                 }
+                                resultList[nResultlist].Date = "";
                                 if (document.TryGetValue("date", out outValue))
                                 {
                                     DateTime dateOut;
@@ -308,32 +313,32 @@ namespace WebApp.Models
                                     {
                                         resultList[nResultlist].Date = dateOut.Date.ToString();
                                     }
-                                    else
-                                    {
-                                        //resultList[nResultlist].Date = DateTime.ParseExact("01/01/1900", "dd/MM/yyyy", CultureInfo.InvariantCulture).DateToString();
-                                        resultList[nResultlist].Date = "";
-                                    }
                                 }
+                                resultList[nResultlist].Keywords = "";
                                 if (document.TryGetValue("keywords", out outValue))
                                 {
                                     resultList[nResultlist].Keywords = outValue.ToString();
                                     resultList[nResultlist].KWList = KwToList(outValue.ToString());
                                 }
+                                resultList[nResultlist].Publisher = "";
                                 if (document.TryGetValue("publisher", out outValue))
                                 {
                                     resultList[nResultlist].Publisher = outValue.ToString();
                                 }
-                                if (document.TryGetValue("author", out outValue))
-                                {
-                                    resultList[nResultlist].Author = outValue.ToString();
-                                }
+                                resultList[nResultlist].Summary = "";
                                 if (document.TryGetValue("summary", out outValue))
                                 {
                                     resultList[nResultlist].Summary = outValue.ToString();
                                 }
+                                resultList[nResultlist].InternalLink = "";
                                 if (document.TryGetValue("internallink", out outValue))
                                 {
                                     resultList[nResultlist].InternalLink = outValue.ToString();
+                                }
+                                resultList[nResultlist].ExternalLink = "";
+                                if (document.TryGetValue("externallink", out outValue))
+                                {
+                                    resultList[nResultlist].ExternalLink = outValue.ToString();
                                 }
                                 nResultlist++;
                             }

@@ -11,7 +11,6 @@
     var resList = Model.ResultList as List<WebApp.Models.Documents.ReportDocument>;
     var count = 5;
     count = resList.Count();
-    
 }
 
 <head>
@@ -30,14 +29,13 @@
         }
 
         summary {
-            width: 300%;
+            width: 100%;
         }
     </style>
     <script type="text/javascript">
         var mod = @Html.Raw(Json.Encode(Model));
 
         function updateSummary(id) {
-            @*document.getElementById('testTb').value = mod.ResultList[id-1].Summary;*@
             var summary = "";
 
             var i;
@@ -47,6 +45,24 @@
                 }
             }
             document.getElementById('summaryTb').value = summary;
+        }
+
+        function openDocument(id) {
+            var i;
+            var link = "";
+            for (i = 0; i < mod.ResultList.length; i++) {
+                if (mod.ResultList[i].Id == id) {
+                    link = mod.ResultList[i].ExternalLink;
+                }
+            }
+            if (!link.includes("www")) {
+                alert("Not correct link format");
+            }
+            else {
+                window.open(link, '_blank');
+            }
+            @*document.getElementById('summaryTb').value = link;*@
+            
         }
 
         function makeTableScroll() {
@@ -71,7 +87,7 @@
     <div class="jumbotron">
         <div class="h4 pb-3">Results</div>
         <div class="scrollingTable">
-            <table id="ResultTable" class="fixed_headers">
+            <table id="ResultTable">
                 <thead>
                     <tr>
                         @foreach (var header in WebApp.Models.SearchData.HeaderList)
@@ -105,29 +121,25 @@
                                 <a href="#" id=@item.Id onclick="updateSummary(this.id)"> Summary </a>
                             </td>
                             <td>
-                                @Html.ActionLink("Download", "Index", new { id = item.Id })
+                                @if (item.ExternalLink.Contains("www"))
+                                {
+                                    <a href=@item.ExternalLink target="_blank"> Open </a>
+                                }
+                                else
+                                {
+                                    <div>No link</div>
+                                }
                             </td>
                         </tr>
                     }
                 </tbody>
-
             </table>
-        </div>
-        <div>
-            <form>
                 <br />
                 <br />
                 <div class="h4 pb-3">Summary</div>
-                <textarea id="summaryTb" value="" readonly="readonly" rows="10" cols="50" wrap="soft"></textarea>
-
-                
+                <textarea id="summaryTb" value="" readonly="readonly" rows="10" cols="50" wrap="soft"></textarea><br />
                 <br />
-
-            </form>
-
         </div>
-
-
     </div>
 </body>
 
