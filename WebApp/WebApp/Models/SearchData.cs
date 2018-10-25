@@ -52,7 +52,7 @@ namespace WebApp.Models
         [DisplayName("Id")]
         public string SearchId { get; set; }
 
-        [DisplayName("Title of document*")]
+        [DisplayName("Title of document")]
         public string SearchName { get; set; }
 
         [DisplayName("Author")]
@@ -61,13 +61,20 @@ namespace WebApp.Models
         [DisplayName("Publisher")]
         public string SearchPublisher { get; set; }
 
-        [DisplayName("Keywords - 'health;environment'")]
+        [DisplayName("Keywords")]
+        [Display(Prompt = "Measurement, Emissions, Ships, Sea, Norway")]
         public string SearchKeywords { get; set; }
 
+        [BsonIgnoreIfNull]
+        [DataType(DataType.Date)]
         [DisplayName("Date From")]
+        //[BsonDefaultValue(DateTime.ParseExact("01/01/1900", "dd/MM/yyyy", CultureInfo.InvariantCulture))]
         public DateTime SearchDateFrom { get; set; }
 
+        [BsonIgnoreIfNull]
+        [DataType(DataType.Date)]
         [DisplayName("Date To")]
+        //[BsonDefaultValue()]
         public DateTime SearchDateTo { get; set; }
 
 
