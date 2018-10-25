@@ -211,6 +211,7 @@
     <Content Include="Content\Images\LogoBig.svg" />
     <Content Include="Content\Images\LogoLong.svg" />
     <Content Include="Content\Images\LogoSmall.svg" />
+    <Content Include="Content\Images\USNlogo.svg" />
     <Content Include="Content\simple-sidebar.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
