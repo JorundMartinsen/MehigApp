@@ -51,7 +51,13 @@ namespace WebApp.Models.Documents {
         [DisplayName("Date of publication")]
         [DataType(DataType.Date)]
         [Required]
-        public string Date { get; set; }
+        public DateTime? Date { get; set; }
+
+        [BsonIgnoreIfNull]
+        [BsonElement("dateStored")]
+        [DisplayName("Date added")]
+        [DataType(DataType.Date)]
+        public DateTime DateStored { get; set; }
 
         [BsonIgnoreIfNull]
         [BsonElement("keywords")]

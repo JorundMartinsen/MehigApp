@@ -305,13 +305,13 @@ namespace WebApp.Models
                                 {
                                     resultList[nResultlist].Author = outValue.ToString();
                                 }
-                                resultList[nResultlist].Date = "";
+                                resultList[nResultlist].Date = null;
                                 if (document.TryGetValue("date", out outValue))
                                 {
                                     DateTime dateOut;
                                     if(DateTime.TryParseExact(outValue.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOut))
                                     {
-                                        resultList[nResultlist].Date = dateOut.Date.ToString();
+                                        resultList[nResultlist].Date = dateOut.Date;
                                     }
                                 }
                                 resultList[nResultlist].Keywords = "";

@@ -26,6 +26,7 @@ namespace WebApp.Controllers {
         [HttpPost]
         public ActionResult Document(ReportDocument document) {
             if (ModelState.IsValid) {
+                document.DateStored = DateTime.Now;
                 if (document.Public) {
                     if (document.File != null) {
                         string fileExt = Path.GetExtension(document.File.FileName).ToUpper();
@@ -69,6 +70,7 @@ namespace WebApp.Controllers {
         [HttpPost]
         public ActionResult RawData(RawDataDocument document) {
             if (ModelState.IsValid) {
+                document.DateStored = DateTime.Now;
                 if (document.Public) {
                     document.DataDocuments = new List<DataDocument>();
 
