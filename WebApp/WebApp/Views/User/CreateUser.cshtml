@@ -1,0 +1,32 @@
+﻿@model WebApp.Models.Documents.UserDocument
+@using WebApp.Content
+
+@{
+    ViewBag.Title = "Create User";
+}
+
+<h2>@Viewbag.Title</h2>
+
+@using (Html.BeginForm("CreateUser", "User", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+    @Chtml.Control(Html, model => model.Username)
+
+    @Chtml.Control(Html, model => model.Password)
+
+    <hr />
+
+    @Chtml.Control(Html, model => model.Email)
+
+    @Chtml.Control(Html, model => model.Phone)
+
+    @Chtml.Control(Html, model => model.Name.First)
+
+    @Chtml.Control(Html, model => model.Name.Middle)
+
+    @Chtml.Control(Html, model => model.Name.Last)
+
+    @Chtml.Control(Html, model => model.Privileges)
+
+    <input type="submit" class="btn btn-outline-dark btn-lg" />
+    <div class="col-md-2">@ViewBag.ModelStatus</div>
+}
+
