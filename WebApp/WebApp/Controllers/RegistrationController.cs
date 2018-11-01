@@ -34,7 +34,7 @@ namespace WebApp.Controllers {
                         if (fileExt == ".PDF") {
                             Report report = new Report();
 
-                            SaveFile(document);
+                            Saver.SaveFile(document);
                             ViewBag.ModelStatus = string.Format("Success. {0} saved.", document.Name);
                             return View("Document", new ReportDocument());
                         }
@@ -45,7 +45,7 @@ namespace WebApp.Controllers {
                     }
                     else {
                         if (document.ExternalLink != null) {
-                            Save(document);
+                            Saver.Save(document);
                             ViewBag.ModelStatus = string.Format("Success. {0} saved.", document.Name);
                             return View("Document", new ReportDocument());
                         }
@@ -99,7 +99,7 @@ namespace WebApp.Controllers {
                             }
                         }
                     }
-                    Save(document);
+                    Saver.Save(document);
 
                     ViewBag.ModelStatus = "Success";
                     return View("RawData");
@@ -114,52 +114,57 @@ namespace WebApp.Controllers {
             return View("RawData", document);
         }
 
-        private void Save(ReportDocument document) {
-            BsonDocument bdoc = document.ToBsonDocument();
-            Save(bdoc, "documents");
-        }
+        //private void Save(ReportDocument document) {
+        //    BsonDocument bdoc = document.ToBsonDocument();
+        //    Save(bdoc, "documents");
+        //}
 
-        private void Save(RawDataDocument document) {
-            BsonDocument bdoc = document.ToBsonDocument();
-            Save(bdoc, "data");
-        }
+        //private void Save(RawDataDocument document) {
+        //    BsonDocument bdoc = document.ToBsonDocument();
+        //    Save(bdoc, "data");
+        //}
 
-        private void Save(BsonDocument bdoc, string collectionName) {
-            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["MongoDB"].ConnectionString;
-            MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
-            settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
-            MongoClient client = new MongoClient(settings);
-            var database = client.GetDatabase("TestDB");
-            var collection = database.GetCollection<BsonDocument>(collectionName);
-            collection.InsertOne(bdoc);
-        }
+        //private void Save(UserDocument document) {
+        //    BsonDocument bdoc = document.ToBsonDocument();
+        //    Save(bdoc, "user");
+        //}
 
-        private void SaveFile(ReportDocument document) {
-            // Connect to and configure Azure Blob storage
-            CloudStorageAccount storageAccount =
-                CloudStorageAccount.Parse(
-                    System.Configuration.ConfigurationManager.ConnectionStrings["AzureBlob"].ConnectionString);
-            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-            CloudBlobContainer cloudBlobContainer = blobClient.GetContainerReference("testdb");
-            if (!cloudBlobContainer.Exists()) {
-                cloudBlobContainer.CreateIfNotExists();
-                var permissions = cloudBlobContainer.GetPermissions();
-                permissions.PublicAccess = BlobContainerPublicAccessType.Off;
-                cloudBlobContainer.SetPermissions(permissions);
-            }
+        //private void Save(BsonDocument bdoc, string collectionName) {
+        //    string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["MongoDB"].ConnectionString;
+        //    MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
+        //    settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
+        //    MongoClient client = new MongoClient(settings);
+        //    var database = client.GetDatabase("TestDB");
+        //    var collection = database.GetCollection<BsonDocument>(collectionName);
+        //    collection.InsertOne(bdoc);
+        //}
 
-            //Upload file to block
-            string uniqueBlobName = string.Format("MehigDocs/{0}", document.File.FileName);
-            CloudBlockBlob blob = cloudBlobContainer.GetBlockBlobReference(uniqueBlobName);
-            blob.Properties.ContentType = document.File.ContentType;
-            blob.UploadFromStream(document.File.InputStream);
+        //private void SaveFile(ReportDocument document) {
+        //    // Connect to and configure Azure Blob storage
+        //    CloudStorageAccount storageAccount =
+        //        CloudStorageAccount.Parse(
+        //            System.Configuration.ConfigurationManager.ConnectionStrings["AzureBlob"].ConnectionString);
+        //    CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+        //    CloudBlobContainer cloudBlobContainer = blobClient.GetContainerReference("testdb");
+        //    if (!cloudBlobContainer.Exists()) {
+        //        cloudBlobContainer.CreateIfNotExists();
+        //        var permissions = cloudBlobContainer.GetPermissions();
+        //        permissions.PublicAccess = BlobContainerPublicAccessType.Off;
+        //        cloudBlobContainer.SetPermissions(permissions);
+        //    }
 
-            //Update filesource to filename
-            document.InternalLink = uniqueBlobName;
+        //    //Upload file to block
+        //    string uniqueBlobName = string.Format("MehigDocs/{0}", document.File.FileName);
+        //    CloudBlockBlob blob = cloudBlobContainer.GetBlockBlobReference(uniqueBlobName);
+        //    blob.Properties.ContentType = document.File.ContentType;
+        //    blob.UploadFromStream(document.File.InputStream);
 
-            Save(document);
+        //    //Update filesource to filename
+        //    document.InternalLink = uniqueBlobName;
 
-        }
+        //    Save(document);
+
+        //}
 
         private bool CheckIfExists(ReportDocument document) {
             //string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["MongoDB"].ConnectionString;
