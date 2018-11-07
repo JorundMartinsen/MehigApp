@@ -37,7 +37,11 @@ namespace WebApp.Models.Documents {
         [BsonIgnoreIfNull]
         [BsonElement("internallink")]
         public string InternalLink {
-            get { return internalLink.Replace(" ","%20"); }
+            get {
+                if (!string.IsNullOrEmpty(internalLink))
+                    return internalLink.Replace(" ", "%20");
+                else return internalLink;
+            }
             set { internalLink = value; }
         }
 
