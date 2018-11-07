@@ -62,7 +62,7 @@
                 window.open(link, '_blank');
             }
             @*document.getElementById('summaryTb').value = link;*@
-            
+
         }
 
         function makeTableScroll() {
@@ -86,59 +86,54 @@
 <body onload="makeTableScroll();">
     <div class="jumbotron">
         <div class="h4 pb-3">Results</div>
-        <div class="scrollingTable">
-            <table id="ResultTable">
-                <thead>
-                    <tr>
-                        @foreach (var header in WebApp.Models.SearchData.HeaderList)
+        <div class="h6 pb-3">Returned @Model.ResultList.Count hits</div>
+        <div class="results">
+            @foreach (var item in Model.ResultList)
+            {
+                <div class="card text-left m-3">
+                    <font size="+1">
+                        @if (!item.ExternalLink.Contains("www"))
                         {
-                            <th>
-                                @Html.DisplayFor(modelItem => header)
-                            </th>
+                            @*<a href=@item.ExternalLink target="_blank"> @item.Name </a>*@
+                            <a href=http://firda.no target="_blank"> @item.Name </a>
                         }
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.ResultList)
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.Name)
+                        }
+                    </font>
+                    @if (item.Author.ToString() != "")
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Author)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Date)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Keywords)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Publisher)
-                            </td>
-                            <td>
-                                <a href="#" id=@item.Id onclick="updateSummary(this.id)"> Summary </a>
-                            </td>
-                            <td>
-                                @if (item.ExternalLink.Contains("www"))
-                                {
-                                    <a href=@item.ExternalLink target="_blank"> Open </a>
-                                }
-                                else
-                                {
-                                    <div>No link</div>
-                                }
-                            </td>
-                        </tr>
+                        @Html.DisplayFor(modelItem => item.Author)
+                        <br />
                     }
-                </tbody>
-            </table>
-                <br />
-                <br />
-                <div class="h4 pb-3">Summary</div>
-                <textarea id="summaryTb" value="" readonly="readonly" rows="10" cols="50" wrap="soft"></textarea><br />
-                <br />
+
+                    @if (item.Date.ToString() != "")
+                    {
+                        @Html.DisplayFor(modelItem => item.Date)
+                        <br />
+                    }
+
+                    @if (item.Keywords.ToString() != "")
+                    {
+                        <span>Keywords:  @Html.DisplayFor(modelItem => item.Keywords)</span>
+                    }
+                    @if (item.Publisher.ToString() != "")
+                    {
+                        @Html.DisplayFor(modelItem => item.Publisher)
+                    }
+
+                    @*<a href="#" id=@item.Id onclick="updateSummary(this.id)"> Summary </a>*@
+                </div>
+            }
+
+
+            @*
+            <div class="h4 pb-3">Summary</div>
+            <textarea id="summaryTb" value="" readonly="readonly" rows="10" cols="50" wrap="soft"></textarea>
+            <br />
+            <br />
+            *@
         </div>
     </div>
 </body>
