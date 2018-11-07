@@ -213,6 +213,7 @@
     <Content Include="Content\Images\LogoBig.svg" />
     <Content Include="Content\Images\LogoLong.svg" />
     <Content Include="Content\Images\LogoSmall.svg" />
+    <Content Include="Content\Images\porsgrunn-logo.png" />
     <Content Include="Content\Images\USNlogo.svg" />
     <Content Include="Content\simple-sidebar.css" />
     <Content Include="favicon.ico" />
@@ -284,7 +285,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Notimplemented.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />

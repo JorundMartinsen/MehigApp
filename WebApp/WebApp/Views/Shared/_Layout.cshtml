@@ -34,19 +34,10 @@
             <ul class="navbar-nav mr-auto"></ul>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    @Html.ActionLink("No/En", "Notimplemented", "Home", null, new { @class = "nav-link" })
-                </li>
-                <li class="nav-item">
                     @Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })
                 </li>
                 <li class="nav-item">
-                    @Html.ActionLink("News", "Notimplemented", "Home", null, new { @class = "nav-link" })
-                </li>
-                <li class="nav-item">
                     @Html.ActionLink("About", "About", "Home", null, new { @class = "nav-link" })
-                </li>
-                <li class="nav-item">
-                    @Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })
                 </li>
                 <li class="nav-item">
                     @Html.ActionLink("Login", "Login", "Home", null, new { @class = "nav-link" })
@@ -59,12 +50,12 @@
                     @Html.ActionLink("Add Data", "Index", "Registration", null, new { @class = "nav-link" })
                 </li>
                 <!--VISIBLE ON SMALL SCREENS ONLY-->
-                <li class="nav-item d-sm-block d-md-none">
+                @*<li class="nav-item d-sm-block d-md-none">
                     @Html.ActionLink("Environmental data", "Notimplemented", "Home", null, new { @class = "nav-link" })
                 </li>
                 <li class="nav-item d-sm-block d-md-none">
                     @Html.ActionLink("Health data", "Notimplemented", "Home", null, new { @class = "nav-link" })
-                </li>
+                </li>*@
                 <!--SMALL DEVICE MENU END-->
             </ul>
         </div>
@@ -72,7 +63,7 @@
     <!--SIDE BAR AND CONTENT-->
     <div class="row" id="body-row">
         <!--SIDEBAR-->
-        <div id="sidebar-container" class="sidebar-expanded d-none d-md-block col-2 bg-light">
+        @*<div id="sidebar-container" class="sidebar-expanded d-none d-md-block col-2 bg-light">
             <ul class="navbar-nav sticky-top sticky-offset">
                 <li class="nav-item">
                     @Html.ActionLink("Environmental data", "Notimplemented", "Home", null, new { @class = "nav-link" })
@@ -81,7 +72,7 @@
                     @Html.ActionLink("Health data", "Notimplemented", "Home", null, new { @class = "nav-link" })
                 </li>
             </ul>
-        </div>
+        </div>*@
         <!--SIDEBAR END-->
         <div class="col py3 pt-3">
             <div>
