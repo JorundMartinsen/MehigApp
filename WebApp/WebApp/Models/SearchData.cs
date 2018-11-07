@@ -195,9 +195,11 @@ namespace WebApp.Models
                 MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
                 settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
                 MongoClient client = new MongoClient(settings);
-                var database = client.GetDatabase("TestDB");
-
-                List<string> collectionList = new List<string>() { "documents", "data" };
+                var database = client.GetDatabase(System.Configuration.ConfigurationManager.AppSettings["DatabaseName"]);
+                
+                List<string> collectionList = new List<string>() {
+                    System.Configuration.ConfigurationManager.AppSettings["DocumentCollection"],
+                    System.Configuration.ConfigurationManager.AppSettings["DataCollection"] };
 
                 //filter
                 //BsonDocument filter = GenerateFilter();

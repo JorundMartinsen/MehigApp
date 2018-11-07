@@ -36,7 +36,12 @@ namespace WebApp.Models.Documents {
         /// </summary>
         [BsonIgnoreIfNull]
         [BsonElement("internallink")]
-        public string InternalLink { get; set; }
+        public string InternalLink {
+            get { return internalLink.Replace(" ","%20"); }
+            set { internalLink = value; }
+        }
+
+        private string internalLink;
 
         /// <summary>
         /// Used for sending files to controller. Ignored by MongoDB

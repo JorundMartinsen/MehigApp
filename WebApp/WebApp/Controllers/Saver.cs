@@ -13,17 +13,17 @@ namespace WebApp.Controllers {
     public static class Saver {
         public static void Save(ReportDocument document) {
             BsonDocument bdoc = document.ToBsonDocument();
-            Save(bdoc, "documents");
+            Save(bdoc, System.Configuration.ConfigurationManager.AppSettings["DocumentCollection"]);
         }
 
         public static void Save(RawDataDocument document) {
             BsonDocument bdoc = document.ToBsonDocument();
-            Save(bdoc, "data");
+            Save(bdoc, System.Configuration.ConfigurationManager.AppSettings["DataCollection"]);
         }
 
         public static void Save(UserDocument document) {
             BsonDocument bdoc = document.ToBsonDocument();
-            Save(bdoc, "user");
+            Save(bdoc, System.Configuration.ConfigurationManager.AppSettings["UserCollection"]);
         }
 
         private static void Save(BsonDocument bdoc, string collectionName) {
@@ -31,7 +31,7 @@ namespace WebApp.Controllers {
             MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
             settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
             MongoClient client = new MongoClient(settings);
-            var database = client.GetDatabase("TestDB");
+            var database = client.GetDatabase(System.Configuration.ConfigurationManager.AppSettings["DatabaseName"]);
             var collection = database.GetCollection<BsonDocument>(collectionName);
             collection.InsertOne(bdoc);
         }
@@ -42,7 +42,7 @@ namespace WebApp.Controllers {
                 CloudStorageAccount.Parse(
                     System.Configuration.ConfigurationManager.ConnectionStrings["AzureBlob"].ConnectionString);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-            CloudBlobContainer cloudBlobContainer = blobClient.GetContainerReference("testdb");
+            CloudBlobContainer cloudBlobContainer = blobClient.GetContainerReference(System.Configuration.ConfigurationManager.AppSettings["BlobDatabase"]);
             if (!cloudBlobContainer.Exists()) {
                 cloudBlobContainer.CreateIfNotExists();
                 var permissions = cloudBlobContainer.GetPermissions();
