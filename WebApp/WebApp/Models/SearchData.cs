@@ -65,14 +65,14 @@ namespace WebApp.Models
         [Display(Prompt = "Measurement, Emissions, Ships, Sea, Norway")]
         public string SearchKeywords { get; set; }
 
-        [BsonIgnoreIfNull]
-        [DataType(DataType.Date)]
+        //[BsonIgnoreIfNull]
+        //[DataType(DataType.Date)]
         [DisplayName("Date From")]
         //[BsonDefaultValue(DateTime.ParseExact("01/01/1900", "dd/MM/yyyy", CultureInfo.InvariantCulture))]
         public DateTime SearchDateFrom { get; set; }
 
-        [BsonIgnoreIfNull]
-        [DataType(DataType.Date)]
+        //[BsonIgnoreIfNull]
+        //[DataType(DataType.Date)]
         [DisplayName("Date To")]
         //[BsonDefaultValue()]
         public DateTime SearchDateTo { get; set; }
