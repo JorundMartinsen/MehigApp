@@ -30,6 +30,8 @@ namespace WebApp.Models
             validationSuccessful = false;
             information = "";
             ResultList = new List<ReportDocument>();
+
+            //this should be in a list or something, for iteration, less code
             this.SearchDatatype = "";
             this.SearchId = "";
             this.SearchName = "";
@@ -39,11 +41,98 @@ namespace WebApp.Models
             this.SearchDateFrom = DateTime.ParseExact("01/01/1900", "dd/MM/yyyy", CultureInfo.InvariantCulture).Date;
             this.SearchDateTo = DateTime.Now.Date;
             SearchKWList = new List<string>();
+            this.SearchString = "";
         }
 
         public void Error()
         {
             information = "Error";
+        }
+
+        public void CreateSearchString()
+        {
+            if (SearchString == "")
+            {
+                if (SearchId != "")
+                {
+                    SearchString += "id=" + SearchId + ";";
+                }
+                if (SearchName != "")
+                {
+                    SearchString += "title=" + SearchName + ";";
+                }
+                if (SearchAuthor != "")
+                {
+                    SearchString += "author=" + SearchAuthor + ";";
+                }
+                if (SearchPublisher != "")
+                {
+                    SearchString += "publisher=" + SearchPublisher + ";";
+                }
+                if (SearchKeywords != "")
+                {
+                    SearchString += "keywords=";
+                    List<string> kwl = KwToList(SearchKeywords);
+                    foreach (string kw in kwl)
+                    {
+                        SearchString += kw + ",";
+                    }
+                    SearchString = SearchString.Remove(SearchString.Length - 1);
+                    SearchString += ";";
+                }
+                if (SearchDateFrom != DateTime.ParseExact("01/01/1900", "dd/MM/yyyy", CultureInfo.InvariantCulture).Date)
+                {
+                    SearchString += "datefrom=" + SearchDateFrom + ";";
+                }
+                if (SearchDateTo != DateTime.Now.Date)
+                {
+                    SearchString += "dateto=" + SearchDateTo + ";";
+                }
+                if (SearchString.Length > 0)
+                {
+                    if (SearchString[SearchString.Length - 1] == ';')
+                    {
+                        SearchString = SearchString.Remove(SearchString.Length - 1);
+                    }
+                }
+            }
+            else
+            {
+                List<string> sl = SearchString.Split(';').ToList<string>();
+                foreach(string s in sl)
+                {
+                    if (s.Contains("id"))
+                    {
+                        this.SearchId = s.Substring(s.IndexOf('=') + 1);
+                    }
+                    if (s.Contains("title"))
+                    {
+                        this.SearchName = s.Substring(s.IndexOf('=') + 1);
+                    }
+                    if (s.Contains("author"))
+                    {
+                        this.SearchAuthor = s.Substring(s.IndexOf('=') + 1);
+                    }
+                    if (s.Contains("publisher"))
+                    {
+                        this.SearchPublisher = s.Substring(s.IndexOf('=') + 1);
+                    }
+                    if (s.Contains("keywords"))
+                    {
+                        this.SearchKeywords = s.Substring(s.IndexOf('=') + 1);
+                    }
+                    if (s.Contains("datefrom"))
+                    {
+                        this.SearchDateFrom = DateTime.ParseExact(s.Substring(s.IndexOf('=') + 1), "dd/MM/yyyy", CultureInfo.InvariantCulture).Date;
+                    }
+                    if (s.Contains("dateto"))
+                    {
+                        this.SearchDateTo = DateTime.ParseExact(s.Substring(s.IndexOf('=') + 1), "dd/MM/yyyy", CultureInfo.InvariantCulture).Date;
+                    }
+                }
+                
+            }
+            
         }
 
         private List<string> SearchKWList { get; set; }
@@ -66,14 +155,14 @@ namespace WebApp.Models
         public string SearchKeywords { get; set; }
 
         //[BsonIgnoreIfNull]
-        //[DataType(DataType.Date)]
         [DisplayName("Date From")]
+        [DataType(DataType.Date)]
         //[BsonDefaultValue(DateTime.ParseExact("01/01/1900", "dd/MM/yyyy", CultureInfo.InvariantCulture))]
         public DateTime SearchDateFrom { get; set; }
 
         //[BsonIgnoreIfNull]
-        //[DataType(DataType.Date)]
         [DisplayName("Date To")]
+        [DataType(DataType.Date)]
         //[BsonDefaultValue()]
         public DateTime SearchDateTo { get; set; }
 
@@ -82,6 +171,8 @@ namespace WebApp.Models
 
 
         public string Information { get => information; }
+
+        public string SearchString { get; set; }
 
 
         public List<ReportDocument> ResultList { get => resultList; set => resultList = value; }
@@ -127,6 +218,10 @@ namespace WebApp.Models
             if (this.SearchDateTo == null)
             {
                 this.SearchDateTo = DateTime.Now;
+            }
+            if (this.SearchString == null)
+            {
+                this.SearchString = "";
             }
             validationSuccessful = true;
         }

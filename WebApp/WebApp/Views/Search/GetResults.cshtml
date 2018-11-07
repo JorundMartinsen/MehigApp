@@ -85,56 +85,76 @@
 
 <body onload="makeTableScroll();">
     <div class="jumbotron">
-        <div class="h4 pb-3">Results</div>
-        <div class="h6 pb-3">Returned @Model.ResultList.Count hits</div>
-        <div class="results">
-            @foreach (var item in Model.ResultList)
-            {
-                <div class="card text-left m-3">
-                    <font size="+1">
-                        @if (!item.ExternalLink.Contains("www"))
+        @*<div class="h4 pb-3">Results</div>*@
+        @if (Model.ResultList.Count > 1)
+        {
+            <div class="h6 pb-3">Returned @Model.ResultList.Count results</div>
+        }
+        else
+        {
+            <div class="h6 pb-3">Returned 1 result</div>
+        }
+            <div class="results">
+                @*@Chtml.Control(Html, model => model.SearchString)*@
+                @using (Html.BeginForm("GetResults", "Search"))
+                {
+                    @Html.TextBoxFor(model => model.SearchString, new { @class = "form-control" })
+                }
+
+                @foreach (var item in Model.ResultList)
+                {
+                    <div class="card text-left m-3">
+                        <font size="+1">
+                            @if (!item.ExternalLink.Contains("www"))
+                            {
+                                @*<a href=@item.ExternalLink target="_blank"> @item.Name </a>*@
+                                <a href=http://firda.no target="_blank"> @item.Name </a>
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => item.Name)
+                            }
+                        </font>
+                        @if (item.Author.ToString() != "")
                         {
-                            @*<a href=@item.ExternalLink target="_blank"> @item.Name </a>*@
-                            <a href=http://firda.no target="_blank"> @item.Name </a>
+                            @Html.DisplayFor(modelItem => item.Author)
+                            < br />
                         }
-                        else
+
+                        @if (item.Date.ToString() != "")
                         {
-                            @Html.DisplayFor(modelItem => item.Name)
+                            @Html.DisplayFor(modelItem => item.Date)
+                            < br />
                         }
-                    </font>
-                    @if (item.Author.ToString() != "")
-                    {
-                        @Html.DisplayFor(modelItem => item.Author)
-                        <br />
-                    }
 
-                    @if (item.Date.ToString() != "")
-                    {
-                        @Html.DisplayFor(modelItem => item.Date)
-                        <br />
-                    }
+                        @if (item.Keywords.ToString() != "")
+                        {
+                            < span > Keywords:  @Html.DisplayFor(modelItem => item.Keywords) </ span >
+                        }
+                        @if (item.Publisher.ToString() != "")
+                        {
+                            @Html.DisplayFor(modelItem => item.Publisher)
+                        }
+                        <i size="-1">
+                            @if (item.Summary.ToString() != "")
+                            {
+                                <br />
+                                @Html.DisplayFor(modelItem => item.Summary)
+                            }
+                        </i>
 
-                    @if (item.Keywords.ToString() != "")
-                    {
-                        <span>Keywords:  @Html.DisplayFor(modelItem => item.Keywords)</span>
-                    }
-                    @if (item.Publisher.ToString() != "")
-                    {
-                        @Html.DisplayFor(modelItem => item.Publisher)
-                    }
-
-                    @*<a href="#" id=@item.Id onclick="updateSummary(this.id)"> Summary </a>*@
-                </div>
-            }
+                        @*<a href="#" id=@item.Id onclick="updateSummary(this.id)"> Summary </a>*@
+                    </div>
+                }
 
 
-            @*
-            <div class="h4 pb-3">Summary</div>
-            <textarea id="summaryTb" value="" readonly="readonly" rows="10" cols="50" wrap="soft"></textarea>
-            <br />
-            <br />
-            *@
-        </div>
+                @*
+        <div class="h4 pb-3">Summary</div>
+        <textarea id="summaryTb" value="" readonly="readonly" rows="10" cols="50" wrap="soft"></textarea>
+        <br />
+        <br />
+                *@
+            </div>
     </div>
 </body>
 
