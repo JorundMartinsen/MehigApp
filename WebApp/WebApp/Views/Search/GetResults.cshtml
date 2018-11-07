@@ -103,48 +103,52 @@
 
                 @foreach (var item in Model.ResultList)
                 {
-                    <div class="card text-left m-3">
-                        <font size="+1">
-                            @if (!item.ExternalLink.Contains("www"))
-                            {
-                                @*<a href=@item.ExternalLink target="_blank"> @item.Name </a>*@
-                                <a href=http://firda.no target="_blank"> @item.Name </a>
-                            }
-                            else
-                            {
-                                @Html.DisplayFor(modelItem => item.Name)
-                            }
-                        </font>
-                        @if (item.Author.ToString() != "")
+                <div class="card text-left m-3">
+                    <font size="+1">
+                        @if (!item.ExternalLink.Contains("www"))
                         {
-                            @Html.DisplayFor(modelItem => item.Author)
-                            < br />
+                            @*<a href=@item.ExternalLink target="_blank"> @item.Name </a>*@
+                            <a href=http://firda.no target="_blank"> @item.Name </a>
                         }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.Name)
+                        }
+                        <br />
+                    </font>
 
-                        @if (item.Date.ToString() != "")
-                        {
-                            @Html.DisplayFor(modelItem => item.Date)
-                            < br />
-                        }
+                    @if (item.Author.ToString() != "")
+                    {
+                        @Html.DisplayFor(modelItem => item.Author)
+                        <br />
+                    }
 
-                        @if (item.Keywords.ToString() != "")
-                        {
-                            < span > Keywords:  @Html.DisplayFor(modelItem => item.Keywords) </ span >
-                        }
-                        @if (item.Publisher.ToString() != "")
-                        {
-                            @Html.DisplayFor(modelItem => item.Publisher)
-                        }
-                        <i size="-1">
-                            @if (item.Summary.ToString() != "")
-                            {
-                                <br />
-                                @Html.DisplayFor(modelItem => item.Summary)
-                            }
-                        </i>
+                    @if (item.Publisher.ToString() != "")
+                    {
+                        @Html.DisplayFor(modelItem => item.Publisher)
+                        <br />
+                    }
+                    @if (item.Date.ToString() != "")
+                    {
+                        @Html.DisplayFor(modelItem => item.Date)
+                        <br />
+                    }
 
-                        @*<a href="#" id=@item.Id onclick="updateSummary(this.id)"> Summary </a>*@
-                    </div>
+                    @if (item.Keywords.ToString() != "")
+                    {
+                        <span> Keywords:  <i>@Html.DisplayFor(modelItem => item.Keywords)</i> </span>
+                    }
+
+                    <i size="-1">
+                        @if (item.Summary.ToString() != "")
+                        {
+                            <br />
+                            @Html.DisplayFor(modelItem => item.Summary)
+                        }
+                    </i>
+
+                    @*<a href="#" id=@item.Id onclick="updateSummary(this.id)"> Summary </a>*@
+                </div>
                 }
 
 
