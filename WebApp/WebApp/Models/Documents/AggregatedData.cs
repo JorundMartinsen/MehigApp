@@ -8,6 +8,9 @@ namespace WebApp.Models.Documents {
 
         private int numOpened;
 
+        /// <summary>
+        /// Number of times the user has opened the link
+        /// </summary>
         public int NumOpened {
             get { return numOpened; }
             set { numOpened = value; }
@@ -15,6 +18,9 @@ namespace WebApp.Models.Documents {
 
         private int numSearched;
 
+        /// <summary>
+        /// Number of times searched for
+        /// </summary>
         public int NumSearched {
             get { return numSearched; }
             set { numSearched = value; }
@@ -22,6 +28,9 @@ namespace WebApp.Models.Documents {
 
         private int numReviews;
 
+        /// <summary>
+        /// Number of reviews. This is added to automatically
+        /// </summary>
         public int NumReviews {
             get { return numReviews; }
             set { numReviews = value; }
@@ -30,6 +39,9 @@ namespace WebApp.Models.Documents {
 
         private double reviewScore;
 
+        /// <summary>
+        /// Average of scores given. Also adds to NumReviews
+        /// </summary>
         public double ReviewScore {
             get { return reviewScore; }
             set {
@@ -37,8 +49,5 @@ namespace WebApp.Models.Documents {
                 reviewScore += (value - reviewScore)/numReviews;
             }
         }
-
-
-
     }
 }

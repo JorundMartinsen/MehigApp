@@ -2,13 +2,9 @@
 using Microsoft.WindowsAzure.Storage.Blob;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Authentication;
-using System.Web;
-using WebApp.Models.Documents;
 using WebApp.Models;
+using WebApp.Models.Documents;
 
 namespace WebApp.Controllers {
     public static class Saver {
@@ -18,8 +14,10 @@ namespace WebApp.Controllers {
         /// </summary>
         /// <param name="document"></param>
         public static void Save(ReportDocument document) {
+            string id = string.Empty;
+            if (!string.IsNullOrEmpty(document.Id)) id = document.Id;
             BsonDocument bdoc = document.ToBsonDocument();
-            Save(bdoc, System.Configuration.ConfigurationManager.AppSettings["DocumentCollection"]);
+            Save(bdoc, System.Configuration.ConfigurationManager.AppSettings["DocumentCollection"],id);
         }
 
         /// <summary>
@@ -27,8 +25,10 @@ namespace WebApp.Controllers {
         /// </summary>
         /// <param name="document"></param>
         public static void Save(RawDataDocument document) {
+            string id = string.Empty;
+            if (!string.IsNullOrEmpty(document.Id)) id = document.Id;
             BsonDocument bdoc = document.ToBsonDocument();
-            Save(bdoc, System.Configuration.ConfigurationManager.AppSettings["DataCollection"]);
+            Save(bdoc, System.Configuration.ConfigurationManager.AppSettings["DataCollection"], id);
         }
 
         /// <summary>
@@ -36,8 +36,10 @@ namespace WebApp.Controllers {
         /// </summary>
         /// <param name="document"></param>
         public static void Save(UserDocument document) {
+            string id = string.Empty;
+            if (!string.IsNullOrEmpty(document.Id)) id = document.Id;
             BsonDocument bdoc = document.ToBsonDocument();
-            Save(bdoc, System.Configuration.ConfigurationManager.AppSettings["UserCollection"]);
+            Save(bdoc, System.Configuration.ConfigurationManager.AppSettings["UserCollection"], id);
         }
 
         /// <summary>
@@ -45,11 +47,13 @@ namespace WebApp.Controllers {
         /// </summary>
         /// <param name="document"></param>
         public static void Save(SearchData document) {
+            string id = string.Empty;
+            if (!string.IsNullOrEmpty(document.Id)) id = document.Id;
             BsonDocument bdoc = document.ToBsonDocument();
-            Save(bdoc, System.Configuration.ConfigurationManager.AppSettings["SearchCollection"]);
+            Save(bdoc, System.Configuration.ConfigurationManager.AppSettings["SearchCollection"], id);
         }
 
-        private static void Save(BsonDocument bdoc, string collectionName) {
+        private static void Save(BsonDocument bdoc, string collectionName, string id) {
             string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["MongoDB"].ConnectionString;
             MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
             settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
@@ -57,6 +61,12 @@ namespace WebApp.Controllers {
             var database = client.GetDatabase(System.Configuration.ConfigurationManager.AppSettings["DatabaseName"]);
             var collection = database.GetCollection<BsonDocument>(collectionName);
             collection.InsertOne(bdoc);
+            //ObjectId objectId = new ObjectId(id);
+            //collection.UpdateOneAsync(
+            //    Query.EQ("_id", objectId),
+            //    Update.Replace(bdoc),
+            //    UpdateFlags.Upsert);
+
         }
 
         public static void SaveFile(ReportDocument document) {
