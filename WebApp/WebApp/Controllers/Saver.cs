@@ -8,22 +8,45 @@ using System.Linq;
 using System.Security.Authentication;
 using System.Web;
 using WebApp.Models.Documents;
+using WebApp.Models;
 
 namespace WebApp.Controllers {
     public static class Saver {
+
+        /// <summary>
+        /// Saves a document to the proper collection. This is overloaded to handle different objects.
+        /// </summary>
+        /// <param name="document"></param>
         public static void Save(ReportDocument document) {
             BsonDocument bdoc = document.ToBsonDocument();
             Save(bdoc, System.Configuration.ConfigurationManager.AppSettings["DocumentCollection"]);
         }
 
+        /// <summary>
+        /// Saves a document to the proper collection. This is overloaded to handle different objects.
+        /// </summary>
+        /// <param name="document"></param>
         public static void Save(RawDataDocument document) {
             BsonDocument bdoc = document.ToBsonDocument();
             Save(bdoc, System.Configuration.ConfigurationManager.AppSettings["DataCollection"]);
         }
 
+        /// <summary>
+        /// Saves a document to the proper collection. This is overloaded to handle different objects.
+        /// </summary>
+        /// <param name="document"></param>
         public static void Save(UserDocument document) {
             BsonDocument bdoc = document.ToBsonDocument();
             Save(bdoc, System.Configuration.ConfigurationManager.AppSettings["UserCollection"]);
+        }
+
+        /// <summary>
+        /// Saves a document to the proper collection. This is overloaded to handle different objects.
+        /// </summary>
+        /// <param name="document"></param>
+        public static void Save(SearchData document) {
+            BsonDocument bdoc = document.ToBsonDocument();
+            Save(bdoc, System.Configuration.ConfigurationManager.AppSettings["SearchCollection"]);
         }
 
         private static void Save(BsonDocument bdoc, string collectionName) {

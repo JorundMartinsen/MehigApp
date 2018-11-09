@@ -55,6 +55,6 @@ namespace WebApp.Models.Documents {
         [DataType(DataType.Upload)]
         public HttpPostedFileBase File { get; set; }
 
-        internal List<string> KWList { get; set; }
+        public List<string> KWList { get; set; }
     }
 }
