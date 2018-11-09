@@ -18,12 +18,12 @@ namespace WebApp.Models
 {
     public class SearchData : ReportDocument
     {
+        [BsonIgnoreIfNull]
         private bool validationSuccessful;
+        [BsonIgnoreIfNull]
         private string information;
+        [BsonIgnoreIfNull]
         public static List<string> HeaderList = new List<string>() {"Name", "Author", "Date", "Keywords", "Publisher", "Summary", "Open" };
-        private List<ReportDocument> resultList;
-        
-        
 
         public SearchData()
         {
@@ -31,7 +31,7 @@ namespace WebApp.Models
             information = "";
             ResultList = new List<ReportDocument>();
 
-            //this should be in a list or something, for iteration, less code
+            //this should be in a list or something, for iteration
             this.SearchDatatype = "";
             this.SearchId = "";
             this.SearchName = "";
@@ -44,55 +44,78 @@ namespace WebApp.Models
             this.SearchString = "";
         }
 
+        [BsonIgnoreIfNull]
+        private DateTime searchTime { get; set; }
+
+        [BsonIgnore]
         private List<string> SearchKWList { get; set; }
+
+        [BsonIgnore]
         public string SearchDatatype { get; set; }
 
+        [BsonIgnore]
         [DisplayName("Id")]
         public string SearchId { get; set; }
 
+        [BsonIgnore]
         [DisplayName("Title of document")]
         public string SearchName { get; set; }
 
+        [BsonIgnore]
         [DisplayName("Author")]
         public string SearchAuthor { get; set; }
 
+        [BsonIgnore]
         [DisplayName("Publisher")]
         public string SearchPublisher { get; set; }
 
+        [BsonIgnore]
         [DisplayName("Keywords")]
         [Display(Prompt = "Measurement, Emissions, Ships, Sea, Norway")]
         public string SearchKeywords { get; set; }
 
-        //[BsonIgnoreIfNull]
+        [BsonIgnore]
         [DisplayName("Date From")]
         [DataType(DataType.Date)]
         //[BsonDefaultValue(DateTime.ParseExact("01/01/1900", "dd/MM/yyyy", CultureInfo.InvariantCulture))]
         public DateTime SearchDateFrom { get; set; }
 
-        //[BsonIgnoreIfNull]
+        [BsonIgnore]
         [DisplayName("Date To")]
         [DataType(DataType.Date)]
         //[BsonDefaultValue()]
         public DateTime SearchDateTo { get; set; }
 
-        [BsonDefaultValue("title=norway;author=john")]
+        [BsonIgnoreIfNull]
         public string SearchString { get; set; }
 
+        [BsonIgnore]
         public bool ValidationSuccessful { get => validationSuccessful; }
 
+        [BsonIgnore]
         public string Information { get => information; }
 
-        public List<ReportDocument> ResultList { get => resultList; set => resultList = value; }
+        [BsonIgnore]
+        public List<ReportDocument> ResultList { get; set; }
+
+
 
         public void Error()
         {
             information = "Error";
         }
 
+        public void SaveSearchData()
+        {
+
+        }
+
+
         public void CreateSearchString()
         {
             if (SearchString == "")
             {
+                //create if emtpty
                 if (SearchId != "")
                 {
                     SearchString += "id=" + SearchId + ";";
@@ -138,6 +161,7 @@ namespace WebApp.Models
             }
             else
             {
+                //use searchstring directly
                 List<string> sl = SearchString.Split(';').ToList<string>();
                 foreach(string s in sl)
                 {
@@ -176,13 +200,11 @@ namespace WebApp.Models
         }
 
         
-        
-
         private BsonDocument GenerateFilter()
         {
+            //not in use
             return new BsonDocument();
         }
-
 
         public void ValidateInput()
         {
@@ -223,28 +245,30 @@ namespace WebApp.Models
             {
                 this.SearchString = "";
             }
+            this.searchTime = DateTime.Now;
             validationSuccessful = true;
         }
 
         private void SortResultListonKW()
         {
-           for(int i = 0; i < resultList.Count(); i++)
+           for(int i = 0; i < ResultList.Count(); i++)
             {
-                resultList[i].nKWHit = 0;
-                for (int j = 0; j < resultList[i].KWList.Count(); j++)
+                ResultList[i].nKWHit = 0;
+                for (int j = 0; j < ResultList[i].KWList.Count(); j++)
                 {
                     for(int k = 0; k < this.SearchKWList.Count(); k++)
                     {
-                        if(resultList[i].KWList[j].ToLower() == this.SearchKWList[k].ToLower())
+                        if(ResultList[i].KWList[j].ToLower() == this.SearchKWList[k].ToLower())
                         {
-                            resultList[i].nKWHit++;
+                            ResultList[i].nKWHit++;
                         }
                     }
                 }
             }
-            resultList = resultList.OrderByDescending(x => x.nKWHit).ToList();
+            ResultList = ResultList.OrderByDescending(x => x.nKWHit).ToList();
         }
 
+        
         private List<string> KwToList(string kwstring)
         {
             char[] kwSepArr = { ';', ',', '/', '.'};
@@ -265,6 +289,7 @@ namespace WebApp.Models
             return l;
         }
 
+        
         public async System.Threading.Tasks.Task SearchAsync()
         {
             // Connect to and configure MongoDB connection - from registrationcontroller
@@ -360,63 +385,63 @@ namespace WebApp.Models
 
                         foreach (BsonDocument document in documents)
                         {
-                            resultList.Add(new ReportDocument());
+                            ResultList.Add(new ReportDocument());
 
                             //MUST GET THIS INTO LIST/LOOP etc..
-                            resultList[nResultlist].Id = "";
+                            ResultList[nResultlist].Id = "";
                             if (document.TryGetValue("_id", out outValue))
                             {
-                                resultList[nResultlist].Id = outValue.ToString();
+                                ResultList[nResultlist].Id = outValue.ToString();
                             }
-                            resultList[nResultlist].Datatype = "";
+                            ResultList[nResultlist].Datatype = "";
                             if (document.TryGetValue("type", out outValue))
                             {
-                                resultList[nResultlist].Datatype = outValue.ToString();
+                                ResultList[nResultlist].Datatype = outValue.ToString();
                             }
-                            resultList[nResultlist].Name = "";
+                            ResultList[nResultlist].Name = "";
                             if (document.TryGetValue("name", out outValue))
                             {
-                                resultList[nResultlist].Name = outValue.ToString();
+                                ResultList[nResultlist].Name = outValue.ToString();
                             }
-                            resultList[nResultlist].Author = "";
+                            ResultList[nResultlist].Author = "";
                             if (document.TryGetValue("author", out outValue))
                             {
-                                resultList[nResultlist].Author = outValue.ToString();
+                                ResultList[nResultlist].Author = outValue.ToString();
                             }
-                            resultList[nResultlist].Date = null;
+                            ResultList[nResultlist].Date = null;
                             if (document.TryGetValue("date", out outValue))
                             {
                                 DateTime dateOut;
                                 if (DateTime.TryParseExact(outValue.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOut))
                                 {
-                                    resultList[nResultlist].Date = dateOut.Date;
+                                    ResultList[nResultlist].Date = dateOut.Date;
                                 }
                             }
-                            resultList[nResultlist].Keywords = "";
+                            ResultList[nResultlist].Keywords = "";
                             if (document.TryGetValue("keywords", out outValue))
                             {
-                                resultList[nResultlist].Keywords = outValue.ToString();
-                                resultList[nResultlist].KWList = KwToList(outValue.ToString());
+                                ResultList[nResultlist].Keywords = outValue.ToString();
+                                ResultList[nResultlist].KWList = KwToList(outValue.ToString());
                             }
-                            resultList[nResultlist].Publisher = "";
+                            ResultList[nResultlist].Publisher = "";
                             if (document.TryGetValue("publisher", out outValue))
                             {
-                                resultList[nResultlist].Publisher = outValue.ToString();
+                                ResultList[nResultlist].Publisher = outValue.ToString();
                             }
-                            resultList[nResultlist].Summary = "";
+                            ResultList[nResultlist].Summary = "";
                             if (document.TryGetValue("summary", out outValue))
                             {
-                                resultList[nResultlist].Summary = outValue.ToString();
+                                ResultList[nResultlist].Summary = outValue.ToString();
                             }
-                            resultList[nResultlist].InternalLink = "";
+                            ResultList[nResultlist].InternalLink = "";
                             if (document.TryGetValue("internallink", out outValue))
                             {
-                                resultList[nResultlist].InternalLink = outValue.ToString();
+                                ResultList[nResultlist].InternalLink = outValue.ToString();
                             }
-                            resultList[nResultlist].ExternalLink = "";
+                            ResultList[nResultlist].ExternalLink = "";
                             if (document.TryGetValue("externallink", out outValue))
                             {
-                                resultList[nResultlist].ExternalLink = outValue.ToString();
+                                ResultList[nResultlist].ExternalLink = outValue.ToString();
                             }
                             nResultlist++;
                         }

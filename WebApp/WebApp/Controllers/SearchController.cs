@@ -26,6 +26,7 @@ namespace WebApp.Controllers
                 if (sData.ValidationSuccessful)
                 {
                     sData.CreateSearchString();
+                    sData.SaveSearchData(); //await?
                     await sData.SearchAsync();
                     if (sData.ResultList.Count() > 0)
                     {
