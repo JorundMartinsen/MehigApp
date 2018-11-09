@@ -12,18 +12,21 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson.Serialization.Attributes;
 using System.Text.RegularExpressions;
+using System.Web.Mvc;
+using WebApp.Controllers;
+
+
 
 
 namespace WebApp.Models
 {
-    public class SearchData : ReportDocument
+    public class SearchData
     {
-        [BsonIgnoreIfNull]
+        [BsonIgnore]
         private bool validationSuccessful;
-        [BsonIgnoreIfNull]
+        [BsonIgnore]
         private string information;
-        [BsonIgnoreIfNull]
-        public static List<string> HeaderList = new List<string>() {"Name", "Author", "Date", "Keywords", "Publisher", "Summary", "Open" };
+
 
         public SearchData()
         {
@@ -43,9 +46,11 @@ namespace WebApp.Models
             SearchKWList = new List<string>();
             this.SearchString = "";
         }
+        [BsonIgnoreIfNull]
+        public string Id { get; set; }
 
         [BsonIgnoreIfNull]
-        private DateTime searchTime { get; set; }
+        public DateTime SearchTime { get; set; }
 
         [BsonIgnore]
         private List<string> SearchKWList { get; set; }
@@ -103,11 +108,6 @@ namespace WebApp.Models
         public void Error()
         {
             information = "Error";
-        }
-
-        public void SaveSearchData()
-        {
-
         }
 
 
@@ -245,7 +245,7 @@ namespace WebApp.Models
             {
                 this.SearchString = "";
             }
-            this.searchTime = DateTime.Now;
+            this.SearchTime = DateTime.Now;
             validationSuccessful = true;
         }
 
@@ -309,65 +309,69 @@ namespace WebApp.Models
             var builder = Builders<BsonDocument>.Filter;
             var filter = builder.Empty;
             var tempfilter = builder.Empty;
-            var tempfilter2 = builder.Empty;
             string dbField = "";
             //LOOP
-            if (this.SearchDatatype != "")
+            List<string> sL = new List<string>() { "title", "author", "publisher", "keywords"};
+            if (!sL.Any(this.SearchString.Contains))
             {
-                dbField = "type";
-                tempfilter = builder.Eq(dbField, this.SearchDatatype);
-                filter = filter & tempfilter;
-            }
-            if (this.SearchId != "")
-            {
-                dbField = "_id";
-                tempfilter = builder.Regex(dbField, new BsonRegularExpression(new Regex(this.SearchId, RegexOptions.IgnoreCase)));
-                filter = filter & tempfilter;
-            }
-            if (this.SearchName != "")
-            {
-                dbField = "name";
-                tempfilter = builder.Regex(dbField, new BsonRegularExpression(new Regex(this.SearchName, RegexOptions.IgnoreCase)));
-                filter = filter & tempfilter;
-            }
-            if (this.SearchAuthor != "")
-            {
-                dbField = "author";
-                tempfilter = builder.Regex(dbField, new BsonRegularExpression(new Regex(this.SearchAuthor, RegexOptions.IgnoreCase)));
-                filter = filter & tempfilter;
-            }
-            if (this.SearchPublisher != "")
-            {
-                dbField = "publisher";
-                tempfilter = builder.Regex(dbField, new BsonRegularExpression(new Regex(this.SearchPublisher, RegexOptions.IgnoreCase)));
-                filter = filter & tempfilter;
-            }
-            if (this.SearchKeywords != "")
-            {
-                tempfilter2 = builder.Empty;
-                dbField = "keywords";
-                SearchKWList = KwToList(this.SearchKeywords.Trim());
-                for (int i = 0; i < SearchKWList.Count(); i++)
+                filter = builder.Regex("name", new BsonRegularExpression(new Regex(this.SearchString, RegexOptions.IgnoreCase))); //OBS
+                for (int i = 1; i < sL.Count();  i++)
                 {
-                    if (i == 0)
-                    {
-                        tempfilter2 = builder.Regex(dbField, new BsonRegularExpression(new Regex(SearchKWList[i], RegexOptions.IgnoreCase)));
-                    }
-                    else
-                    {
-                        tempfilter = builder.Regex(dbField, new BsonRegularExpression(new Regex(SearchKWList[i], RegexOptions.IgnoreCase)));
-                        tempfilter2 = (tempfilter2 | tempfilter); //OR
-                    }
+                    filter = filter | builder.Regex(sL[i], new BsonRegularExpression(new Regex(this.SearchString, RegexOptions.IgnoreCase)));
                 }
-                filter = filter & tempfilter2;
+                SearchKWList = KwToList(this.SearchString.Trim());
             }
-            if (this.SearchDateFrom != DateTime.ParseExact("01/01/1900", "dd/MM/yyyy", CultureInfo.InvariantCulture).Date)
+            else
             {
-                filter = filter & builder.Gte("date", this.SearchDateFrom);
-            }
-            if (this.SearchDateTo != DateTime.Now.Date)
-            {
-                filter = filter & builder.Lte("date", this.SearchDateTo);
+                if (this.SearchDatatype != "")
+                {
+                    dbField = "type";
+                    tempfilter = builder.Eq(dbField, this.SearchDatatype);
+                    filter = filter & tempfilter;
+                }
+                if (this.SearchId != "")
+                {
+                    dbField = "_id";
+                    tempfilter = builder.Regex(dbField, new BsonRegularExpression(new Regex(this.SearchId, RegexOptions.IgnoreCase)));
+                    filter = filter & tempfilter;
+                }
+                if (this.SearchName != "")
+                {
+                    dbField = "name";
+                    tempfilter = builder.Regex(dbField, new BsonRegularExpression(new Regex(this.SearchName, RegexOptions.IgnoreCase)));
+                    filter = filter & tempfilter;
+                }
+                if (this.SearchAuthor != "")
+                {
+                    dbField = "author";
+                    tempfilter = builder.Regex(dbField, new BsonRegularExpression(new Regex(this.SearchAuthor, RegexOptions.IgnoreCase)));
+                    filter = filter & tempfilter;
+                }
+                if (this.SearchPublisher != "")
+                {
+                    dbField = "publisher";
+                    tempfilter = builder.Regex(dbField, new BsonRegularExpression(new Regex(this.SearchPublisher, RegexOptions.IgnoreCase)));
+                    filter = filter & tempfilter;
+                }
+                if (this.SearchKeywords != "")
+                {
+                    dbField = "keywords";
+                    SearchKWList = KwToList(this.SearchKeywords.Trim());
+                    tempfilter = builder.Regex(dbField, new BsonRegularExpression(new Regex(SearchKWList[0], RegexOptions.IgnoreCase)));
+                    for (int i = 1; i < SearchKWList.Count(); i++)
+                    {
+                        tempfilter = tempfilter | builder.Regex(dbField, new BsonRegularExpression(new Regex(SearchKWList[i], RegexOptions.IgnoreCase)));
+                    }
+                    filter = filter & tempfilter;
+                }
+                if (this.SearchDateFrom != DateTime.ParseExact("01/01/1900", "dd/MM/yyyy", CultureInfo.InvariantCulture).Date)
+                {
+                    filter = filter & builder.Gte("date", this.SearchDateFrom);
+                }
+                if (this.SearchDateTo != DateTime.Now.Date)
+                {
+                    filter = filter & builder.Lte("date", this.SearchDateTo);
+                }
             }
             //------------------------------------------Above Into GenerateFilter-----------------------------------------------------
 
