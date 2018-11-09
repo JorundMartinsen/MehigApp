@@ -1,9 +1,9 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace WebApp.Models.Documents {
     public class BaseDocument {
@@ -24,12 +24,66 @@ namespace WebApp.Models.Documents {
         public string User { get; set; }
 
         /// <summary>
-        /// Type is 'Environment' or 'Health'
+        /// Type is 'Environment' and/or 'Health'
         /// </summary>
         [BsonRequired]
         [BsonElement("type")]
         [Required]
-        public string Datatype { get; set; }
+        public List<string> Datatype { get; set; }
+
+        [BsonIgnore]
+        [DisplayName("Environment")]
+        public bool DatatypeEnvironment {
+            get {
+                bool variable = false;
+                if (Datatype == null) return variable;
+                foreach (string d in Datatype) {
+                    if (string.IsNullOrEmpty(d)) {
+                        if (d.Contains("Environment")) variable = true;
+                    }
+                }
+                return variable;
+            }
+            set {
+                if (value) {
+                    bool variable = false;
+                    if (Datatype == null) Datatype = new List<string>();
+                    foreach (string d in Datatype) {
+                        if (string.IsNullOrEmpty(d)) {
+                            if (d.Contains("Environment")) variable = true;
+                        }
+                    }
+                    if (variable) Datatype.Add("Environment");
+                }
+            }
+        }
+
+        [BsonIgnore]
+        [DisplayName("Health")]
+        public bool DatatypeHealth {
+            get {
+                bool variable = false;
+                if (Datatype == null) return variable;
+                foreach (string d in Datatype) {
+                    if (string.IsNullOrEmpty(d)) {
+                        if (d.Contains("Health")) variable = true;
+                    }
+                }
+                return variable;
+            }
+            set {
+                if (value) {
+                    bool variable = false;
+                    if (Datatype == null) Datatype = new List<string>();
+                    foreach (string d in Datatype) {
+                        if (string.IsNullOrEmpty(d)) {
+                            if (d.Contains("Health")) variable = true;
+                        }
+                    }
+                    if (variable) Datatype.Add("Health");
+                }
+            }
+        }
 
         /// <summary>
         /// Title of data
@@ -61,9 +115,30 @@ namespace WebApp.Models.Documents {
 
         [BsonIgnoreIfNull]
         [BsonElement("keywords")]
+        public List<string> KeywordsList { get; set; }
+
+        [BsonIgnore]
         [Display(Name = "Keyword", Prompt = "Measurement, Emissions, Ships, Sea, Norway")]
         [Required]
-        public string Keywords { get; set; }
+        public string Keywords {
+            get {
+                if (KeywordsList == null) return string.Empty;
+                if (KeywordsList.Count == 0) return string.Empty;
+                string r = KeywordsList[0];
+                for (int i = 1; i < KeywordsList.Count; i++) {
+                    r += ", ";
+                    r += KeywordsList[i];
+                }
+                return r;
+            }
+
+            set {
+                KeywordsList = new List<string>();
+                foreach (string s in value.Split(new char[] { ',', ';', '.' })) {
+                    KeywordsList.Add(s);
+                }
+            }
+        }
 
         [BsonIgnore]
         [BsonElement("public")]
