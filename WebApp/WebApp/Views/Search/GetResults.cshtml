@@ -65,6 +65,7 @@
 
         }
 
+
         function makeTableScroll() {
             // Constant retrieved from server-side via JSP
             var maxRows = 10;
@@ -94,27 +95,18 @@
         {
             <div class="h6 pb-3">Returned 1 result</div>
         }
-            <div class="results">
-                @*@Chtml.Control(Html, model => model.SearchString)*@
-                @using (Html.BeginForm("GetResults", "Search"))
-                {
-                    @Html.TextBoxFor(model => model.SearchString, new { @class = "form-control" })
-                }
+        <div class="results">
+            @*@Chtml.Control(Html, model => model.SearchString)*@
+            @using (Html.BeginForm("GetResults", "Search"))
+            {
+                @Html.TextBoxFor(model => model.SearchString, new { @class = "form-control" })
+            }
 
-                @foreach (var item in Model.ResultList)
-                {
+            @foreach (var item in Model.ResultList)
+            {
                 <div class="card text-left m-3">
                     <font size="+1">
-                        @if (item.ExternalLink.Contains("www"))
-                        {
-                            @*<a href=@item.ExternalLink target="_blank"> @item.Name </a>*@
-                            <a href=http://firda.no target="_blank"> @item.Name </a>
-                        }
-                        else
-                        {
-                            <a href=# target="_blank"> @item.Name </a>
-                            
-                        }
+                        <a href= @("https://mehdstorageacc.blob.core.windows.net/testcontainer/" + @item.InternalLink) link target="_blank"> @item.Name </a>
                         <br />
                     </font>
 
@@ -150,16 +142,16 @@
 
                     @*<a href="#" id=@item.Id onclick="updateSummary(this.id)"> Summary </a>*@
                 </div>
-                }
+            }
 
 
-                @*
-        <div class="h4 pb-3">Summary</div>
-        <textarea id="summaryTb" value="" readonly="readonly" rows="10" cols="50" wrap="soft"></textarea>
-        <br />
-        <br />
-                *@
-            </div>
+            @*
+                <div class="h4 pb-3">Summary</div>
+                <textarea id="summaryTb" value="" readonly="readonly" rows="10" cols="50" wrap="soft"></textarea>
+                <br />
+                <br />
+            *@
+        </div>
     </div>
 </body>
 
