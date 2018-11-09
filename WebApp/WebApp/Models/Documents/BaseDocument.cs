@@ -115,30 +115,9 @@ namespace WebApp.Models.Documents {
 
         [BsonIgnoreIfNull]
         [BsonElement("keywords")]
-        public List<string> KeywordsList { get; set; }
-
-        [BsonIgnore]
         [Display(Name = "Keyword", Prompt = "Measurement, Emissions, Ships, Sea, Norway")]
         [Required]
-        public string Keywords {
-            get {
-                if (KeywordsList == null) return string.Empty;
-                if (KeywordsList.Count == 0) return string.Empty;
-                string r = KeywordsList[0];
-                for (int i = 1; i < KeywordsList.Count; i++) {
-                    r += ", ";
-                    r += KeywordsList[i];
-                }
-                return r;
-            }
-
-            set {
-                KeywordsList = new List<string>();
-                foreach (string s in value.Split(new char[] { ',', ';', '.' })) {
-                    KeywordsList.Add(s);
-                }
-            }
-        }
+        public string Keywords { get; set; }
 
         [BsonIgnore]
         [BsonElement("public")]
