@@ -43,40 +43,7 @@
 
             @Chtml.Control(Html, model => model.SearchDateTo)
 
-            @*
-            <div class="form-check-inline">
-                @Html.RadioButtonFor(model => model.Datatype, "", new { @class = "form-check-input", @checked = "checked" }) @Html.Label("All", new { @class = "form-check-label" })
-            </div>
-            <div class="form-check-inline">
-                @Html.RadioButtonFor(model => model.Datatype, "Environment", new { @class = "form-check-input" }) @Html.Label("Environment", new { @class = "form-check-label" })
-            </div>
-            <div class="form-check-inline">
-                @Html.RadioButtonFor(model => model.Datatype, "Health", new { @class = "form-check-input" }) @Html.Label("Health", new { @class = "form-check-label" })
-            </div>
             <br />
-            @Html.TextBoxFor(model => model.Id, new { @class = "form-control" })
-            @Html.LabelFor(model => model.Id, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
-
-            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
-
-            @Html.TextBoxFor(model => model.Author, new { @class = "form-control" })
-            @Html.LabelFor(model => model.Author, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
-
-            @Html.TextBoxFor(model => model.Publisher, new { @class = "form-control" })
-            @Html.LabelFor(model => model.Publisher, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
-
-            @Html.TextBoxFor(model => model.Keywords, new { @class = "form-control" })
-            @Html.LabelFor(model => model.Keywords, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
-
-            @Html.TextBoxFor(model => model.DateFrom, new { @type = "date", @class = "form-control" })
-            @Html.LabelFor(model => model.DateFrom, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
-
-            @Html.TextBoxFor(model => model.SearchDateTo, new { @type = "date", @class = "form-control", @value = Model.SearchDateTo })
-            @Html.LabelFor(model => model.SearchDateTo, htmlAttributes: new { @class = "control-label pl-3 pb-3" })
-            *@
-            <br />
-
             <input type="submit" value="Search" name="searchBtn" /><font color="red">@info</font>
         }
 

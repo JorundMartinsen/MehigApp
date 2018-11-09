@@ -311,7 +311,7 @@ namespace WebApp.Models
             var tempfilter = builder.Empty;
             string dbField = "";
             //LOOP
-            List<string> sL = new List<string>() { "title", "author", "publisher", "keywords"};
+            List<string> sL = new List<string>() { "title", "author", "publisher", "keywords", "summary"};
             if (!sL.Any(this.SearchString.Contains))
             {
                 filter = builder.Regex("name", new BsonRegularExpression(new Regex(this.SearchString, RegexOptions.IgnoreCase))); //OBS
