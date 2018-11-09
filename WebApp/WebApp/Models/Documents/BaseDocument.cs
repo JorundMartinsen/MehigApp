@@ -29,7 +29,7 @@ namespace WebApp.Models.Documents {
         [BsonRequired]
         [BsonElement("type")]
         [Required]
-        public List<string> Datatype { get; set; }
+        public string Datatype { get; set; }
 
         [BsonIgnore]
         [DisplayName("Environment")]
@@ -37,23 +37,15 @@ namespace WebApp.Models.Documents {
             get {
                 bool variable = false;
                 if (Datatype == null) return variable;
-                foreach (string d in Datatype) {
-                    if (string.IsNullOrEmpty(d)) {
-                        if (d.Contains("Environment")) variable = true;
-                    }
+                if (string.IsNullOrEmpty(Datatype)) {
+                    if (Datatype.Contains("Environment")) variable = true;
                 }
                 return variable;
             }
             set {
                 if (value) {
-                    bool variable = false;
-                    if (Datatype == null) Datatype = new List<string>();
-                    foreach (string d in Datatype) {
-                        if (string.IsNullOrEmpty(d)) {
-                            if (d.Contains("Environment")) variable = true;
-                        }
-                    }
-                    if (variable) Datatype.Add("Environment");
+                    if (Datatype == null) Datatype = "Environment";
+                    else if (!Datatype.Contains("Environment")) Datatype += ", Environment";
                 }
             }
         }
@@ -64,23 +56,15 @@ namespace WebApp.Models.Documents {
             get {
                 bool variable = false;
                 if (Datatype == null) return variable;
-                foreach (string d in Datatype) {
-                    if (string.IsNullOrEmpty(d)) {
-                        if (d.Contains("Health")) variable = true;
-                    }
+                if (string.IsNullOrEmpty(Datatype)) {
+                    if (Datatype.Contains("Health")) variable = true;
                 }
                 return variable;
             }
             set {
                 if (value) {
-                    bool variable = false;
-                    if (Datatype == null) Datatype = new List<string>();
-                    foreach (string d in Datatype) {
-                        if (string.IsNullOrEmpty(d)) {
-                            if (d.Contains("Health")) variable = true;
-                        }
-                    }
-                    if (variable) Datatype.Add("Health");
+                    if (Datatype == null) Datatype = "Health";
+                    else if (!Datatype.Contains("Health")) Datatype += ", Health";
                 }
             }
         }

@@ -60,12 +60,14 @@ namespace WebApp.Controllers {
             MongoClient client = new MongoClient(settings);
             var database = client.GetDatabase(System.Configuration.ConfigurationManager.AppSettings["DatabaseName"]);
             var collection = database.GetCollection<BsonDocument>(collectionName);
-            collection.InsertOne(bdoc);
-            //ObjectId objectId = new ObjectId(id);
-            //collection.UpdateOneAsync(
-            //    Query.EQ("_id", objectId),
-            //    Update.Replace(bdoc),
-            //    UpdateFlags.Upsert);
+            //collection.InsertOne(bdoc);
+            ObjectId objectId;
+            if (!string.IsNullOrEmpty(id)) objectId = new ObjectId(id);
+            else objectId = ObjectId.GenerateNewId();
+            collection.ReplaceOneAsync(
+                filter: new BsonDocument("_id", objectId),
+                options: new UpdateOptions { IsUpsert = true },
+                replacement: bdoc);
 
         }
 
