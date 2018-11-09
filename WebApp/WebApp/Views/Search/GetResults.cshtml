@@ -105,14 +105,15 @@
                 {
                 <div class="card text-left m-3">
                     <font size="+1">
-                        @if (!item.ExternalLink.Contains("www"))
+                        @if (item.ExternalLink.Contains("www"))
                         {
                             @*<a href=@item.ExternalLink target="_blank"> @item.Name </a>*@
                             <a href=http://firda.no target="_blank"> @item.Name </a>
                         }
                         else
                         {
-                            @Html.DisplayFor(modelItem => item.Name)
+                            <a href=# target="_blank"> @item.Name </a>
+                            
                         }
                         <br />
                     </font>
