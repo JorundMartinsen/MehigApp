@@ -1,13 +1,8 @@
-﻿using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Authentication;
+using System.Linq;
 using System.Web.Mvc;
-using WebApp.Models;
 using WebApp.Models.Documents;
 
 namespace WebApp.Controllers {
@@ -29,17 +24,32 @@ namespace WebApp.Controllers {
                 document.DateStored = DateTime.Now;
                 if (document.Public) {
                     if (document.File != null) {
-                        string fileExt = Path.GetExtension(document.File.FileName).ToUpper();
+                        string fileExt = Path.GetExtension(document.File.FileName).ToUpper().Replace(".", string.Empty);
+                        string[] AcceptedFileExtenstions = System.Configuration.ConfigurationManager.AppSettings["FileExtensions"].
+                            ToUpper().
+                            Replace(" ", string.Empty).
+                            Split(',');
 
-                        if (fileExt == ".PDF") {
-                            Report report = new Report();
+                        bool FileExtAccepted = AcceptedFileExtenstions.Any(x => x == fileExt);
+                        if (FileExtAccepted) {
+                            //Report report = new Report(); // Remove?
 
                             Saver.SaveFile(document);
                             ViewBag.ModelStatus = string.Format("Success. {0} saved.", document.Name);
                             return View("Document", new ReportDocument());
                         }
                         else {
-                            ViewBag.ModelStatus = "Wrong file format. Only PDF accepted";
+                            string fileFormats = ".";
+                            fileFormats += AcceptedFileExtenstions[0].ToLower();
+                            
+                            int n = AcceptedFileExtenstions.Length;
+                            for (int i = 1; i < n - 1; i++) {
+                                fileFormats += ", .";
+                                fileFormats += AcceptedFileExtenstions[i].ToLower();                                
+                            }
+                            fileFormats += " or .";
+                            fileFormats += AcceptedFileExtenstions[n-1].ToLower();
+                            ViewBag.ModelStatus = string.Format("Wrong file format. Only {0} files are accepted", fileFormats);
                             return View("Document", document);
                         }
                     }
