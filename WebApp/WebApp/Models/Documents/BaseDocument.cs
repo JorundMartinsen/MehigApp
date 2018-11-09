@@ -147,6 +147,12 @@ namespace WebApp.Models.Documents {
         [EnforceTrue(ErrorMessage = "You cannot upload data that is not public")]
         [Required]
         public bool Public { get; set; }
+
+        [BsonElement("aggregated")]
+        [BsonIgnoreIfNull]
+        public AggregatedData Aggregated { get; set; }
+
+
     }
 
     public class EnforceTrueAttribute : ValidationAttribute, IClientValidatable {
