@@ -16,6 +16,12 @@ namespace WebApp.Controllers
             return View(new SearchData());
         }
 
+        [HttpGet]
+        public void StoreOpenDoc()
+        {
+            
+        }
+
 
         //public ActionResult Results(FormCollection col)
         public async System.Threading.Tasks.Task<ActionResult> GetResults(SearchData sData) //async

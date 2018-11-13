@@ -46,6 +46,10 @@ namespace WebApp.Models
             SearchKWList = new List<string>();
             this.SearchString = "";
         }
+
+        [BsonIgnoreIfNull]
+        public string OpenDocId { get; set; }
+
         [BsonIgnoreIfNull]
         public string Id { get; set; }
 
@@ -102,7 +106,6 @@ namespace WebApp.Models
 
         [BsonIgnore]
         public List<ReportDocument> ResultList { get; set; }
-
 
 
         public void Error()
