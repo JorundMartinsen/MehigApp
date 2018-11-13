@@ -1,7 +1,5 @@
-﻿@using WebApp.Models
-@model WebApp.Models.SearchData
+﻿@model WebApp.Models.SearchData
 @using WebApp.Content
-@using WebApp.Controllers
 
 @{
     /**/
@@ -9,46 +7,25 @@
     ViewBag.Title = "GetResults";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var resList = Model.ResultList as List<WebApp.Models.Documents.ReportDocument>;
-    var count = 5;
-    count = resList.Count();
 }
 
 <head>
-    <style type="text/css">
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .scrollingTable {
-            overflow-y: auto;
-        }
-
-        input {
-            border: 0;
-        }
-
-        summary {
-            width: 100%;
-        }
-    </style>
     <script type="text/javascript">
-        function Save(id)
+        function Save()
         {
-            alert("Hello! I am an alert box!!");
+            @*
+            alert("test");
             var sString = @Model.SearchString;
-            
-            @*$.post("/Search/StoreDoc", { searchData: sString, docid : id });*@
 
-            return 0;
+            $.post("/Search/StoreDoc", { searchData: sString, docid : id });*@
+
         }
-        @*(string searchData, string docid)*@
     </script>
 </head>
 
 
 <body>
+    
     <div class="jumbotron">
         @if (Model.ResultList.Count > 1)
         {
@@ -69,7 +46,7 @@
             {
                 <div class="card text-left m-3">
                     <font size="+1">
-                        <a id="docLink" href=@("https://mehdstorageacc.blob.core.windows.net/testcontainer/" + @item.InternalLink) onclick="Save(@item.Id);" link target="_blank"> @item.Name</a>
+                        <a id="docLink" href=@("https://mehdstorageacc.blob.core.windows.net/testcontainer/" + @item.InternalLink) onclick="Save();return false;" link target="_blank"> @item.Name</a>
                         <br />
                     </font>
 
@@ -106,6 +83,7 @@
                 </div>
 
             }
+
 
         </div>
 
