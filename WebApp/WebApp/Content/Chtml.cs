@@ -37,9 +37,9 @@ namespace WebApp.Content {
                 var attr = new RouteValueDictionary { { "class", "form-check-input" } };
 
                 var mvc1 = htmlHelper.CheckBoxFor((Expression<Func<TModel, bool>>)(object)expression, attr);
-
                 attr = new RouteValueDictionary { { "class", "form-check-label" } };
                 var mvc2 = mvcLabel(htmlHelper, expression, attr, metadata);
+
                 var mvc3 = htmlHelper.ValidationMessageFor(expression);
                 return MvcHtmlString.Create(mvc1.ToString() + mvc2.ToString() + mvc3.ToString());
             }
@@ -48,47 +48,54 @@ namespace WebApp.Content {
 
         public static MvcHtmlString Textbox<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, ModelMetadata metadata) {
             var attr = new RouteValueDictionary { { "class", "form-control tb" }, { "placeholder" ,metadata.Watermark} };
-            var mvc1 = htmlHelper.TextBoxFor(expression, attr);
-            attr = new RouteValueDictionary { { "class", "control-label " } };
-            var mvc2 = mvcLabel(htmlHelper, expression, attr, metadata);
+            var mvc1 = mvcLabel(htmlHelper, expression,  metadata);
+            var mvc2 = htmlHelper.TextBoxFor(expression, attr);
             var mvc3 = htmlHelper.ValidationMessageFor(expression, " ");
             return MvcHtmlString.Create(mvc1.ToString() + mvc2.ToString() + mvc3.ToString());
         }
 
         public static MvcHtmlString Textarea<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, ModelMetadata metadata) {
             var attr = new RouteValueDictionary { { "class", "form-control tb noresize" } };
-            var mvc1 = htmlHelper.TextAreaFor(expression, attr);
-            attr = new RouteValueDictionary { { "class", "control-label" } };
-            var mvc2 = mvcLabel(htmlHelper, expression, attr, metadata);
+            var mvc1 = mvcLabel(htmlHelper, expression, metadata);
+            var mvc2 = htmlHelper.TextAreaFor(expression, attr);
             var mvc3 = htmlHelper.ValidationMessageFor(expression, " ");
             return MvcHtmlString.Create(mvc1.ToString() + mvc2.ToString() + mvc3.ToString());
         }
         public static MvcHtmlString Textfile<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, ModelMetadata metadata) {
             var attr = new RouteValueDictionary { { "class", "form-control-file" }, { "type", "file" } };
-            var mvc1 = htmlHelper.TextBoxFor(expression, attr);
-            attr = new RouteValueDictionary { { "class", "control-label" } };
-            var mvc2 = mvcLabel(htmlHelper, expression, attr, metadata);
+            var mvc1 = mvcLabel(htmlHelper, expression, metadata);
+            var mvc2 = htmlHelper.TextBoxFor(expression, attr);
             var mvc3 = htmlHelper.ValidationMessageFor(expression, " ");
             return MvcHtmlString.Create(mvc1.ToString() + mvc2.ToString() + mvc3.ToString());
         }
         public static MvcHtmlString Textdate<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, ModelMetadata metadata) {
             var attr = new RouteValueDictionary { { "class", "form-control tb" }, { "type", "date" } };
-            var mvc1 = htmlHelper.TextBoxFor(expression, attr);
-            attr = new RouteValueDictionary { { "class", "control-label" } };
-            var mvc2 = mvcLabel(htmlHelper, expression, attr, metadata);
+            var mvc1 = mvcLabel(htmlHelper, expression,  metadata);
+            var mvc2 = htmlHelper.TextBoxFor(expression, attr);
             var mvc3 = htmlHelper.ValidationMessageFor(expression, " ");
             return MvcHtmlString.Create(mvc1.ToString() + mvc2.ToString() + mvc3.ToString());
         }
         public static MvcHtmlString Textpass<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, ModelMetadata metadata) {
             var attr = new RouteValueDictionary { { "class", "form-control tb" } };
-            var mvc1 = htmlHelper.PasswordFor(expression, attr);
-            attr = new RouteValueDictionary { { "class", "control-label" } };
-            var mvc2 = mvcLabel(htmlHelper, expression, attr, metadata);
+            var mvc1 = mvcLabel(htmlHelper, expression, metadata);
+            var mvc2 = htmlHelper.PasswordFor(expression, attr);
             var mvc3 = htmlHelper.ValidationMessageFor(expression, " ");
             return MvcHtmlString.Create(mvc1.ToString() + mvc2.ToString() + mvc3.ToString());
         }
 
-        private static MvcHtmlString mvcLabel<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, RouteValueDictionary attr, ModelMetadata metadata) {
+        private static MvcHtmlString mvcLabel<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, ModelMetadata metadata) {
+            MvcHtmlString mvc2 = MvcHtmlString.Empty;
+            var attr = new RouteValueDictionary { { "class", "control-label" }, { "style", "display:block" } };
+            if (ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData).IsRequired) {
+                string label = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData).DisplayName + "*";
+                mvc2 = htmlHelper.LabelFor(expression, label, attr);
+            }
+            else {
+                mvc2 = htmlHelper.LabelFor(expression, attr);
+            }
+            return mvc2;
+        }
+        private static MvcHtmlString mvcLabel<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression,RouteValueDictionary attr, ModelMetadata metadata) {
             MvcHtmlString mvc2 = MvcHtmlString.Empty;
             if (ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData).IsRequired) {
                 string label = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData).DisplayName + "*";
