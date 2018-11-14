@@ -17,11 +17,12 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public void StoreOpenDoc(string searchData, string docid)
+        public void StoreOpenDoc(string searchData, string docid, string name)
         {
             SearchData sData = new SearchData();
             sData.SearchString = searchData;
             sData.OpenDocId = docid;
+            sData.SearchName = name;
             Saver.Save(sData);
         }
         
@@ -41,7 +42,7 @@ namespace WebApp.Controllers
                     if (sData.ResultList.Count() > 0)
                     {
                         await sData.SearchAsync(2);
-                        //await sData.SearchAsync(3);
+                        await sData.SearchAsync(3);
                         ViewBag.FileStatus = string.Format("{0} found.", sData.ResultList.Count());
                         return View(sData);
                     }

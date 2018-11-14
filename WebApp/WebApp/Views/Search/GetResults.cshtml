@@ -11,7 +11,7 @@
 
 <head>
     <script type="text/javascript">
-        function Save(id, searchStr)
+        function Save(searchStr, id, nam)
         {
             var sString = "str";
             var id2 = "id";
@@ -22,7 +22,7 @@
 
                 document.getElementById("panel").innerHTML = id;
             *@
-            $.post("/Search/StoreOpenDoc", { searchData: searchStr, docid: id });
+            $.post("/Search/StoreOpenDoc", { searchData: searchStr, docid: id, name: nam });
 
         }
     </script>
@@ -54,7 +54,7 @@
             {
                 <div class="card text-left m-3">
                     <font size="+1">
-                        <a id="docLink" href=@("https://mehdstorageacc.blob.core.windows.net/testcontainer/" + @item.InternalLink) onclick="Save('@item.Id','@Model.SearchString');" link target="_blank"> @item.Name</a>
+                        <a id="docLink" href=@("https://mehdstorageacc.blob.core.windows.net/testcontainer/" + @item.InternalLink) onclick="Save('@Model.SearchString','@item.Id','@item.Name' );" link target="_blank"> @item.Name</a>
                         <br />
                     </font>
 
@@ -91,7 +91,51 @@
                 </div>
 
             }
+                @if (Model.SuggestionList.Count > 0)
+                {<br />
+                    <div class="h6 pb-3">Based on your search you might be interested in</div>
+                    foreach (var item in Model.SuggestionList)
+                    {
+                        <div class="card text-left m-3">
+                            <font size="+1">
+                                <a id="docLink" href=@("https://mehdstorageacc.blob.core.windows.net/testcontainer/" + @item.InternalLink) onclick="Save('@Model.SearchString','@item.Id','@item.Name');" link target="_blank"> @item.Name</a>
+                                <br />
+                            </font>
 
+                            @if (item.Author.ToString() != "")
+                            {
+                                @Html.DisplayFor(modelItem => item.Author)
+                                <br />
+                            }
+
+                            @if (item.Publisher.ToString() != "")
+                            {
+                                @Html.DisplayFor(modelItem => item.Publisher)
+                                <br />
+                            }
+                            @if (item.Date.ToString() != "")
+                            {
+                                @Html.DisplayFor(modelItem => item.Date)
+                                <br />
+                            }
+
+                            @if (item.Keywords.ToString() != "")
+                            {
+                                <span> Keywords:  <i>@Html.DisplayFor(modelItem => item.Keywords)</i> </span>
+                            }
+
+                            <i size="-1">
+                                @if (item.Summary.ToString() != "")
+                                {
+                                    <br />
+                                    @Html.DisplayFor(modelItem => item.Summary)
+                                }
+                            </i>
+
+                        </div>
+                    }
+
+                }
 
         </div>
 

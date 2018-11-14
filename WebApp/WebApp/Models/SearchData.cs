@@ -69,7 +69,7 @@ namespace WebApp.Models
         [DisplayName("Id")]
         public string SearchId { get; set; }
 
-        [BsonIgnore]
+        [BsonIgnoreIfNull]
         [DisplayName("Title of document")]
         public string SearchName { get; set; }
 
@@ -405,7 +405,8 @@ namespace WebApp.Models
             }
             else if(searchType == 3)
             {
-                dbField = "_id";
+                //dbField = "_id";
+                dbField = "name";
                 int nL = BasedOnSearchIdList.Count();
                 if (nL > 0)
                 {
@@ -508,7 +509,8 @@ namespace WebApp.Models
                         {
                             foreach (BsonDocument document in documents)
                             {
-                                if (document.TryGetValue("OpenDocId", out outValue))
+                                //should be OpenDocId
+                                if (document.TryGetValue("SearchName", out outValue))
                                 {
                                     BasedOnSearchIdList.Add(outValue.ToString());
                                 }
@@ -522,6 +524,11 @@ namespace WebApp.Models
             {
                 SuggestionList = ResultList.ToList();
                 ResultList = tempResultList.ToList();
+                if (nList > 5)
+                {
+                    SuggestionList.RemoveRange(5, nList - 5);
+                }
+                
             }
             if (nList == 0)
             {
