@@ -37,9 +37,11 @@ namespace WebApp.Controllers
                     sData.CreateSearchString();
                     Saver.Save(sData);
                     
-                    await sData.SearchAsync();
+                    await sData.SearchAsync(1);
                     if (sData.ResultList.Count() > 0)
                     {
+                        await sData.SearchAsync(2);
+                        //await sData.SearchAsync(3);
                         ViewBag.FileStatus = string.Format("{0} found.", sData.ResultList.Count());
                         return View(sData);
                     }
