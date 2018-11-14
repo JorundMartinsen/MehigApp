@@ -16,12 +16,15 @@ namespace WebApp.Controllers
             return View(new SearchData());
         }
 
-        [HttpGet]
-        public void StoreOpenDoc()
+        [HttpPost]
+        public void StoreOpenDoc(string searchData, string docid)
         {
-            
+            SearchData sData = new SearchData();
+            sData.SearchString = searchData;
+            sData.OpenDocId = docid;
+            Saver.Save(sData);
         }
-
+        
 
         //public ActionResult Results(FormCollection col)
         public async System.Threading.Tasks.Task<ActionResult> GetResults(SearchData sData) //async

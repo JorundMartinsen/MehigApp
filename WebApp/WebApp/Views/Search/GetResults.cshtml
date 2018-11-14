@@ -11,13 +11,18 @@
 
 <head>
     <script type="text/javascript">
-        function Save()
+        function Save(id, searchStr)
         {
-            @*
-            alert("test");
-            var sString = @Model.SearchString;
+            var sString = "str";
+            var id2 = "id";
 
-            $.post("/Search/StoreDoc", { searchData: sString, docid : id });*@
+            @*
+                var sString = @Model.SearchString;
+                alert("test");
+
+                document.getElementById("panel").innerHTML = id;
+            *@
+            $.post("/Search/StoreOpenDoc", { searchData: searchStr, docid: id });
 
         }
     </script>
@@ -25,7 +30,10 @@
 
 
 <body>
-    
+    @*
+        <div id="panel">Text</div>
+    *@
+
     <div class="jumbotron">
         @if (Model.ResultList.Count > 1)
         {
@@ -46,7 +54,7 @@
             {
                 <div class="card text-left m-3">
                     <font size="+1">
-                        <a id="docLink" href=@("https://mehdstorageacc.blob.core.windows.net/testcontainer/" + @item.InternalLink) onclick="Save();return false;" link target="_blank"> @item.Name</a>
+                        <a id="docLink" href=@("https://mehdstorageacc.blob.core.windows.net/testcontainer/" + @item.InternalLink) onclick="Save('@item.Id','@Model.SearchString');" link target="_blank"> @item.Name</a>
                         <br />
                     </font>
 
