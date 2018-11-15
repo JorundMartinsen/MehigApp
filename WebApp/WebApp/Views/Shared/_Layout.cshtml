@@ -11,7 +11,9 @@
             Scripts.Render("~/bundles/layout");
         }
     }
-
+    @if (IsSectionDefined("AddToHead")) {
+        @RenderSection("AddToHead", required: false)
+    }
 </head>
 <body>
     <!--TOP NAV BAR-->
