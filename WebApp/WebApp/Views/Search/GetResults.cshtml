@@ -54,7 +54,13 @@
             {
                 <div class="card text-left m-3">
                     <font size="+1">
-                        <a id="docLink" href=@("https://mehdstorageacc.blob.core.windows.net/testcontainer/" + @item.InternalLink) onclick="Save('@Model.SearchString','@item.Id','@item.Name' );" link target="_blank"> @item.Name</a>
+                        @if (string.IsNullOrEmpty(item.InternalLink))
+                            {
+                                <a id="docLink" href=@(@item.ExternalLink) onclick="Save('@Model.SearchString','@item.Id','@item.Name' );" link target="_blank"> @item.Name</a>
+                            }
+                        else{
+                                <a id="docLink" href=@("https://mehdstorageacc.blob.core.windows.net/testcontainer/" + @item.InternalLink) onclick="Save('@Model.SearchString','@item.Id','@item.Name' );" link target="_blank"> @item.Name</a>
+                        }
                         <br />
                     </font>
 
