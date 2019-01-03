@@ -12,16 +12,11 @@ namespace WebApp.Controllers {
 
         }
 
-        public ActionResult About() {
-            ViewBag.Message = "Your application description page.";
-
+        public ActionResult Contact() {
             return View();
         }
 
-        public ActionResult Login()
-        {
-            ViewBag.Message = "Your login page.";
-
+        public ActionResult Login() { 
             return View();
         }
 
@@ -34,8 +29,6 @@ namespace WebApp.Controllers {
 
         public ActionResult AddData()
         {
-            ViewBag.Message = " ";
-
             return View();
         }
 
