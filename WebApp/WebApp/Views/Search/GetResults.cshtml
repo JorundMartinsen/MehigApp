@@ -44,11 +44,12 @@
             <div class="h6 pb-3">Returned 1 result</div>
         }
         <div class="results">
-
+            @*
             @using (Html.BeginForm("GetResults", "Search"))
             {
                 @Html.TextBoxFor(model => model.SearchString, new { @class = "form-control" })
             }
+                *@
 
             @foreach (var item in Model.ResultList)
             {
